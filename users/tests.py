@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.utils import timezone
 from datetime import datetime
 
-from .models import UserProfile, EmailVerify
+from .models import UserProfile, EmailVerify, Banner
 
 
 class UserModuleModelsDBConnectionTest(TestCase):
@@ -68,3 +68,26 @@ class UserModuleModelsDBConnectionTest(TestCase):
         self.assertEqual(codes.count(), 2)
         self.assertEqual(codes[0].code, register_code.code)
         self.assertEqual(codes[1].code, forget_code.code)
+
+    def test_banner_saving_and_retrieving_from_db(self):
+        google = Banner(
+            title="Google News Initial",
+            image="media/banner/2018/04",
+            url="https://news.google.com",
+            index=9000,
+            add_time=timezone.now(),
+        )
+        amazon = Banner(
+            title="Kindle Sales",
+            image="media/banner/2018/04",
+            url="https://amazon.com",
+            index=11000,
+            add_time=timezone.now(),
+        )
+        google.save()
+        amazon.save()
+
+        banners = Banner.objects.all()
+        self.assertEqual(banners.count(), 2)
+        self.assertEqual(banners[0].title, "Google News Initial")
+        self.assertEqual(banners[1].title, "Kindle Sales")

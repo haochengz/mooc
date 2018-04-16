@@ -27,7 +27,7 @@ class Course(models.Model):
 
 
 class Chapter(models.Model):
-    course = models.ForeignKey(Course, verbose_name="所属课程")
+    course = models.ForeignKey(Course, verbose_name="所属课程", on_delete=models.CASCADE, default=None)
     name = models.CharField(verbose_name="章节名", max_length=30)
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
@@ -40,7 +40,7 @@ class Chapter(models.Model):
 
 
 class Section(models.Model):
-    chapter = models.ForeignKey(Chapter, verbose_name="所属章节")
+    chapter = models.ForeignKey(Chapter, verbose_name="所属章节", on_delete=models.CASCADE)
     name = models.CharField(verbose_name="小节名", max_length=30)
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
@@ -53,7 +53,7 @@ class Section(models.Model):
 
 
 class Resource(models.Model):
-    course = models.ForeignKey(Course, verbose_name="所属课程")
+    course = models.ForeignKey(Course, verbose_name="所属课程", on_delete=models.CASCADE)
     name = models.CharField(verbose_name="资源名", max_length=30)
     path = models.FileField(verbose_name="资源链接", upload_to="media/courses/resourses/%Y/%m")
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)

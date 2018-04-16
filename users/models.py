@@ -30,6 +30,9 @@ class EmailVerify(models.Model):
         verbose_name = "邮箱验证"
         verbose_name_plural = verbose_name
 
+    def __unicode__(self):
+        return self.email
+
 
 class Banner(models.Model):
     title = models.CharField(verbose_name="标题", max_length=100)
@@ -41,3 +44,6 @@ class Banner(models.Model):
     class Meta:
         verbose_name = "轮播图"
         verbose_name_plural = verbose_name
+
+    def __unicode__(self):
+        return self.title

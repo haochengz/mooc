@@ -34,6 +34,7 @@ class Org(models.Model):
 
 
 class Instructor(models.Model):
+    org = models.ForeignKey(Org, verbose_name="所属机构", on_delete=models.CASCADE, default=None)
     name = models.CharField(verbose_name="教师名称", max_length=50)
     hits = models.IntegerField(verbose_name="点击量", default=0)
     favorite_nums = models.IntegerField(verbose_name="收藏数", default=0)

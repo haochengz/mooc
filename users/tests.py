@@ -2,10 +2,10 @@ from django.test import TestCase
 from django.utils import timezone
 from datetime import datetime
 
-from .models import UserProfile
+from .models import UserProfile, EmailVerify
 
 
-class UserProfileTest(TestCase):
+class UserModuleModelsDBConnectionTest(TestCase):
 
     def test_userprofile_saving_and_retrieving_from_db(self):
         john = UserProfile(
@@ -35,7 +35,7 @@ class UserProfileTest(TestCase):
             date_joined=timezone.now(),
             nick_name="bear",
             birthday=datetime(1988, 3, 28),
-            gender="male",
+            gender="female",
             address="No.8 Euclid St. Mountain View, San Francisco, CA, USA",
             mobile="550(425)3536",
             image="media/image/default.png",
@@ -47,3 +47,24 @@ class UserProfileTest(TestCase):
         self.assertEqual(saved_users.count(), 2)
         self.assertEqual(john.username, saved_users[0].username)
         self.assertEqual(jim.username, saved_users[1].username)
+
+    def test_emailverify_saving_and_retrieving_from_db(self):
+        register_code = EmailVerify(
+            code="123456",
+            email="jim@gmail.com",
+            verify_type="register",
+            send_time=timezone.now(),
+        )
+        forget_code = EmailVerify(
+            code="654321",
+            email="hype@gmail.com",
+            verify_type="forget",
+            send_time=timezone.now(),
+        )
+        register_code.save()
+        forget_code.save()
+
+        codes = EmailVerify.objects.all()
+        self.assertEqual(codes.count(), 2)
+        self.assertEqual(codes[0].code, register_code.code)
+        self.assertEqual(codes[1].code, forget_code.code)

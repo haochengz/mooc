@@ -1,6 +1,7 @@
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 class UserProfile(AbstractUser):
@@ -18,3 +19,13 @@ class UserProfile(AbstractUser):
     def __unicode__(self):
         return self.username
 
+
+class EmailVerify(models.Model):
+    code = models.CharField(verbose_name="验证码", max_length=20)
+    email = models.EmailField(verbose_name="接收邮箱", max_length=50)
+    verify_type = models.CharField(verbose_name="验证类型", choices=(("register", ""), ("forget", "")), max_length=10)
+    send_time = models.DateTimeField(verbose_name="发送时间", default=timezone.now)
+
+    class Meta:
+        verbose_name = "邮箱验证"
+        verbose_name_plural = verbose_name

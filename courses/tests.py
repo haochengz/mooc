@@ -24,12 +24,32 @@ class CourseModuleDBConnectionTest(TestCase):
         self.assertEqual(chapters[2].name, binary_search.name)
 
     def test_section_saving_and_retrieving_from_db(self):
-        pass
+        create_dec, use_dec, why_dec = self.get_sections()
+        sections = Section.objects.all()
+
+        self.assertEqual(sections.count(), 3)
+        self.assertEqual(sections[0].name, create_dec.name)
+        self.assertEqual(sections[1].name, use_dec.name)
+        self.assertEqual(sections[2].name, why_dec.name)
 
     def test_resource_saving_and_retrieving_from_db(self):
+        data, test, hello_world = self.get_resources()
+        resources = Resource.objects.all()
+
+        self.assertEqual(resources.count(), 3)
+        self.assertEqual(data.name, resources[0].name)
+        self.assertEqual(test.name, resources[1].name)
+        self.assertEqual(hello_world.name, resources[2].name)
+
+    def test_chapters_foreinkey_correct(self):
+        # TODO: 测试外链正确
         pass
 
-    def test_chapter_foreinkey_correct(self):
+    def test_sections_foreinkey_correct(self):
+        # TODO: 测试外链正确
+        pass
+
+    def test_resources_foreinkey_correct(self):
         # TODO: 测试外链正确
         pass
 
@@ -83,3 +103,50 @@ class CourseModuleDBConnectionTest(TestCase):
         dijsktra.save()
         binary_search.save()
         return decorator, dijsktra, binary_search
+
+    def get_sections(self):
+        decorator, dijsktra, binary_search = self.get_chapters()
+        create_decorator = Section(
+            chapter=decorator,
+            name="How to create a decorator",
+            add_time=timezone.now(),
+        )
+        use_decorator = Section(
+            chapter=decorator,
+            name="How to use a decorator",
+            add_time=timezone.now(),
+        )
+        why_need_decorator = Section(
+            chapter=decorator,
+            name="Why do we need decorator when we developing",
+            add_time=timezone.now(),
+        )
+        create_decorator.save()
+        use_decorator.save()
+        why_need_decorator.save()
+        return create_decorator, use_decorator, why_need_decorator
+
+    def get_resources(self):
+        python_intro, algorithms = self.get_courses()
+        data = Resource(
+            name="Data sets for test",
+            course=algorithms,
+            path="media/courses/resources/2018/04",
+            add_time=timezone.now(),
+        )
+        test = Resource(
+            name="Test case of the algorithms",
+            course=algorithms,
+            path="media/courses/resources/2018/04",
+            add_time=timezone.now(),
+        )
+        hello_world = Resource(
+            name="Hello world program of Python",
+            course=python_intro,
+            path="media/courses/resources/2018/04",
+            add_time=timezone.now(),
+        )
+        data.save()
+        test.save()
+        hello_world.save()
+        return data, test, hello_world

@@ -17,11 +17,27 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 
 class EmailVerifyAdmin(admin.ModelAdmin):
-    pass
+    list_display = [
+        "email", "code", "verify_type", "send_time",
+    ]
+    list_filter = [
+        "email", "code", "verify_type", "send_time",
+    ]
+    search_fields = [
+        "email", "code", "verify_type",
+    ]
 
 
 class BannerAdmin(admin.ModelAdmin):
-    pass
+    list_display = [
+        "title", "url", "index", "add_time",
+    ]
+    search_fields = [
+        "title", "url", "index",
+    ]
+    list_filter = [
+        "title", "url", "index", "add_time",
+    ]
 
 
 admin.site.register(UserProfile, UserProfileAdmin)

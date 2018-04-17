@@ -12,7 +12,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     ]
     list_filter = [
         "username", "nick_name", "mobile", "first_name", "last_name", "address", "gender",
-        "is_stuff", "is_active", "email",
+        "is_staff", "is_active", "email", "date_joined",
     ]
 
 

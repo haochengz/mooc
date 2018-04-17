@@ -4,7 +4,16 @@ from .models import UserProfile, EmailVerify, Banner
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    pass
+    list_display = [
+        "username", "nick_name", "gender", "mobile", "email",
+    ]
+    search_fields = [
+        "username", "nick_name", "mobile", "first_name", "last_name", "address", "gender", "email"
+    ]
+    list_filter = [
+        "username", "nick_name", "mobile", "first_name", "last_name", "address", "gender",
+        "is_stuff", "is_active", "email",
+    ]
 
 
 class EmailVerifyAdmin(admin.ModelAdmin):

@@ -53,7 +53,7 @@ class UserCourse(models.Model):
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:
-        verbose_name = ""
+        verbose_name = "用户正在学习的课程"
         verbose_name_plural = verbose_name
 
     def __unicode__(self):
@@ -64,9 +64,9 @@ class UserFavorite(models.Model):
     user = models.ForeignKey(UserProfile, verbose_name="用户", on_delete=models.CASCADE)
     fav_id = models.IntegerField(verbose_name="收藏数据id", default=0)
     fav_type = models.IntegerField(verbose_name="收藏类型", default=1, choices=(
-        (1, ""),
-        (2, ""),
-        (3, ""),
+        (1, "课程"),
+        (2, "机构"),
+        (3, "讲师"),
     ))
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 

@@ -7,7 +7,7 @@ from .models import Course, Chapter, Section, Resource
 class CourseModuleDBConnectionTest(TestCase):
 
     def test_course_saving_and_retrieving_from_db(self):
-        python_intro, algorithms = self.get_courses()
+        python_intro, algorithms = CourseModuleDBConnectionTest.get_courses()
 
         courses = Course.objects.all()
         self.assertEqual(courses.count(), 2)
@@ -15,7 +15,7 @@ class CourseModuleDBConnectionTest(TestCase):
         self.assertEqual(courses[1].name, algorithms.name)
 
     def test_chapter_saving_and_retrieving_from_db(self):
-        decorator, dijsktra, binary_search = self.get_chapters()
+        decorator, dijsktra, binary_search = CourseModuleDBConnectionTest.get_chapters()
 
         chapters = Chapter.objects.all()
         self.assertEqual(chapters.count(), 3)
@@ -24,7 +24,7 @@ class CourseModuleDBConnectionTest(TestCase):
         self.assertEqual(chapters[2].name, binary_search.name)
 
     def test_section_saving_and_retrieving_from_db(self):
-        create_dec, use_dec, why_dec = self.get_sections()
+        create_dec, use_dec, why_dec = CourseModuleDBConnectionTest.get_sections()
         sections = Section.objects.all()
 
         self.assertEqual(sections.count(), 3)
@@ -33,7 +33,7 @@ class CourseModuleDBConnectionTest(TestCase):
         self.assertEqual(sections[2].name, why_dec.name)
 
     def test_resource_saving_and_retrieving_from_db(self):
-        data, test, hello_world = self.get_resources()
+        data, test, hello_world = CourseModuleDBConnectionTest.get_resources()
         resources = Resource.objects.all()
 
         self.assertEqual(resources.count(), 3)
@@ -53,7 +53,8 @@ class CourseModuleDBConnectionTest(TestCase):
         # TODO: 测试外链正确
         pass
 
-    def get_courses(self):
+    @staticmethod
+    def get_courses():
         python_intro = Course(
             name="Introduction to Python",
             desc="A introduction and tutorial to Python language.",
@@ -82,8 +83,9 @@ class CourseModuleDBConnectionTest(TestCase):
         algorithms.save()
         return python_intro, algorithms
 
-    def get_chapters(self):
-        python_intro, algorithms = self.get_courses()
+    @staticmethod
+    def get_chapters():
+        python_intro, algorithms = CourseModuleDBConnectionTest.get_courses()
         decorator = Chapter(
             name="Decorator",
             add_time=timezone.now(),
@@ -104,8 +106,9 @@ class CourseModuleDBConnectionTest(TestCase):
         binary_search.save()
         return decorator, dijsktra, binary_search
 
-    def get_sections(self):
-        decorator, dijsktra, binary_search = self.get_chapters()
+    @staticmethod
+    def get_sections():
+        decorator, dijsktra, binary_search = CourseModuleDBConnectionTest.get_chapters()
         create_decorator = Section(
             chapter=decorator,
             name="How to create a decorator",
@@ -126,8 +129,9 @@ class CourseModuleDBConnectionTest(TestCase):
         why_need_decorator.save()
         return create_decorator, use_decorator, why_need_decorator
 
-    def get_resources(self):
-        python_intro, algorithms = self.get_courses()
+    @staticmethod
+    def get_resources():
+        python_intro, algorithms = CourseModuleDBConnectionTest.get_courses()
         data = Resource(
             name="Data sets for test",
             course=algorithms,

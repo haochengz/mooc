@@ -66,7 +66,7 @@
 					<div class="module1_1 left">
 						<img width="228" height="614" src="/static/images/module1_1.jpg"/>
 						<p class="fisrt_word">名师授课<br/>专业权威</p>
-						<a class="more" href="{% url 'course:course_list' %}">查看更多课程 ></a>
+						<a class="more" href="{% url 'course_list' %}">查看更多课程 ></a>
 					</div>
 					<div class="right group_list">
 						<div class="module1_2 box">
@@ -74,7 +74,7 @@
 								<ul class="imgs">
                                     {% for banner_course in banner_courses %}
                                     <li>
-                                        <a href="{% url 'course:course_detail' banner_course.id %}">
+                                        <a href="{% url 'course_detail' banner_course.id %}">
                                             <img width="470" height="300" src="{{ MEDIA_URL }}{{ banner_course.image }}" />
                                         </a>
                                     </li>
@@ -86,11 +86,11 @@
 						</div>
                             {% for course in courses %}
                             <div class="module1_{{ forloop.counter|add:2 }} box">
-                                <a href="{% url 'course:course_detail' course.id %}">
+                                <a href="{% url 'course_detail' course.id %}">
                                     <img width="233" height="190" src="{{ MEDIA_URL }}{{ course.image }}"/>
                                 </a>
                                 <div class="des">
-                                    <a href="{% url 'course:course_detail' course.id %}">
+                                    <a href="{% url 'course_detail' course.id %}">
                                         <h2 title="{{ course.name }}">{{ course.name }}</h2>
                                     </a>
                                     <span class="fl">难度：<i class="key">{{ course.get_degree_display }}</i></span>
@@ -115,13 +115,13 @@
 					<div class="module3_1 left">
 						<img width="228" height="463" src="/static/images/module3_1.jpg"/>
 						<p class="fisrt_word">名校来袭<br/>权威认证</p>
-						<a class="more" href="{% url 'org:org_list' %}">查看更多机构 ></a>
+						<a class="more" href="{% url 'org_list' %}">查看更多机构 ></a>
 					</div>
 					<div class="right">
 						<ul>
                             {% for org in course_orgs %}
                                 <li class="{% if forloop.counter|divisibleby:5 %}five{% endif %}">
-                                    <a href="{% url 'org:org_home' org.id %}">
+                                    <a href="{% url 'org_home' org.id %}">
                                         <div class="company">
                                             <img width="184" height="100" src="{{ MEDIA_URL }}{{ org.image }}"/>
                                             <div class="score">

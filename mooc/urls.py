@@ -20,7 +20,16 @@ import users.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='fake_index.html'), name='index'),
+    path('', users.views.index, name='index'),
     path('login/', users.views.login, name='login'),
-    path('forget/', TemplateView.as_view(template_name='fake_index.html'), name='forget_pwd')
+    path('forget/', TemplateView.as_view(template_name='index.html'), name='forget_pwd'),
+    path('info/', TemplateView.as_view(template_name='index.html'), name='user_info'),
+    path('logout/', TemplateView.as_view(template_name='index.html'), name='logout'),
+    path('message/', TemplateView.as_view(template_name='index.html'), name='mymessage'),
+    path('register/', TemplateView.as_view(template_name='index.html'), name='register'),
+    path('courses/', TemplateView.as_view(template_name='index.html'), name='course_list'),
+    path('teachers/', TemplateView.as_view(template_name='index.html'), name='teacher_list'),
+    path('orgs/', TemplateView.as_view(template_name='index.html'), name='org_list'),
+    path('orghome/', TemplateView.as_view(template_name='index.html'), name='org_home'),
+    path('coursedetail/', TemplateView.as_view(template_name='index.html'), name='course_detail'),
 ]

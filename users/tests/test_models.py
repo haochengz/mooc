@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.utils import timezone
 from datetime import datetime
 
-from .models import UserProfile, EmailVerify, Banner
+from users.models import UserProfile, EmailVerify, Banner
 
 
 class UserModuleModelsDBConnectionTest(TestCase):

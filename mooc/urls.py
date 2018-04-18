@@ -16,9 +16,11 @@ Including another URLconf
 from django.urls import path
 from django.contrib import admin
 from django.views.generic import TemplateView
+import users.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='fake_index.html'), name='index'),
-    path('login/', TemplateView.as_view(template_name='fake_login.html'), name='login'),
+    path('login/', users.views.login, name='login'),
+    path('forget/', TemplateView.as_view(template_name='fake_index.html'), name='forget_pwd')
 ]

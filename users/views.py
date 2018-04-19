@@ -28,4 +28,4 @@ class LoginView(View):
                 return render(request, "index.html", {})
             else:
                 return render(request, "login.html", {"msg": "invalid username or password"})
-        return render(request, "login.html", {})
+        return render(request, "login.html", {"login_form": login_form})

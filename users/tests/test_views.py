@@ -78,3 +78,57 @@ class LoginViewTest(TestCase):
         })
 
         self.assertContains(resp, "invalid username or password")
+
+    def test_login_with_empty_username_POST_should_be_fail(self):
+        resp = self.client.post('/login/', data={
+            "username": "",
+            "password": "123456abc",
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, "login.html")
+        self.assertContains(resp, "这个字段是必填项")
+
+    def test_login_with_empty_password_POST_should_be_fail(self):
+        resp = self.client.post('/login/', data={
+            "username": "test",
+            "password": "",
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, "login.html")
+        self.assertContains(resp, "这个字段是必填项")
+
+    def test_login_POST_username_must_more_than_4_chars(self):
+        resp = self.client.post('/login/', data={
+            "username": "tes",
+            "password": "123456abc",
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, "login.html")
+        self.assertContains(resp, "确保该变量至少包含")
+
+    def test_login_POST_password_must_more_than_8_chars(self):
+        resp = self.client.post('/login/', data={
+            "username": "test",
+            "password": "1234567",
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, "login.html")
+        self.assertContains(resp, "确保该变量至少包含")
+
+    def test_login_POST_username_no_more_than_32_chars(self):
+        resp = self.client.post('/login/', data={
+            "username": "abcdefgjiuhgdsucjdkluehfngjchdjnf",
+            "password": "123456abc",
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, "login.html")
+        self.assertContains(resp, "确保该变量包含不超过")
+
+    def test_login_POST_password_no_more_than_16_chars(self):
+        resp = self.client.post('/login/', data={
+            "username": "test",
+            "password": "12345678998765432",
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, "login.html")
+        self.assertContains(resp, "确保该变量包含不超过")

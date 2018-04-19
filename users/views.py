@@ -2,8 +2,11 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.views.generic.base import View
+from django.contrib.auth.hashers import make_password
 
-from users.forms import LoginForm, RegisterForm
+from users.forms import LoginForm, RegisterEmailForm
+from users.models import UserProfile
+from apps.utils.email import send_register_verify_mail
 
 
 def index(request):
@@ -35,9 +38,25 @@ class RegisterView(View):
 
     @staticmethod
     def get(request):
-        reg_form = RegisterForm()
+        reg_form = RegisterEmailForm()
+        reg_form.email = ""
+        reg_form.password = ""
         return render(request, "register.html", {"register_form": reg_form})
 
     @staticmethod
     def post(request):
-        pass
+        reg_form = RegisterEmailForm(request.POST)
+        if reg_form.is_valid():
+            UserProfile.objects.create(
+                username=request.POST['email'],
+                email=request.POST['email'],
+                password=make_password(request.POST['password']),
+                is_active=False,
+                is_staff=False,
+            )
+            unactivate_user = UserProfile.objects.get(username=request.POST['email'])
+            send_register_verify_mail(unactivate_user)
+            # send an activation email
+            # hit the link on that email lead you to the finish page of registration
+            # save this user as a official member in the database
+        return render(request, "register.html", {"register_form": reg_form})

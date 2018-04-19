@@ -8,9 +8,8 @@ class LoginForm(forms.Form):
     password = forms.CharField(required=True, max_length=16, min_length=8)
 
 
-class RegisterForm(forms.Form):
-    username = forms.CharField(required=True, max_length=32, min_length=4)
+class RegisterEmailForm(forms.Form):
     email = forms.EmailField(required=True)
     password = forms.CharField(required=True, max_length=16, min_length=8)
-    captcha = CaptchaField()
+    captcha = CaptchaField(error_messages={"invalid": "验证码错误"})
 

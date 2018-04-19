@@ -5,16 +5,19 @@ from django.views.generic.base import View
 
 from users.forms import LoginForm
 
+
 def index(request):
     return render(request, "index.html", {})
 
 
 class LoginView(View):
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         return render(request, "login.html", {})
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
             username = request.POST.get("username", "")
@@ -26,4 +29,3 @@ class LoginView(View):
             else:
                 return render(request, "login.html", {"msg": "invalid username or password"})
         return render(request, "login.html", {})
-

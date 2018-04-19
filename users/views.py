@@ -29,3 +29,14 @@ class LoginView(View):
             else:
                 return render(request, "login.html", {"msg": "invalid username or password"})
         return render(request, "login.html", {"login_form": login_form})
+
+
+class RegisterView(View):
+
+    @staticmethod
+    def get(request):
+        return render(request, "register.html", {})
+
+    @staticmethod
+    def post(request):
+        pass

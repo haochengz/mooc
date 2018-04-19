@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.urls import resolve
 
-from users.views import index, LoginView
+from users.views import index, LoginView, RegisterView
 from users.models import UserProfile
 
 
@@ -132,3 +132,19 @@ class LoginViewTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, "login.html")
         self.assertContains(resp, "确保该变量包含不超过")
+
+
+class RegisterViewTest(TestCase):
+
+    def setUp(self):
+        self.user = UserProfile(username="test", email="test@tests.com")
+        self.user.set_password("123456abc")
+        self.user.save()
+
+    def test_register_url_resolve(self):
+        found = resolve('/register/')
+        self.assertEqual(found.func.view_class, RegisterView)
+
+    def test_register_template_correct_when_asking_as_GET(self):
+        resp = self.client.get('/register/')
+        self.assertTemplateUsed(resp, 'register.html')

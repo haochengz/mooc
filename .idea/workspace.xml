@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f8779402-86b3-42f2-8904-72a10ef01f7e" name="Default" comment="新建user app">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/users/tests/test_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/tests/test_views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/views.py" afterDir="false" />
     </list>
@@ -15,7 +14,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/mooc$Test__users_tests.coverage" NAME="Test: users.tests Coverage Results" MODIFIED="1523856131136" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/mooc$Test__.coverage" NAME="Test:  Coverage Results" MODIFIED="1524116511168" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/mooc$Test__.coverage" NAME="Test:  Coverage Results" MODIFIED="1524117746986" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -51,11 +50,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/users/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="11" column="104" selection-start-line="11" selection-start-column="104" selection-end-line="11" selection-end-column="104" />
+            <state relative-caret-position="225">
+              <caret line="15" selection-start-line="15" selection-end-line="15" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -63,11 +62,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="test_views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/users/tests/test_views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="930">
-              <caret line="62" column="29" selection-start-line="62" selection-start-column="29" selection-end-line="62" selection-end-column="29" />
+            <state relative-caret-position="517">
+              <caret line="65" column="35" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="35" />
               <folding>
                 <element signature="e#1#33#0" expanded="true" />
               </folding>
@@ -156,8 +155,8 @@
         <option value="$PROJECT_DIR$/mooc/settings.py" />
         <option value="$PROJECT_DIR$/users/tests/tests_models.py" />
         <option value="$PROJECT_DIR$/operations/tests.py" />
-        <option value="$PROJECT_DIR$/users/tests/test_views.py" />
         <option value="$PROJECT_DIR$/users/views.py" />
+        <option value="$PROJECT_DIR$/users/tests/test_views.py" />
       </list>
     </option>
   </component>
@@ -340,27 +339,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Test__ - 2018.04.18 at 16h 53m 00s.xml">
-      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
-    </history-entry>
-    <history-entry file="Test__ - 2018.04.18 at 16h 53m 05s.xml">
-      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
-    </history-entry>
-    <history-entry file="Test__ - 2018.04.18 at 16h 53m 45s.xml">
-      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
-    </history-entry>
-    <history-entry file="Test__ - 2018.04.18 at 16h 53m 55s.xml">
-      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
-    </history-entry>
-    <history-entry file="Test__ - 2018.04.18 at 16h 57m 57s.xml">
-      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
-    </history-entry>
-    <history-entry file="Test__ - 2018.04.18 at 17h 00m 20s.xml">
-      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
-    </history-entry>
-    <history-entry file="Test__ - 2018.04.18 at 17h 02m 20s.xml">
-      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
-    </history-entry>
     <history-entry file="Test__ - 2018.04.19 at 13h 38m 34s.xml">
       <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
     </history-entry>
@@ -368,6 +346,27 @@
       <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
     </history-entry>
     <history-entry file="Test__ - 2018.04.19 at 13h 41m 52s.xml">
+      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Test__ - 2018.04.19 at 13h 54m 10s.xml">
+      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Test__ - 2018.04.19 at 13h 54m 32s.xml">
+      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Test__ - 2018.04.19 at 13h 56m 37s.xml">
+      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Test__ - 2018.04.19 at 13h 58m 20s.xml">
+      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Test__ - 2018.04.19 at 14h 00m 25s.xml">
+      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Test__ - 2018.04.19 at 14h 02m 25s.xml">
+      <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Test__ - 2018.04.19 at 14h 02m 28s.xml">
       <configuration name="Test: " configurationId="DjangoTestsConfigurationType" />
     </history-entry>
   </component>
@@ -387,7 +386,7 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32900944" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50069445" side_tool="true" weight="0.32900944" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49930555" visible="true" weight="0.3283582" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49930555" weight="0.3283582" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32900944" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32900944" />
       <window_info anchor="bottom" id="Terminal" order="7" />
@@ -449,7 +448,39 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="27" />
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/users/tests/test_views.py</url>
+          <line>64</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/users/views.py</url>
+          <line>12</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/users/views.py</url>
+          <line>11</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/users/views.py</url>
+          <line>13</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/users/views.py</url>
+          <line>14</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/users/views.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="35" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -772,22 +803,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/users/tests/test_views.py">
+    <entry file="file://$PROJECT_DIR$/users/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="930">
-          <caret line="62" column="29" selection-start-line="62" selection-start-column="29" selection-end-line="62" selection-end-column="29" />
+        <state relative-caret-position="225">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
           <folding>
-            <element signature="e#1#33#0" expanded="true" />
+            <element signature="e#0#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/users/views.py">
+    <entry file="file://$PROJECT_DIR$/users/tests/test_views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="11" column="104" selection-start-line="11" selection-start-column="104" selection-end-line="11" selection-end-column="104" />
+        <state relative-caret-position="517">
+          <caret line="65" column="35" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="35" />
           <folding>
-            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#1#33#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -19,6 +19,11 @@ class IndexViewTest(TestCase):
 
 class LoginViewTest(TestCase):
 
+    def setUp(self):
+        self.user = UserProfile(username="test", email="test@tests.com")
+        self.user.set_password("123456abc")
+        self.user.save()
+
     def test_login_url_resolve(self):
         found = resolve('/login/')
         self.assertEqual(found.func, user_login)
@@ -28,9 +33,6 @@ class LoginViewTest(TestCase):
         self.assertTemplateUsed(resp, "login.html")
 
     def test_login_url_POST_to_existing_user(self):
-        user = UserProfile(username="test", email="test@test.com")
-        user.set_password("123456abc")
-        user.save()
         resp = self.client.post('/login/', data={
             "username": "test",
             "password": "123456abc",
@@ -41,9 +43,6 @@ class LoginViewTest(TestCase):
         self.assertTrue(resp.wsgi_request.user.is_authenticated)
 
     def test_login_with_POST_wrong_username_or_password_should_return_to_login_page(self):
-        user = UserProfile(username="test", email="test@test.com")
-        user.set_password("123456abc")
-        user.save()
         resp = self.client.post('/login/', data={
             "username": "test",
             "password": "123456",
@@ -61,4 +60,16 @@ class LoginViewTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, "login.html")
         self.assertFalse(resp.wsgi_request.user.is_authenticated)
+
+    def test_login_with_POST_using_email_as_username_should_works_just_fun(self):
+        resp = self.client.post('/login/', data={
+            "username": "test@tests.com",
+            "password": "123456abc",
+        })
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, "index.html")
+        self.assertTrue(resp.wsgi_request.user.is_authenticated)
+
+
 

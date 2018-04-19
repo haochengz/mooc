@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.urls import resolve
 
-from users.views import index, user_login
+from users.views import index, LoginView
 from users.models import UserProfile
 
 
@@ -26,7 +26,7 @@ class LoginViewTest(TestCase):
 
     def test_login_url_resolve(self):
         found = resolve('/login/')
-        self.assertEqual(found.func, user_login)
+        self.assertEqual(found.func.view_class, LoginView)
 
     def test_login_url_GET_correct_template(self):
         resp = self.client.get('/login/')
@@ -78,6 +78,3 @@ class LoginViewTest(TestCase):
         })
 
         self.assertContains(resp, "invalid username or password")
-
-
-

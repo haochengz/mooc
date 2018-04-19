@@ -1,14 +1,19 @@
+
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
+from django.views.generic.base import View
 
 
 def index(request):
     return render(request, "index.html", {})
 
 
-def user_login(request):
-    msg = ""
-    if request.method == "POST":
+class LoginView(View):
+
+    def get(self, request):
+        return render(request, "login.html", {})
+
+    def post(self, request):
         username = request.POST.get("username", "")
         password = request.POST.get("password", "")
         user = authenticate(username=username, password=password)
@@ -16,5 +21,5 @@ def user_login(request):
             login(request=request, user=user)
             return render(request, "index.html", {})
         else:
-            msg = "invalid username or password"
-    return render(request, "login.html", {"msg": msg, })
+            return render(request, "login.html", {"msg": "invalid username or password"})
+

@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 # Authentication
 AUTHENTICATION_BACKENDS = (
-    'users.views.CustomBackend',
+    'users.helper.CustomBackend',
 )
 
 

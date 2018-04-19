@@ -7,6 +7,7 @@ def index(request):
 
 
 def user_login(request):
+    msg = ""
     if request.method == "POST":
         username = request.POST.get("username", "")
         password = request.POST.get("password", "")
@@ -14,4 +15,6 @@ def user_login(request):
         if user:
             login(request=request, user=user)
             return render(request, "index.html", {})
-    return render(request, "login.html", {})
+        else:
+            msg = "invalid username or password"
+    return render(request, "login.html", {"msg": msg, })

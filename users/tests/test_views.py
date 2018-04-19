@@ -71,5 +71,13 @@ class LoginViewTest(TestCase):
         self.assertTemplateUsed(resp, "index.html")
         self.assertTrue(resp.wsgi_request.user.is_authenticated)
 
+    def test_login_with_POST_return_to_login_page_and_given_a_error_msg(self):
+        resp = self.client.post('/login/', data={
+            "username": "test@tests.com",
+            "password": "123456abb",
+        })
+
+        self.assertContains(resp, "invalid username or password")
+
 
 

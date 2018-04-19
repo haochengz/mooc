@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.views.generic.base import View
 
-from users.forms import LoginForm
+from users.forms import LoginForm, RegisterForm
 
 
 def index(request):
@@ -35,7 +35,8 @@ class RegisterView(View):
 
     @staticmethod
     def get(request):
-        return render(request, "register.html", {})
+        reg_form = RegisterForm()
+        return render(request, "register.html", {"register_form": reg_form})
 
     @staticmethod
     def post(request):

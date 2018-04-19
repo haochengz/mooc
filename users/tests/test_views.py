@@ -28,12 +28,37 @@ class LoginViewTest(TestCase):
         self.assertTemplateUsed(resp, "login.html")
 
     def test_login_url_POST_to_existing_user(self):
-        user = UserProfile.objects.create(username="test", password="123456abc", email="test@test.com")
+        user = UserProfile(username="test", email="test@test.com")
+        user.set_password("123456abc")
+        user.save()
         resp = self.client.post('/login/', data={
             "username": "test",
             "password": "123456abc",
         })
-        # TODO: 不能测试用户登陆
+
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, "index.html")
         self.assertTrue(resp.wsgi_request.user.is_authenticated)
+
+    def test_login_with_POST_wrong_username_or_password_should_return_to_login_page(self):
+        user = UserProfile(username="test", email="test@test.com")
+        user.set_password("123456abc")
+        user.save()
+        resp = self.client.post('/login/', data={
+            "username": "test",
+            "password": "123456",
+        })
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, "login.html")
+        self.assertFalse(resp.wsgi_request.user.is_authenticated)
+
+        resp = self.client.post('/login/', data={
+            "username": "test1",
+            "password": "123456abc",
+        })
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, "login.html")
+        self.assertFalse(resp.wsgi_request.user.is_authenticated)
+

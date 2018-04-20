@@ -86,7 +86,7 @@ class LoginViewTest(TestCase):
         })
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, "login.html")
-        self.assertContains(resp, "这个字段是必填项")
+        self.assertContains(resp, "这个字段是必须的")
 
     def test_login_with_empty_password_POST_should_be_fail(self):
         resp = self.client.post('/login/', data={
@@ -95,7 +95,7 @@ class LoginViewTest(TestCase):
         })
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, "login.html")
-        self.assertContains(resp, "这个字段是必填项")
+        self.assertContains(resp, "这个字段是必须的")
 
     def test_login_POST_username_must_more_than_4_chars(self):
         resp = self.client.post('/login/', data={

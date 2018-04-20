@@ -137,3 +137,20 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+
+# Email configurations
+# mail.sina.com
+# username: hczhao000111@sina.com
+# password: 110293
+# pop3 server: pop.sina.com
+# smtp server: smtp.sina.com
+# imap server: imap.sina.com
+# smtp server: smtp.sina.com
+
+EMAIL_HOST = "smtp.sina.com"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "hczhao000111@sina.com"
+EMAIL_HOST_PASSWORD = "392011"
+EMAIL_USE_TLS = True
+EMAIL_FROM = "hczhao000111@sina.com"

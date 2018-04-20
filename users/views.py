@@ -39,8 +39,6 @@ class RegisterView(View):
     @staticmethod
     def get(request):
         reg_form = RegisterEmailForm()
-        reg_form.email = ""
-        reg_form.password = ""
         return render(request, "register.html", {"register_form": reg_form})
 
     @staticmethod
@@ -54,9 +52,11 @@ class RegisterView(View):
                 is_active=False,
                 is_staff=False,
             )
-            unactivate_user = UserProfile.objects.get(username=request.POST['email'])
-            send_register_verify_mail(unactivate_user)
+            unactive_user = UserProfile.objects.get(username=request.POST['email'])
+            send_register_verify_mail(unactive_user)
             # send an activation email
             # hit the link on that email lead you to the finish page of registration
             # save this user as a official member in the database
+            # TODO: UNIQUE constraint failed on username field
+            return render(request, "login.html", {})
         return render(request, "register.html", {"register_form": reg_form})

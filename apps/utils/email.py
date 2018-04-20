@@ -9,7 +9,7 @@ from users.models import EmailVerify
 from mooc.settings import EMAIL_FROM
 
 
-test_server_addr = "http://127.0.0.1/"
+test_server_addr = "http://127.0.0.1:8000/"
 
 
 def send_register_verify_mail(user):

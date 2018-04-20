@@ -5,7 +5,7 @@ from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 
 from users.forms import LoginForm, RegisterEmailForm
-from users.models import UserProfile
+from users.models import UserProfile, EmailVerify
 from apps.utils.email import send_register_verify_mail
 
 
@@ -58,5 +58,21 @@ class RegisterView(View):
             # hit the link on that email lead you to the finish page of registration
             # save this user as a official member in the database
             # TODO: UNIQUE constraint failed on username field
+            # TODO: Test for this view and email send util tools
+            # TODO: Save literal to a independent file
+            # TODO: Only activated user can login
             return render(request, "login.html", {})
         return render(request, "register.html", {"register_form": reg_form})
+
+
+class ActivateUserView(View):
+
+    @staticmethod
+    def get(request, code):
+        record = EmailVerify.objects.get(code=code)
+        email = record.email
+        user = UserProfile.objects.get(email=email)
+        if user:
+            user.is_active = True
+            # TODO: Major bug, repetion username and email address
+        return render(request, "index.html", {})

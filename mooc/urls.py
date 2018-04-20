@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path, include
+from django.urls import path, re_path, include
 from django.contrib import admin
 from django.views.generic import TemplateView
 
@@ -34,5 +34,6 @@ urlpatterns = [
     path('orghome/', TemplateView.as_view(template_name='index.html'), name='org_home'),
     path('coursedetail/', TemplateView.as_view(template_name='index.html'), name='course_detail'),
     path('captcha/', include('captcha.urls')),
+    re_path(r'^activate/(?P<code>.*)/$', users.views.ActivateUserView.as_view(), name="active"),
 ]
 

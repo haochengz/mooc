@@ -63,6 +63,19 @@ class LoginViewTest(TestCase):
         self.assertTemplateUsed(resp, "login.html")
         self.assertFalse(resp.wsgi_request.user.is_authenticated)
 
+    def test_only_activated_user_login(self):
+        user = UserProfile(username="unactivated", email="unactivated@tests.com", is_active=False)
+        user.set_password("123456abc")
+        user.save()
+        resp = self.client.post('/login/', data={
+            "username": "unactivated",
+            "password": "123456abc",
+        })
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, "login.html")
+        self.assertContains(resp, "user unactivated is not activated")
+
     def test_login_with_POST_using_email_as_username_should_works_just_fun(self):
         resp = self.client.post('/login/', data={
             "username": "test@tests.com",

@@ -26,11 +26,13 @@ class LoginView(View):
             username = request.POST.get("username", "")
             password = request.POST.get("password", "")
             user = authenticate(username=username, password=password)
-            if user:
+            if user and user.is_active:
                 login(request=request, user=user)
                 return render(request, "index.html", {})
-            else:
+            elif not user:
                 return render(request, "login.html", {"msg": "invalid username or password"})
+            else:
+                return render(request, "login.html", {"msg": "user %s is not activated" % user.username})
         return render(request, "login.html", {"login_form": login_form})
 
 

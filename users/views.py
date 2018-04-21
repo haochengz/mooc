@@ -59,7 +59,6 @@ class RegisterView(View):
             # save this user as a official member in the database
             # TODO: Test for this view and email send util tools
             # TODO: UNIQUE constraint failed on username field
-            # TODO: Save literal to a independent file
             # TODO: Only activated user can login
             return render(request, "login.html", {})
         return render(request, "register.html", {"register_form": reg_form})

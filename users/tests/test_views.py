@@ -1,9 +1,11 @@
 
 from django.test import TestCase
 from django.urls import resolve
+from django.db import IntegrityError
+from captcha.models import CaptchaStore
 
 from users.views import index, LoginView, RegisterView
-from users.models import UserProfile
+from users.models import UserProfile, EmailVerify
 
 
 class IndexViewTest(TestCase):
@@ -148,3 +150,59 @@ class RegisterViewTest(TestCase):
     def test_register_template_correct_when_asking_as_GET(self):
         resp = self.client.get('/register/')
         self.assertTemplateUsed(resp, 'register.html')
+
+    def test_POST_a_user_register_request_to_view_then_create_user_in_db(self):
+        captcha = self.captcha_through()
+        resp = self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        # user = UserProfile.objects.get(email="testuser@user.com")
+        self.assertTemplateUsed(resp, "login.html")
+        # self.assertIsNotNone(user)
+
+    def test_POST_a_user_register_request_to_view_which_user_is_not_active(self):
+        captcha = self.captcha_through()
+        self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        user = UserProfile.objects.get(email="testuser@user.com")
+        self.assertEqual(user.is_active, False)
+
+    def test_POST_a_user_register_request_to_view_then_create_a_verify_code_in_db(self):
+        captcha = self.captcha_through()
+        self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        verify_code = EmailVerify.objects.get(email="testuser@user.com")
+        self.assertIsNotNone(verify_code)
+
+    def test_POST_a_user_register_request_to_view_which_is_already_in_db_should_raise_IntegrityError(self):
+        UserProfile.objects.create(
+            username = "testuser@user.com",
+            email="testuser@user.com",
+            password="123456789",
+        )
+        with self.assertRaises(IntegrityError) as e:
+            captcha = self.captcha_through()
+            self.client.post("/register/", data={
+                "email": "testuser@user.com",
+                "password": "12345566",
+                "captcha_0": captcha.hashkey,
+                "captcha_1": captcha.response,
+            })
+        self.assertEqual(e.exception.args[0], "UNIQUE constraint failed: users_userprofile.username")
+
+    @staticmethod
+    def captcha_through():
+        captcha = CaptchaStore.objects.get(hashkey=CaptchaStore.generate_key())
+        return captcha
+

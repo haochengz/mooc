@@ -1,11 +1,11 @@
 
 from django.test import TestCase
 from django.urls import resolve
-from django.db import IntegrityError
 from captcha.models import CaptchaStore
 
 from users.views import index, LoginView, RegisterView
 from users.models import UserProfile, EmailVerify
+from apps.utils.email import generate_verify_url
 
 
 class IndexViewTest(TestCase):
@@ -172,9 +172,9 @@ class RegisterViewTest(TestCase):
             "captcha_0": captcha.hashkey,
             "captcha_1": captcha.response,
         })
-        # user = UserProfile.objects.get(email="testuser@user.com")
+        user = UserProfile.objects.get(email="testuser@user.com")
         self.assertTemplateUsed(resp, "login.html")
-        # self.assertIsNotNone(user)
+        self.assertIsNotNone(user)
 
     def test_POST_a_user_register_request_to_view_which_user_is_not_active(self):
         captcha = self.captcha_through()
@@ -214,9 +214,34 @@ class RegisterViewTest(TestCase):
         self.assertTemplateUsed(resp, "register.html")
         self.assertContains(resp, "email already exists")
 
-
     @staticmethod
     def captcha_through():
         captcha = CaptchaStore.objects.get(hashkey=CaptchaStore.generate_key())
         return captcha
+
+
+class ActivateViewTest(TestCase):
+
+    def test_activate_unactive_user(self):
+        captcha = RegisterViewTest.captcha_through()
+        self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        record = EmailVerify.objects.get(email="testuser@user.com")
+        activate_url = generate_verify_url(record.code)
+        resp = self.client.get(activate_url)
+
+        self.assertTemplateUsed(resp, "index.html")
+        user = UserProfile.objects.get(email="testuser@user.com")
+        self.assertTrue(user.is_active)
+
+    def test_activate_unactive_user_with_a_wrong_active_code(self):
+        activate_url = generate_verify_url("Hfjsdlfeur")
+        resp = self.client.get(activate_url)
+
+        self.assertTemplateUsed(resp, "register.html")
+        self.assertContains(resp, "cannot activate user, active code is wrong")
 

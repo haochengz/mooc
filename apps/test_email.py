@@ -42,10 +42,14 @@ class EmailVerifyTest(TestCase):
         code = generate_random_code()
         url = generate_verify_url(code)
         self.assertIn(code, url)
-        self.assertEqual(url, server_url + "activate/" + code)
+        self.assertEqual(url, server_url + "activate/" + code + '/')
 
     def test_no_repetitive_code_in_db(self):
         send_register_verify_mail(user=self.user)
         email_verify_recode = EmailVerify.objects.get(email=self.user.email)
         res = EmailVerify.objects.filter(code=email_verify_recode.code)
         self.assertEqual(len(res), 1)
+
+    def test_never_had_a_repetition_verify_code(self):
+        # Unable to test
+        pass

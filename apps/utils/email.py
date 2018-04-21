@@ -46,7 +46,7 @@ def generate_mail(code):
 
 
 def generate_verify_url(code):
-    return server_url + "activate/" + code
+    return server_url + "activate/" + code + "/"
 
 
 def _send_the_mail(email_addr, subject, text):

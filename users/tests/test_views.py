@@ -198,21 +198,22 @@ class RegisterViewTest(TestCase):
         verify_code = EmailVerify.objects.get(email="testuser@user.com")
         self.assertIsNotNone(verify_code)
 
-    def test_POST_a_user_register_request_to_view_which_is_already_in_db_should_raise_IntegrityError(self):
+    def test_POST_register_an_exists_email_should_reture_to_register_page(self):
         UserProfile.objects.create(
             username = "testuser@user.com",
             email="testuser@user.com",
             password="123456789",
         )
-        with self.assertRaises(IntegrityError) as e:
-            captcha = self.captcha_through()
-            self.client.post("/register/", data={
-                "email": "testuser@user.com",
-                "password": "12345566",
-                "captcha_0": captcha.hashkey,
-                "captcha_1": captcha.response,
-            })
-        self.assertEqual(e.exception.args[0], "UNIQUE constraint failed: users_userprofile.username")
+        captcha = self.captcha_through()
+        resp = self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        self.assertTemplateUsed(resp, "register.html")
+        self.assertContains(resp, "email already exists")
+
 
     @staticmethod
     def captcha_through():

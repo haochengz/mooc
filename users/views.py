@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
+from django.db.models import Q
 
 from users.forms import LoginForm, RegisterEmailForm
 from users.models import UserProfile, EmailVerify
@@ -46,7 +47,8 @@ class RegisterView(View):
     @staticmethod
     def post(request):
         reg_form = RegisterEmailForm(request.POST)
-        if reg_form.is_valid():
+        repeat = UserProfile.objects.filter(Q(username=request.POST['email']) | Q(email=request.POST['email']))
+        if reg_form.is_valid() and len(repeat) == 0:
             UserProfile.objects.create(
                 username=request.POST['email'],
                 email=request.POST['email'],
@@ -56,13 +58,9 @@ class RegisterView(View):
             )
             unactive_user = UserProfile.objects.get(username=request.POST['email'])
             send_register_verify_mail(unactive_user)
-            # send an activation email
-            # hit the link on that email lead you to the finish page of registration
-            # save this user as a official member in the database
-            # TODO: Test for this view and email send util tools
-            # TODO: UNIQUE constraint failed on username field
-            # TODO: Only activated user can login
             return render(request, "login.html", {})
+        else:
+            return render(request, "register.html", {"msg": "email already exists"})
         return render(request, "register.html", {"register_form": reg_form})
 
 

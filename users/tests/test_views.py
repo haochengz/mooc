@@ -269,3 +269,40 @@ class ActivateViewTest(TestCase):
         user = UserProfile.objects.get(email="testuser@user.com")
         self.assertFalse(user.is_active)
 
+    def test_delete_the_validation_code_once_it_has_been_verified(self):
+        captcha = RegisterViewTest.captcha_through()
+        self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        record = EmailVerify.objects.get(email="testuser@user.com")
+        activate_url = generate_verify_url(record.code)
+        resp = self.client.get(activate_url)
+
+        self.assertTemplateUsed(resp, "index.html")
+        self.assertEqual(EmailVerify.objects.count(), 0)
+        record = EmailVerify.objects.filter(email="testuser@user.com")
+        self.assertEqual(len(record), 0)
+
+    def test_delete_the_validation_code_once_it_has_been_expired(self):
+        captcha = RegisterViewTest.captcha_through()
+        self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        record = EmailVerify.objects.get(email="testuser@user.com")
+        register_time = minutes_ago(datetime.now(), 31)
+        record.send_time = register_time
+        record.save()
+        activate_url = generate_verify_url(record.code)
+        resp = self.client.get(activate_url)
+
+        self.assertTemplateUsed(resp, "register.html")
+        self.assertContains(resp, "the validation code is out of date")
+        self.assertEqual(EmailVerify.objects.count(), 0)
+        record = EmailVerify.objects.filter(email="testuser@user.com")
+        self.assertEqual(len(record), 0)

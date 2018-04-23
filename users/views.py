@@ -73,15 +73,15 @@ class ActivateUserView(View):
         if len(record) != 1:
             return render(request, "register.html", {"msg": "cannot activate user, active code is wrong"})
         elif (timezone.now() - record[0].send_time).total_seconds() > 1800:
+            EmailVerify.objects.filter(code=code).delete()
             return render(request, "register.html", {"msg": "the validation code is out of date"})
         email = record[0].email
         user = UserProfile.objects.get(email=email)
         if user:
+            EmailVerify.objects.filter(code=code).delete()
             user.is_active = True
             user.save()
         return render(request, "index.html", {})
 
     # TODO: setup a page to re-send verify code email
     # TODO: re-send verify code should only every 15 minutes interval
-    # TODO: warn the user period of validity in the verify mail
-    # TODO: once code has been verified, delete it from db

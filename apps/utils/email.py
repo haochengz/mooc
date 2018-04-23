@@ -3,6 +3,7 @@ from random import choice
 
 
 from django.core.mail import send_mail
+from django.core.exceptions import FieldError
 
 
 from users.models import EmailVerify
@@ -12,6 +13,9 @@ from local import server_url
 
 def send_register_verify_mail(user):
     code = generate_random_code()
+    appears = EmailVerify.objects.filter(code=code)
+    if len(appears) != 0:
+        raise FieldError("Unexpected random_code function produced same codes")
     email_record = EmailVerify(
         email=user.email,
         code=code,

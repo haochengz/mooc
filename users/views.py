@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from django.db.models import Q
-from django.db import IntegrityError
+from django.utils import timezone
 
 from users.forms import LoginForm, RegisterEmailForm
 from users.models import UserProfile, EmailVerify
@@ -72,6 +72,8 @@ class ActivateUserView(View):
         record = EmailVerify.objects.filter(code=code)
         if len(record) != 1:
             return render(request, "register.html", {"msg": "cannot activate user, active code is wrong"})
+        elif (timezone.now() - record[0].send_time).total_seconds() > 1800:
+            return render(request, "register.html", {"msg": "the validation code is out of date"})
         email = record[0].email
         user = UserProfile.objects.get(email=email)
         if user:
@@ -79,9 +81,7 @@ class ActivateUserView(View):
             user.save()
         return render(request, "index.html", {})
 
-    # TODO: very unlikely but still had a tiny chance that might been produced a same verify code
     # TODO: setup a page to re-send verify code email
     # TODO: re-send verify code should only every 15 minutes interval
-    # TODO: verify code may out of date
     # TODO: warn the user period of validity in the verify mail
     # TODO: once code has been verified, delete it from db

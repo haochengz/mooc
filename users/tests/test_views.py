@@ -1,4 +1,7 @@
 
+from datetime import datetime
+
+
 from django.test import TestCase
 from django.urls import resolve
 from captcha.models import CaptchaStore
@@ -6,6 +9,7 @@ from captcha.models import CaptchaStore
 from users.views import index, LoginView, RegisterView
 from users.models import UserProfile, EmailVerify
 from apps.utils.email import generate_verify_url
+from apps.utils.tools import minutes_ago
 
 
 class IndexViewTest(TestCase):
@@ -244,4 +248,24 @@ class ActivateViewTest(TestCase):
 
         self.assertTemplateUsed(resp, "register.html")
         self.assertContains(resp, "cannot activate user, active code is wrong")
+
+    def test_validation_code_could_been_out_of_date(self):
+        captcha = RegisterViewTest.captcha_through()
+        self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        record = EmailVerify.objects.get(email="testuser@user.com")
+        register_time = minutes_ago(datetime.now(), 31)
+        record.send_time = register_time
+        record.save()
+        activate_url = generate_verify_url(record.code)
+        resp = self.client.get(activate_url)
+
+        self.assertTemplateUsed(resp, "register.html")
+        self.assertContains(resp, "the validation code is out of date")
+        user = UserProfile.objects.get(email="testuser@user.com")
+        self.assertFalse(user.is_active)
 

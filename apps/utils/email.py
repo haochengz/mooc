@@ -45,6 +45,10 @@ def generate_mail(code):
             %s
             
             If you cannot click that link, you could also copy that link and paste in the address bar of your browser.
+            
+            This validation code only validate within 30 minutes after it send out. So, make sure you click the link
+            as soon as you can, if you accidentally gone out of date, you can hit the link below and retrieve a new
+            validation code for your account. The new validation code could send every 30 minutes period.
         """ % generate_verify_url(code)
     return subject, text
 

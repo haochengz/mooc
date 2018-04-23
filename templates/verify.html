@@ -9,8 +9,10 @@
         {{ msg }}
     </h1>
     <div>
-        <form>
-            <input form="input">
+        <h2>Perhaps you want to re-send the validation code to your email address:</h2>
+        <form action="{% url 'resend' %}" method="post">
+            {% csrf_token %}
+            <input form="input" name="email" placeholder="email">
             <input form="submit">
         </form>
     </div>

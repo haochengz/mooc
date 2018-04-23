@@ -310,3 +310,97 @@ class ActivateViewTest(TestCase):
     def test_resend_verify_code_url_resolve(self):
         found = resolve('/reactive/')
         self.assertEqual(found.func.view_class, ActivateUserView)
+
+    def test_resend_a_validation_code_request_by_an_activated_user_should_return_wrong(self):
+        captcha = RegisterViewTest.captcha_through()
+        self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        record = EmailVerify.objects.get(email="testuser@user.com")
+        activate_url = generate_verify_url(record.code)
+        self.client.get(activate_url)
+        resp = self.client.post("/reactive/", data={
+            "email": "testuser@user.com",
+        })
+
+        self.assertTemplateUsed(resp, "verify.html")
+        self.assertContains(resp, "email address already been activated")
+        user = UserProfile.objects.get(email="testuser@user.com")
+        self.assertTrue(user.is_active)
+
+    def test_resend_a_validation_code_by_an_un_register_email(self):
+        resp = self.client.post("/reactive/", data={
+            "email": "somedude@user.com",
+        })
+
+        self.assertTemplateUsed(resp, "verify.html")
+        self.assertContains(resp, "please register first")
+
+    def test_only_re_send_the_validation_code_after_15_minutes_when_last_sent(self):
+        captcha = RegisterViewTest.captcha_through()
+        self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        record = EmailVerify.objects.get(email="testuser@user.com")
+        register_time = minutes_ago(datetime.now(), 31)
+        record.send_time = register_time
+        record.save()
+        self.client.post("/reactive/", data={
+            "email": "testuser@user.com",
+        })
+        record = EmailVerify.objects.filter(email="testuser@user.com")
+        self.assertEqual(record.count(), 2)
+        activate_url = generate_verify_url(record[1].code)
+        resp = self.client.get(activate_url)
+
+        self.assertTemplateUsed(resp, "login.html")
+        user = UserProfile.objects.get(email="testuser@user.com")
+        self.assertTrue(user.is_active)
+
+    def test_resend_a_request_to_have_a_new_validation_code_less_than_15_minutes_when_last_sent(self):
+        captcha = RegisterViewTest.captcha_through()
+        self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        resp = self.client.post("/reactive/", data={
+            "email": "testuser@user.com",
+        })
+        record = EmailVerify.objects.filter(email="testuser@user.com")
+        self.assertEqual(record.count(), 1)
+
+        self.assertTemplateUsed(resp, "verify.html")
+        self.assertContains(resp, "same email address only re-send a validation code every 15 minutes")
+        user = UserProfile.objects.get(email="testuser@user.com")
+        self.assertFalse(user.is_active)
+
+    def test_resend_a_request_new_validation_code_less_than_15_minutes_when_and_only_last_sent(self):
+        captcha = RegisterViewTest.captcha_through()
+        self.client.post("/register/", data={
+            "email": "testuser@user.com",
+            "password": "12345566",
+            "captcha_0": captcha.hashkey,
+            "captcha_1": captcha.response,
+        })
+        record = EmailVerify.objects.get(email="testuser@user.com")
+        register_time = minutes_ago(datetime.now(), 15)
+        record.send_time = register_time
+        record.save()
+        self.client.post("/reactive/", data={
+            "email": "testuser@user.com",
+        })
+        record = EmailVerify.objects.filter(email="testuser@user.com")
+        self.assertEqual(record.count(), 2)
+        self.client.post("/reactive/", data={
+            "email": "testuser@user.com",
+        })
+        record = EmailVerify.objects.filter(email="testuser@user.com")
+        self.assertEqual(record.count(), 2)

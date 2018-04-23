@@ -85,9 +85,20 @@ class ActivateUserView(View):
 
     @staticmethod
     def post(request):
-        pass
+        email = request.POST['email']
+        users = UserProfile.objects.filter(email=email)
+        if users.count() == 0:
+            return render(request, "verify.html", {"msg": "email address didn't found, please register first"})
+        elif users[0].is_active:
+            return render(request, "verify.html", {"msg": "email address already been activated"})
+        else:
+            record = EmailVerify.objects.filter(email=email)
+            last_send_time = sorted(record, key=lambda x: x.send_time)
+            period = (timezone.now() - last_send_time[-1].send_time).total_seconds()
+            if period < 900:
+                return render(request, "verify.html",
+                              {"msg": "same email address only re-send a validation code every 15 minutes"})
+            send_register_verify_mail(users[0])
+            return render(request, "login.html", {})
 
-    # TODO: setup a page to re-send verify code email
-    # TODO: re-send verify code should only every 15 minutes interval
-    # TODO: there are people already been verified, didn't do anything in that case
     # TODO: test url path with parameters

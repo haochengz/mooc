@@ -81,7 +81,13 @@ class ActivateUserView(View):
             EmailVerify.objects.filter(code=code).delete()
             user.is_active = True
             user.save()
-        return render(request, "index.html", {})
+        return render(request, "login.html", {"msg": "verify success, please login"})
+
+    @staticmethod
+    def post(request):
+        pass
 
     # TODO: setup a page to re-send verify code email
     # TODO: re-send verify code should only every 15 minutes interval
+    # TODO: there are people already been verified, didn't do anything in that case
+    # TODO: test url path with parameters

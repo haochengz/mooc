@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', users.views.index, name='index'),
     path('login/', users.views.LoginView.as_view(), name='login'),
+    path('reactive/', users.views.ActivateUserView.as_view(), name="resend"),
     path('forget/', TemplateView.as_view(template_name='index.html'), name='forget_pwd'),
     path('info/', TemplateView.as_view(template_name='index.html'), name='user_info'),
     path('logout/', TemplateView.as_view(template_name='index.html'), name='logout'),

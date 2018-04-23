@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.urls import resolve
 from captcha.models import CaptchaStore
 
-from users.views import index, LoginView, RegisterView
+from users.views import index, LoginView, RegisterView, ActivateUserView
 from users.models import UserProfile, EmailVerify
 from apps.utils.email import generate_verify_url
 from apps.utils.tools import minutes_ago
@@ -238,7 +238,7 @@ class ActivateViewTest(TestCase):
         activate_url = generate_verify_url(record.code)
         resp = self.client.get(activate_url)
 
-        self.assertTemplateUsed(resp, "index.html")
+        self.assertTemplateUsed(resp, "login.html")
         user = UserProfile.objects.get(email="testuser@user.com")
         self.assertTrue(user.is_active)
 
@@ -281,7 +281,7 @@ class ActivateViewTest(TestCase):
         activate_url = generate_verify_url(record.code)
         resp = self.client.get(activate_url)
 
-        self.assertTemplateUsed(resp, "index.html")
+        self.assertTemplateUsed(resp, "login.html")
         self.assertEqual(EmailVerify.objects.count(), 0)
         record = EmailVerify.objects.filter(email="testuser@user.com")
         self.assertEqual(len(record), 0)
@@ -306,3 +306,7 @@ class ActivateViewTest(TestCase):
         self.assertEqual(EmailVerify.objects.count(), 0)
         record = EmailVerify.objects.filter(email="testuser@user.com")
         self.assertEqual(len(record), 0)
+
+    def test_resend_verify_code_url_resolve(self):
+        found = resolve('/reactive/')
+        self.assertEqual(found.func.view_class, ActivateUserView)

@@ -226,6 +226,14 @@ class RegisterViewTest(TestCase):
 
 class ActivateViewTest(TestCase):
 
+    def test_activate_url_resolve(self):
+        found = resolve("/activate/some_validation_code/")
+        self.assertEqual(found.func.view_class, ActivateUserView)
+
+    def test_resend_verify_code_url_resolve(self):
+        found = resolve('/reactive/')
+        self.assertEqual(found.func.view_class, ActivateUserView)
+
     def test_activate_unactive_user(self):
         captcha = RegisterViewTest.captcha_through()
         self.client.post("/register/", data={
@@ -306,10 +314,6 @@ class ActivateViewTest(TestCase):
         self.assertEqual(EmailVerify.objects.count(), 0)
         record = EmailVerify.objects.filter(email="testuser@user.com")
         self.assertEqual(len(record), 0)
-
-    def test_resend_verify_code_url_resolve(self):
-        found = resolve('/reactive/')
-        self.assertEqual(found.func.view_class, ActivateUserView)
 
     def test_resend_a_validation_code_request_by_an_activated_user_should_return_wrong(self):
         captcha = RegisterViewTest.captcha_through()

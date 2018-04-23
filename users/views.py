@@ -71,10 +71,10 @@ class ActivateUserView(View):
     def get(request, code):
         record = EmailVerify.objects.filter(code=code)
         if len(record) != 1:
-            return render(request, "register.html", {"msg": "cannot activate user, active code is wrong"})
+            return render(request, "verify.html", {"msg": "cannot activate user, active code is wrong"})
         elif (timezone.now() - record[0].send_time).total_seconds() > 1800:
             EmailVerify.objects.filter(code=code).delete()
-            return render(request, "register.html", {"msg": "the validation code is out of date"})
+            return render(request, "verify.html", {"msg": "the validation code is out of date"})
         email = record[0].email
         user = UserProfile.objects.get(email=email)
         if user:

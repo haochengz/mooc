@@ -246,7 +246,7 @@ class ActivateViewTest(TestCase):
         activate_url = generate_verify_url("Hfjsdlfeur")
         resp = self.client.get(activate_url)
 
-        self.assertTemplateUsed(resp, "register.html")
+        self.assertTemplateUsed(resp, "verify.html")
         self.assertContains(resp, "cannot activate user, active code is wrong")
 
     def test_validation_code_could_been_out_of_date(self):
@@ -264,7 +264,7 @@ class ActivateViewTest(TestCase):
         activate_url = generate_verify_url(record.code)
         resp = self.client.get(activate_url)
 
-        self.assertTemplateUsed(resp, "register.html")
+        self.assertTemplateUsed(resp, "verify.html")
         self.assertContains(resp, "the validation code is out of date")
         user = UserProfile.objects.get(email="testuser@user.com")
         self.assertFalse(user.is_active)
@@ -301,7 +301,7 @@ class ActivateViewTest(TestCase):
         activate_url = generate_verify_url(record.code)
         resp = self.client.get(activate_url)
 
-        self.assertTemplateUsed(resp, "register.html")
+        self.assertTemplateUsed(resp, "verify.html")
         self.assertContains(resp, "the validation code is out of date")
         self.assertEqual(EmailVerify.objects.count(), 0)
         record = EmailVerify.objects.filter(email="testuser@user.com")

@@ -15,14 +15,28 @@ def send_register_verify_mail(user):
     code = generate_random_code()
     appears = EmailVerify.objects.filter(code=code)
     if len(appears) != 0:
-        raise FieldError("Unexpected random_code function produced same codes")
+        raise FieldError("unexpected random_code function produced same codes")
     email_record = EmailVerify(
         email=user.email,
         code=code,
         verify_type="register"
     )
     email_record.save()
-    return _send_the_mail(user.email, *generate_mail(code))
+    return _send_the_mail(user.email, *generate_register_mail(code))
+
+
+def send_retrieve_password_mail(user):
+    code = generate_random_code()
+    appears = EmailVerify.objects.filter(code=code)
+    if len(appears) != 0:
+        raise FieldError("unexpected random_code function produced same codes")
+    email_record = EmailVerify(
+        email=user.email,
+        code=code,
+        verify_type="register"
+    )
+    email_record.save()
+    return _send_the_mail(user.email, *generate_retrieve_mail(code))
 
 
 def generate_random_code(n=32):
@@ -38,7 +52,7 @@ def generate_random_code(n=32):
     return "".join(gens)
 
 
-def generate_mail(code):
+def generate_register_mail(code):
     subject = "Mooc verify mail"
     text = """
             Please click the link below to activate your account:
@@ -53,8 +67,27 @@ def generate_mail(code):
     return subject, text
 
 
+def generate_retrieve_mail(code):
+    subject = "Mooc verify mail, follow this procedure to retrieve your password"
+    text = """
+            Please click the link below to retrieve your password:
+            %s
+            
+            If you cannot click that link, you could also copy that link and paste in the address bar of your browser.
+            
+            This validation code only validate within 30 minutes after it send out. So, make sure you click the link
+            as soon as you can, if you accidentally gone out of date, you can hit the link below and retrieve a new
+            validation code for your account. The new validation code could send every 30 minutes period.
+        """ % generate_retrieve_url(code)
+    return subject, text
+
+
 def generate_verify_url(code):
     return server_url + "activate/" + code + "/"
+
+
+def generate_retrieve_url(code):
+    return server_url + "retrieve/" + code + "/"
 
 
 def _send_the_mail(email_addr, subject, text):

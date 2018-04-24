@@ -1,7 +1,7 @@
 
 from django.test import TestCase
 
-from utils.email import send_register_verify_mail, generate_random_code, generate_mail, generate_verify_url
+from apps.utils.email import send_register_verify_mail, generate_random_code, generate_register_mail, generate_verify_url
 from users.models import UserProfile
 from users.models import EmailVerify
 from local import server_url
@@ -31,9 +31,9 @@ class EmailVerifyTest(TestCase):
         code = generate_random_code()
         self.assertEqual(len(code), 32)
 
-    def test_generate_mail(self):
+    def test_generate_register_mail(self):
         code = generate_random_code()
-        subject, text = generate_mail(code)
+        subject, text = generate_register_mail(code)
 
         self.assertEqual(subject, "Mooc verify mail")
         self.assertIn(code, text)

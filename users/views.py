@@ -111,4 +111,12 @@ class ForgetView(View):
 
     @staticmethod
     def post(request):
-        pass
+        form = ForgetForm(request)
+        if form.is_valid():
+            pass
+
+    # TODO: Lots of test need to cover at utils module
+
+
+class RetrievePasswordView(View):
+    pass

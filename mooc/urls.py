@@ -36,4 +36,5 @@ urlpatterns = [
     path('coursedetail/', TemplateView.as_view(template_name='index.html'), name='course_detail'),
     path('captcha/', include('captcha.urls')),
     re_path(r'^activate/(?P<code>.*)/$', users.views.ActivateUserView.as_view(), name="active"),
+    re_path(r'^retrieve/(?P<code>.*)/$', users.views.RetrievePasswordView.as_view, name="retrieve")
 ]

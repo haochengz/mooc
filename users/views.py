@@ -6,9 +6,9 @@ from django.contrib.auth.hashers import make_password
 from django.db.models import Q
 from django.utils import timezone
 
-from users.forms import LoginForm, RegisterEmailForm, ForgetForm
+from users.forms import LoginForm, RegisterEmailForm, ForgetForm, PasswordResetForm
 from users.models import UserProfile, EmailVerify
-from apps.utils.email import send_register_verify_mail
+from apps.utils.email import send_register_verify_mail, send_retrieve_password_mail
 
 
 def index(request):
@@ -111,12 +111,48 @@ class ForgetView(View):
 
     @staticmethod
     def post(request):
-        form = ForgetForm(request)
+        form = ForgetForm(request.POST)
         if form.is_valid():
-            pass
+            user = UserProfile.objects.filter(email=request.POST['email'])
+            if len(user) == 0:
+                return render(request, "forgetpwd.html", {"msg": "Wrong email address"})
+            send_retrieve_password_mail(user[0])
+            return render(request, "index.html", {})
+        return render(request, "forgetpwd.html", {"forget_form": form})
 
     # TODO: Lots of test need to cover at utils module
+    # TODO: when send the retrieve password email, should give user a hint that email was send away
+    # TODO: when submited a wrong captcha, should fill the email address with which was submited
+    # TODO: Also lots of test need to be cover at Views of retrieving password
 
 
 class RetrievePasswordView(View):
-    pass
+
+    @staticmethod
+    def get(request, code):
+        form = PasswordResetForm()
+        records = EmailVerify.objects.filter(code=code)
+        if len(records) == 0:
+            pass
+        return render(request, "password_reset.html", {"email": records[0].email, "reset_form": form})
+
+
+class ModifyView(View):
+
+    @staticmethod
+    def post(request):
+        form = PasswordResetForm(request.POST)
+        email = request.POST['email']
+        if form.is_valid():
+            if request.POST['pwd1'] != request.POST['pwd2']:
+                return render(request, "password_reset.html", {
+                    "email": email,
+                    "reset_form": form,
+                    "msg": "password were different between two enters"
+                })
+            user = UserProfile.objects.get(email=email)
+            user.password = make_password(request.POST['pwd2'])
+            user.save()
+            return render(request, "login.html", {"msg": "reset success, please login."})
+        else:
+            return render(request, "password_reset.html", {"email": email, "reset_form": form})

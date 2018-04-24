@@ -25,6 +25,7 @@ urlpatterns = [
     path('login/', users.views.LoginView.as_view(), name='login'),
     path('reactive/', users.views.ActivateUserView.as_view(), name="resend"),
     path('forget/', users.views.ForgetView.as_view(), name='forget_pwd'),
+    path('modify/', users.views.ModifyView.as_view(), name='modify_pwd'),
     path('info/', TemplateView.as_view(template_name='index.html'), name='user_info'),
     path('logout/', TemplateView.as_view(template_name='index.html'), name='logout'),
     path('message/', TemplateView.as_view(template_name='index.html'), name='mymessage'),
@@ -36,5 +37,5 @@ urlpatterns = [
     path('coursedetail/', TemplateView.as_view(template_name='index.html'), name='course_detail'),
     path('captcha/', include('captcha.urls')),
     re_path(r'^activate/(?P<code>.*)/$', users.views.ActivateUserView.as_view(), name="active"),
-    re_path(r'^retrieve/(?P<code>.*)/$', users.views.RetrievePasswordView.as_view, name="retrieve")
+    re_path(r'^retrieve/(?P<code>.*)/$', users.views.RetrievePasswordView.as_view(), name="retrieve"),
 ]

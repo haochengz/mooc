@@ -33,7 +33,7 @@ def send_retrieve_password_mail(user):
     email_record = EmailVerify(
         email=user.email,
         code=code,
-        verify_type="register"
+        verify_type="forget"
     )
     email_record.save()
     return _send_the_mail(user.email, *generate_retrieve_mail(code))

@@ -17,3 +17,8 @@ class RegisterEmailForm(forms.Form):
 class ForgetForm(forms.Form):
     email = forms.EmailField(required=True)
     captcha = CaptchaField(error_messages={"invalid": "验证码错误"})
+
+
+class PasswordResetForm(forms.Form):
+    pwd1 = forms.CharField(required=True, max_length=16, min_length=8)
+    pwd2 = forms.CharField(required=True, max_length=16, min_length=8)

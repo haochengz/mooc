@@ -61,7 +61,7 @@ class RegisterView(View):
             send_register_verify_mail(unactive_user)
             return render(request, "login.html", {})
         elif len(repeat) > 0:
-            return render(request, "register.html", {"msg": "email already exists"})
+            return render(request, "register.html", {"register_form": reg_form, "msg": "email already exists"})
         return render(request, "register.html", {"register_form": reg_form})
 
 
@@ -101,4 +101,13 @@ class ActivateUserView(View):
             send_register_verify_mail(users[0])
             return render(request, "login.html", {})
 
-    # TODO: test url path with parameters
+
+class ForgetView(View):
+
+    @staticmethod
+    def get(request):
+        return render(request, "forgetpwd.html", {})
+
+    @staticmethod
+    def post(request):
+        pass

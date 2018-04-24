@@ -1,5 +1,5 @@
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 
 def minutes_ago(now, minutes):

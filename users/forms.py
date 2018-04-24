@@ -13,3 +13,7 @@ class RegisterEmailForm(forms.Form):
     password = forms.CharField(required=True, max_length=16, min_length=8)
     captcha = CaptchaField(error_messages={"invalid": "验证码错误"})
 
+
+class ForgetForm(forms.Form):
+    email = forms.EmailField(required=True)
+    captcha = CaptchaField(error_messages={"invalid": "验证码错误"})

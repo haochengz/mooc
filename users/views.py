@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import make_password
 from django.db.models import Q
 from django.utils import timezone
 
-from users.forms import LoginForm, RegisterEmailForm
+from users.forms import LoginForm, RegisterEmailForm, ForgetForm
 from users.models import UserProfile, EmailVerify
 from apps.utils.email import send_register_verify_mail
 
@@ -106,7 +106,8 @@ class ForgetView(View):
 
     @staticmethod
     def get(request):
-        return render(request, "forgetpwd.html", {})
+        form = ForgetForm()
+        return render(request, "forgetpwd.html", {"forget_form": form})
 
     @staticmethod
     def post(request):

@@ -123,6 +123,7 @@ class ForgetView(View):
     # TODO: when send the retrieve password email, should give user a hint that email was send away
     # TODO: when submited a wrong captcha, should fill the email address with which was submited
     # TODO: Also lots of test need to be cover at Views of retrieving password
+    # TODO: What if multiple validation code stored in db that relative to one user
 
 
 class RetrievePasswordView(View):
@@ -130,10 +131,15 @@ class RetrievePasswordView(View):
     @staticmethod
     def get(request, code):
         form = PasswordResetForm()
-        records = EmailVerify.objects.filter(code=code)
+        records = EmailVerify.objects.filter(code=code, verify_type="forget")
         if len(records) == 0:
-            pass
-        return render(request, "password_reset.html", {"email": records[0].email, "reset_form": form})
+            return render(request, "register.html", {"msg": "Wrong validation code"})
+        elif (timezone.now() - records[0].send_time).total_seconds() > 1800:
+            records[0].delete()
+            return render(request, "register.html", {"msg": "validation code out of date"})
+        email = records[0].email
+        records[0].delete()
+        return render(request, "password_reset.html", {"email": email, "reset_form": form})
 
 
 class ModifyView(View):

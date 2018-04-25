@@ -122,7 +122,6 @@ class ForgetView(View):
 
     # TODO: when send the retrieve password email, should give user a hint that email was send away
     # TODO: when submited a wrong captcha, should fill the email address with which was submited
-    # TODO: Also lots of test need to be cover at Views of retrieving password
     # TODO: What if multiple validation code stored in db that relative to one user
 
 

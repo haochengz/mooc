@@ -42,16 +42,36 @@ class CourseModuleDBConnectionTest(TestCase):
         self.assertEqual(hello_world.name, resources[2].name)
 
     def test_chapters_foreinkey_correct(self):
-        # TODO: 测试外链正确
-        pass
+        decorator, dijsktra, binary_search = self.get_chapters()
+        python_intro = Course.objects.get(name="Introduction to Python")
+        algorithms = Course.objects.get(name="Algorithms")
+
+        self.assertEqual(decorator.course, python_intro)
+        self.assertEqual(dijsktra.course, algorithms)
+        self.assertEqual(binary_search.course, algorithms)
 
     def test_sections_foreinkey_correct(self):
-        # TODO: 测试外链正确
-        pass
+        create_decorator, use_decorator, why_need_decorator = self.get_sections()
+        decorator = Chapter.objects.get(name="Decorator")
+        python_intro = Course.objects.get(name="Introduction to Python")
+
+        self.assertEqual(create_decorator.chapter, decorator)
+        self.assertEqual(use_decorator.chapter, decorator)
+        self.assertEqual(why_need_decorator.chapter, decorator)
+
+        self.assertEqual(create_decorator.chapter.course, python_intro)
+        self.assertEqual(use_decorator.chapter.course, python_intro)
+        self.assertEqual(why_need_decorator.chapter.course, python_intro)
 
     def test_resources_foreinkey_correct(self):
-        # TODO: 测试外链正确
-        pass
+        data, test, hello_world = self.get_resources()
+        python_intro = Course.objects.get(name="Introduction to Python")
+        algorithms = Course.objects.get(name="Algorithms")
+
+        self.assertEqual(hello_world.course, python_intro)
+        self.assertEqual(data.course, algorithms)
+        self.assertEqual(test.course, algorithms)
+
 
     @staticmethod
     def get_courses():

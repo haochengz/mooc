@@ -53,3 +53,4 @@ class EmailVerifyTest(TestCase):
     def test_never_had_a_repetition_verify_code(self):
         # Unable to test
         pass
+

@@ -11,3 +11,114 @@ See /usr/include/servers/bootstrap_defs.h for the error codes.
 See /usr/include/servers/bootstrap_defs.h for the error codes.
 1524644862960	addons.xpi	WARN	Exception running bootstrap method shutdown on activity-stream@mozilla.org: [Exception... "Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIObserverService.removeObserver]"  nsresult: "0x80004005 (NS_ERROR_FAILURE)"  location: "JS frame :: resource://activity-stream/lib/SnippetsFeed.jsm :: uninit :: line 125"  data: no] Stack trace: uninit()@resource://activity-stream/lib/SnippetsFeed.jsm:125 < onAction()@resource://activity-stream/lib/SnippetsFeed.jsm:141 < _middleware/</<()@resource://activity-stream/lib/Store.jsm:51 < Store/this[method]()@resource://activity-stream/lib/Store.jsm:30 < uninit()@resource://activity-stream/lib/Store.jsm:153 < uninit()@resource://activity-stream/lib/ActivityStream.jsm:274 < uninit()@resource://gre/modules/addons/XPIProvider.jsm -> jar:file:///Applications/Firefox.app/Contents/Resources/browser/features/activity-stream@mozilla.org.xpi!/bootstrap.js:80 < shutdown()@resource://gre/modules/addons/XPIProvider.jsm -> jar:file:///Applications/Firefox.app/Contents/Resources/browser/features/activity-stream@mozilla.org.xpi!/bootstrap.js:196 < callBootstrapMethod()@resource://gre/modules/addons/XPIProvider.jsm:4419 < observe()@resource://gre/modules/addons/XPIProvider.jsm:2279 < GeckoDriver.prototype.quit()@driver.js:3270 < despatch()@server.js:557 < execute()@server.js:531 < onPacket/<()@server.js:506 < onPacket()@server.js:505 < _onJSONObjectReady/<()@transport.js:500
 *** UTM:SVC TimerManager:registerTimer called after profile-before-change notification. Ignoring timer registration for id: telemetry_modules_ping
+1524645123938	geckodriver	INFO	geckodriver 0.20.1
+1524645124005	geckodriver	INFO	Listening on 127.0.0.1:51783
+1524645124965	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-headless" "-profile" "/var/folders/9c/y7w9v6ts4xv2_h36dvz045dm0000gn/T/rust_mozprofile.Tz33dYpPSc1a"
+*** You are running in headless mode.
+1524645125402	Marionette	INFO	Enabled via --marionette
+2018-04-25 16:32:06.140 plugin-container[38285:4443861] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x1513f, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524645126426	Marionette	INFO	Listening on port 51794
+1524645126526	Marionette	WARN	TLS certificate errors will be ignored for this session
+2018-04-25 16:32:07.064 plugin-container[38287:4443977] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0xac3f, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+[GFX1-]: Receive IPC close with reason=AbnormalShutdown
+1524645233846	geckodriver	INFO	geckodriver 0.20.1
+1524645233913	geckodriver	INFO	Listening on 127.0.0.1:51937
+1524645234870	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-headless" "-profile" "/var/folders/9c/y7w9v6ts4xv2_h36dvz045dm0000gn/T/rust_mozprofile.NQ3xkg1Z930j"
+*** You are running in headless mode.
+1524645235306	Marionette	INFO	Enabled via --marionette
+2018-04-25 16:33:56.046 plugin-container[38310:4446016] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x15203, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524645236376	Marionette	INFO	Listening on port 51948
+1524645236434	Marionette	WARN	TLS certificate errors will be ignored for this session
+2018-04-25 16:33:56.971 plugin-container[38312:4446138] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0xad03, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524645237010	addons.xpi	WARN	Exception running bootstrap method shutdown on activity-stream@mozilla.org: [Exception... "Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIObserverService.removeObserver]"  nsresult: "0x80004005 (NS_ERROR_FAILURE)"  location: "JS frame :: resource://activity-stream/lib/SnippetsFeed.jsm :: uninit :: line 125"  data: no] Stack trace: uninit()@resource://activity-stream/lib/SnippetsFeed.jsm:125 < onAction()@resource://activity-stream/lib/SnippetsFeed.jsm:141 < _middleware/</<()@resource://activity-stream/lib/Store.jsm:51 < Store/this[method]()@resource://activity-stream/lib/Store.jsm:30 < uninit()@resource://activity-stream/lib/Store.jsm:153 < uninit()@resource://activity-stream/lib/ActivityStream.jsm:274 < uninit()@resource://gre/modules/addons/XPIProvider.jsm -> jar:file:///Applications/Firefox.app/Contents/Resources/browser/features/activity-stream@mozilla.org.xpi!/bootstrap.js:80 < shutdown()@resource://gre/modules/addons/XPIProvider.jsm -> jar:file:///Applications/Firefox.app/Contents/Resources/browser/features/activity-stream@mozilla.org.xpi!/bootstrap.js:196 < callBootstrapMethod()@resource://gre/modules/addons/XPIProvider.jsm:4419 < observe()@resource://gre/modules/addons/XPIProvider.jsm:2279 < GeckoDriver.prototype.quit()@driver.js:3270 < despatch()@server.js:557 < execute()@server.js:531 < onPacket/<()@server.js:506 < onPacket()@server.js:505 < _onJSONObjectReady/<()@transport.js:500
+*** UTM:SVC TimerManager:registerTimer called after profile-before-change notification. Ignoring timer registration for id: telemetry_modules_ping
+1524645294996	geckodriver	INFO	geckodriver 0.20.1
+1524645295062	geckodriver	INFO	Listening on 127.0.0.1:52092
+1524645296018	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-headless" "-profile" "/var/folders/9c/y7w9v6ts4xv2_h36dvz045dm0000gn/T/rust_mozprofile.wTiYAdKICFpS"
+*** You are running in headless mode.
+1524645296456	Marionette	INFO	Enabled via --marionette
+2018-04-25 16:34:57.196 plugin-container[38329:4447070] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0xae3b, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524645297464	Marionette	INFO	Listening on port 52103
+1524645297472	Marionette	WARN	TLS certificate errors will be ignored for this session
+2018-04-25 16:34:58.120 plugin-container[38330:4447187] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x1523f, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+[GFX1-]: Receive IPC close with reason=AbnormalShutdown
+1524645394078	geckodriver	INFO	geckodriver 0.20.1
+1524645394145	geckodriver	INFO	Listening on 127.0.0.1:52265
+1524645395102	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-headless" "-profile" "/var/folders/9c/y7w9v6ts4xv2_h36dvz045dm0000gn/T/rust_mozprofile.YSXtPcqfezV3"
+*** You are running in headless mode.
+1524645395538	Marionette	INFO	Enabled via --marionette
+2018-04-25 16:36:36.278 plugin-container[38351:4450897] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x14f03, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524645396614	Marionette	INFO	Listening on port 52276
+1524645396660	Marionette	WARN	TLS certificate errors will be ignored for this session
+2018-04-25 16:36:37.211 plugin-container[38353:4451015] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x1543f, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524646114681	geckodriver	INFO	geckodriver 0.20.1
+1524646114749	geckodriver	INFO	Listening on 127.0.0.1:52676
+1524646115706	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-headless" "-profile" "/var/folders/9c/y7w9v6ts4xv2_h36dvz045dm0000gn/T/rust_mozprofile.dbMzCdtkdnJQ"
+*** You are running in headless mode.
+1524646116150	Marionette	INFO	Enabled via --marionette
+2018-04-25 16:48:36.885 plugin-container[38458:4462727] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x15103, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524646117188	Marionette	INFO	Listening on port 52687
+1524646117266	Marionette	WARN	TLS certificate errors will be ignored for this session
+2018-04-25 16:48:37.799 plugin-container[38459:4462875] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0xac3f, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+[GFX1-]: Receive IPC close with reason=AbnormalShutdown
+1524646222934	geckodriver	INFO	geckodriver 0.20.1
+1524646223000	geckodriver	INFO	Listening on 127.0.0.1:52854
+1524646223960	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-headless" "-profile" "/var/folders/9c/y7w9v6ts4xv2_h36dvz045dm0000gn/T/rust_mozprofile.YyrozvcsJDm0"
+*** You are running in headless mode.
+1524646224406	Marionette	INFO	Enabled via --marionette
+2018-04-25 16:50:25.152 plugin-container[38487:4467899] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0xb03f, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524646225456	Marionette	INFO	Listening on port 52866
+1524646225542	Marionette	WARN	TLS certificate errors will be ignored for this session
+1524646225648	addons.xpi	WARN	Exception running bootstrap method shutdown on activity-stream@mozilla.org: [Exception... "Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIObserverService.removeObserver]"  nsresult: "0x80004005 (NS_ERROR_FAILURE)"  location: "JS frame :: resource://activity-stream/lib/SnippetsFeed.jsm :: uninit :: line 125"  data: no] Stack trace: uninit()@resource://activity-stream/lib/SnippetsFeed.jsm:125 < onAction()@resource://activity-stream/lib/SnippetsFeed.jsm:141 < _middleware/</<()@resource://activity-stream/lib/Store.jsm:51 < Store/this[method]()@resource://activity-stream/lib/Store.jsm:30 < uninit()@resource://activity-stream/lib/Store.jsm:153 < uninit()@resource://activity-stream/lib/ActivityStream.jsm:274 < uninit()@resource://gre/modules/addons/XPIProvider.jsm -> jar:file:///Applications/Firefox.app/Contents/Resources/browser/features/activity-stream@mozilla.org.xpi!/bootstrap.js:80 < shutdown()@resource://gre/modules/addons/XPIProvider.jsm -> jar:file:///Applications/Firefox.app/Contents/Resources/browser/features/activity-stream@mozilla.org.xpi!/bootstrap.js:196 < callBootstrapMethod()@resource://gre/modules/addons/XPIProvider.jsm:4419 < observe()@resource://gre/modules/addons/XPIProvider.jsm:2279 < GeckoDriver.prototype.quit()@driver.js:3270 < despatch()@server.js:557 < execute()@server.js:531 < onPacket/<()@server.js:506 < onPacket()@server.js:505 < _onJSONObjectReady/<()@transport.js:500
+console.error: 
+  Message: Error: Connection closed before committing the transaction.
+  Stack:
+    executeTransaction/promise</transactionPromise<@resource://gre/modules/Sqlite.jsm:617:19
+observe@resource://gre/modules/AsyncShutdown.jsm:535:9
+
+*** UTM:SVC TimerManager:registerTimer called after profile-before-change notification. Ignoring timer registration for id: telemetry_modules_ping
+1524646268712	geckodriver	INFO	geckodriver 0.20.1
+1524646268779	geckodriver	INFO	Listening on 127.0.0.1:52921
+1524646269737	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-headless" "-profile" "/var/folders/9c/y7w9v6ts4xv2_h36dvz045dm0000gn/T/rust_mozprofile.mYQLLkD1g2fd"
+*** You are running in headless mode.
+1524646270176	Marionette	INFO	Enabled via --marionette
+2018-04-25 16:51:10.922 plugin-container[38503:4469420] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x1503f, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524646271238	Marionette	INFO	Listening on port 52932
+1524646271294	Marionette	WARN	TLS certificate errors will be ignored for this session
+2018-04-25 16:51:11.851 plugin-container[38504:4469574] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0xaa0b, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524646439704	geckodriver	INFO	geckodriver 0.20.1
+1524646439769	geckodriver	INFO	Listening on 127.0.0.1:53091
+1524646440729	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-headless" "-profile" "/var/folders/9c/y7w9v6ts4xv2_h36dvz045dm0000gn/T/rust_mozprofile.vRZbwhzlRd4K"
+*** You are running in headless mode.
+1524646441164	Marionette	INFO	Enabled via --marionette
+2018-04-25 16:54:01.911 plugin-container[38569:4476679] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0xb03f, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524646442204	Marionette	INFO	Listening on port 53105
+1524646442282	Marionette	WARN	TLS certificate errors will be ignored for this session
+2018-04-25 16:54:02.838 plugin-container[38570:4476804] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x1543f, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524646533707	geckodriver	INFO	geckodriver 0.20.1
+1524646533774	geckodriver	INFO	Listening on 127.0.0.1:53284
+1524646534731	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-headless" "-profile" "/var/folders/9c/y7w9v6ts4xv2_h36dvz045dm0000gn/T/rust_mozprofile.xjCvqxZvAUhW"
+*** You are running in headless mode.
+1524646535166	Marionette	INFO	Enabled via --marionette
+2018-04-25 16:55:35.906 plugin-container[38621:4480641] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0xac03, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1524646536186	Marionette	INFO	Listening on port 53295
+1524646536208	Marionette	WARN	TLS certificate errors will be ignored for this session
+2018-04-25 16:55:36.819 plugin-container[38622:4480752] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0xab3b, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+[GFX1-]: Receive IPC close with reason=AbnormalShutdown

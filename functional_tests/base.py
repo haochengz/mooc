@@ -1,9 +1,9 @@
 
 from selenium import webdriver
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.staticfiles.testing import LiveServerTestCase
 
 
-class FunctionalBaseTest(StaticLiveServerTestCase):
+class FunctionalBaseTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = self.open_browser()
@@ -17,8 +17,8 @@ class FunctionalBaseTest(StaticLiveServerTestCase):
         return browser
 
     def reset_browser(self):
-        self.browser.quit()
+        self.browser.close()
         return self.open_browser()
 
     def tearDown(self):
-        self.browser.close()
+        self.browser.quit()

@@ -120,7 +120,6 @@ class ForgetView(View):
             return render(request, "index.html", {})
         return render(request, "forgetpwd.html", {"forget_form": form})
 
-    # TODO: Lots of test need to cover at utils module
     # TODO: when send the retrieve password email, should give user a hint that email was send away
     # TODO: when submited a wrong captcha, should fill the email address with which was submited
     # TODO: Also lots of test need to be cover at Views of retrieving password

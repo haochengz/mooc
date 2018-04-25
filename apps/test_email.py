@@ -1,7 +1,9 @@
 
 from django.test import TestCase
 
-from apps.utils.email import send_register_verify_mail, generate_random_code, generate_register_mail, generate_verify_url
+from apps.utils.email import (send_register_verify_mail, generate_random_code, generate_register_mail,
+                              generate_verify_url, send_retrieve_password_mail, generate_retrieve_url,
+                              generate_retrieve_mail)
 from users.models import UserProfile
 from users.models import EmailVerify
 from local import server_url
@@ -27,6 +29,16 @@ class EmailVerifyTest(TestCase):
         status = send_register_verify_mail(self.user)
         self.assertTrue(status)
 
+    def test_send_retrieve_mail_to_user(self):
+        status = send_retrieve_password_mail(self.user)
+        self.assertTrue(status)
+
+    def test_save_retrieve_code_record_to_database(self):
+        email = self.user.email
+        send_retrieve_password_mail(self.user)
+        record = EmailVerify.objects.get(email=email)
+        self.assertIsNotNone(record)
+
     def test_generate_random_code(self):
         code = generate_random_code()
         self.assertEqual(len(code), 32)
@@ -38,11 +50,24 @@ class EmailVerifyTest(TestCase):
         self.assertEqual(subject, "Mooc verify mail")
         self.assertIn(code, text)
 
-    def test_generate_mail(self):
+    def test_generate_retrieve_mail(self):
+        code = generate_random_code()
+        subject, text = generate_retrieve_mail(code)
+
+        self.assertIn("Mooc verify mail", subject)
+        self.assertIn(code, text)
+
+    def test_generate_register_mail(self):
         code = generate_random_code()
         url = generate_verify_url(code)
         self.assertIn(code, url)
         self.assertEqual(url, server_url + "activate/" + code + '/')
+
+    def test_generate_retrieve_mail(self):
+        code = generate_random_code()
+        url = generate_retrieve_url(code)
+        self.assertIn(code, url)
+        self.assertEqual(url, server_url + "retrieve/" + code + '/')
 
     def test_no_repetitive_code_in_db(self):
         send_register_verify_mail(user=self.user)

@@ -14,4 +14,5 @@ class OrgListView(View):
         return render(request, "org-list.html", {
             "all_orgs": all_orgs,
             "all_cities": all_cities,
+            "org_nums": all_orgs.count(),
         })

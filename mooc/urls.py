@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 
 import users.views
+import organizations.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,16 +27,17 @@ urlpatterns = [
     path('reactive/', users.views.ActivateUserView.as_view(), name="resend"),
     path('forget/', users.views.ForgetView.as_view(), name='forget_pwd'),
     path('modify/', users.views.ModifyView.as_view(), name='modify_pwd'),
+    path('orgs/', organizations.views.OrgListView.as_view(), name='org_list'),
     path('info/', TemplateView.as_view(template_name='index.html'), name='user_info'),
     path('logout/', TemplateView.as_view(template_name='index.html'), name='logout'),
     path('message/', TemplateView.as_view(template_name='index.html'), name='mymessage'),
     path('register/', users.views.RegisterView.as_view(), name='register'),
     path('courses/', TemplateView.as_view(template_name='index.html'), name='course_list'),
     path('teachers/', TemplateView.as_view(template_name='index.html'), name='teacher_list'),
-    path('orgs/', TemplateView.as_view(template_name='index.html'), name='org_list'),
     path('orghome/', TemplateView.as_view(template_name='index.html'), name='org_home'),
     path('coursedetail/', TemplateView.as_view(template_name='index.html'), name='course_detail'),
     path('captcha/', include('captcha.urls')),
     re_path(r'^activate/(?P<code>.*)/$', users.views.ActivateUserView.as_view(), name="active"),
     re_path(r'^retrieve/(?P<code>.*)/$', users.views.RetrievePasswordView.as_view(), name="retrieve"),
+    path('orghome/', TemplateView.as_view(template_name='index.html'), name='add_ask'),
 ]

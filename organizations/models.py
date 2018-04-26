@@ -14,6 +14,9 @@ class Location(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
 
 class Org(models.Model):
     name = models.CharField(verbose_name="机构名称", max_length=50)
@@ -22,6 +25,9 @@ class Org(models.Model):
     favorite_nums = models.IntegerField(verbose_name="收藏数", default=0)
     image = models.ImageField(verbose_name="封面图", upload_to="media/org/%Y/%m")
     address = models.CharField(verbose_name="地址", max_length=200)
+    category = models.CharField(verbose_name="类别",
+                                choices=(("personal", "个人"), ("vocational", "职业培训"), ("college", "高校"),),
+                                max_length=10, default="personal")
     located = models.ForeignKey(Location, verbose_name="位于", on_delete=models.CASCADE)
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 

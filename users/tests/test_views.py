@@ -204,7 +204,7 @@ class RegisterViewTest(TestCase):
 
     def test_POST_register_an_exists_email_should_reture_to_register_page(self):
         UserProfile.objects.create(
-            username = "testuser@user.com",
+            username="testuser@user.com",
             email="testuser@user.com",
             password="123456789",
         )
@@ -562,5 +562,3 @@ class ModifyViewTest(TestCase):
 
         self.assertTemplateUsed(resp, "password_reset.html")
         self.assertFalse(authenticate(username="user@testserver.com", password="987654321"))
-
-

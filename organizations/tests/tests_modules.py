@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from .models import Location, Instructor, Org
+from organizations.models import Location, Instructor, Org
 
 
 class OrganizationsModuleDBConnectionTest(TestCase):

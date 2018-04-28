@@ -18,6 +18,7 @@ class OrgListView(View):
         category = request.GET.get('ct', '')
         all_cities = Location.objects.all()
         all_orgs = Org.objects.all()
+        top_orgs = all_orgs.order_by("-hits")[:3]
 
         if city_id:
             all_orgs = all_orgs.filter(located_id=city_id)
@@ -32,7 +33,9 @@ class OrgListView(View):
             "org_nums": all_orgs.count(),
             "city_id": city_id,
             "category": category,
+            "top_orgs": top_orgs,
         })
 
     # TODO: test pagination
-    # TODO:
+    # TODO: test sift organizations
+    # TODO: test top 3 orgs shows at right side of the page

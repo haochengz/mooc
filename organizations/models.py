@@ -28,6 +28,8 @@ class Org(models.Model):
     category = models.CharField(verbose_name="类别",
                                 choices=(("personal", "个人"), ("vocational", "职业培训"), ("college", "高校"),),
                                 max_length=10, default="personal")
+    enrolled_nums = models.IntegerField(verbose_name="注册学生人数", default=0)
+    course_nums = models.IntegerField(verbose_name="开放课程数量", default=0)
     located = models.ForeignKey(Location, verbose_name="位于", on_delete=models.CASCADE)
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 

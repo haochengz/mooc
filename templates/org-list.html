@@ -52,7 +52,7 @@
 				</ul>
 			</div>
 
-            {% for course_org in all_orgs %}
+            {% for course_org in orgs.object_list %}
                 <dl class="des difdes">
                     <dt>
                         <a href="{% url 'org_home' course_org.id %}">
@@ -60,7 +60,7 @@
                         </a>
                     </dt>
                     <dd>
-                        <div class="clearfix">
+                        <div class="clearfix">#}
                              <a href="org-detail-homepage.html">
                                  <h1>{{ course_org.name }}</h1>
                                  <div class="pic fl">
@@ -73,7 +73,7 @@
                             <li class="first"><p class="pic9">课程数：<span>1</span></p><p class="c7">学习人数：<span>{{ course_org.favorite_nums }}</span></p></li>
                             <li class="c8" style="padding-left:18px;">{{ course_org.address }}</li>
                             <li class="pic10" style="padding-left:18px;">经典课程：
-                                    <a href="/diary/19/">c语言基础入门</a>
+                                   <a href="/diary/19/">c语言基础入门</a>
                                     <a href="/diary/16/">数据库基础</a>
                             </li>
                         </ul>
@@ -85,13 +85,13 @@
 		</div>
 		 <div class="pageturn">
             <ul class="pagelist">
-                {% if all_orgs.has_previous %}
-                    <li class="long"><a href="?{{ all_orgs.previous_page_number.querystring }}">上一页</a></li>
+                {% if orgs.has_previous %}
+                    <li class="long"><a href="?{{ orgs.previous_page_number.querystring }}">上一页</a></li>
                 {% endif %}
 
-                {% for page in all_orgs.pages %}
+                {% for page in orgs.pages %}
                     {% if page %}
-                        {% ifequal page all_orgs.number %}
+                        {% ifequal page orgs.number %}
                             <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a></li>
                         {% else %}
                             <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
@@ -100,8 +100,8 @@
                         <li class="none"><a href="">...</a></li>
                     {% endif %}
                 {% endfor %}
-                {% if all_orgs.has_next %}
-                    <li class="long"><a href="?{{ all_orgs.next_page_number.querystring }}">下一页</a></li>
+                {% if orgs.has_next %}
+                    <li class="long"><a href="?{{ orgs.next_page_number.querystring }}">下一页</a></li>
                 {% endif %}
 
             </ul>

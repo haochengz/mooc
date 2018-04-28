@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'organizations',
     'operations',
     'captcha',
+    'pure_pagination',
 ]
 
 AUTH_USER_MODEL = "users.UserProfile"
@@ -140,6 +141,7 @@ STATICFILES_DIRS = (
 )
 
 
+###############################################################################
 # Email configurations
 # mail.sina.com
 # username: hczhao000111@sina.com
@@ -158,3 +160,13 @@ EMAIL_FROM = "hczhao000111@sina.com"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+###############################################################################
+# django-pure-pagination setup
+
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 10,
+    'MARGIN_PAGES_DISPLAYED': 1,
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}

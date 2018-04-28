@@ -1,9 +1,11 @@
 
 from django.views.generic import View
 from django.shortcuts import render
-from pure_pagination import Paginator, EmptyPage, InvalidPage, PageNotAnInteger
+from django.http import HttpResponse
+from pure_pagination import Paginator, PageNotAnInteger
 
 from .models import Org, Location
+from .forms import UserConsultForm
 
 
 class OrgListView(View):
@@ -44,7 +46,20 @@ class OrgListView(View):
             "sort": sort_by,
         })
 
+
+class UserConsultView(View):
+
+    @staticmethod
+    def post(request):
+        consult = UserConsultForm(request.POST)
+        if consult.is_valid():
+            consult.save(commit=True)
+            return HttpResponse("{'status': 'success'}", content_type='application/json')
+        return HttpResponse("{'status': 'failed', 'msg':{0}}".format(consult.errors), content_type='application/json')
+
     # TODO: test pagination
     # TODO: test sift organizations
     # TODO: test top 3 orgs shows at right side of the page
     # TODO: test sort by enrolled students number of open course number
+    # TODO: test submit consultation
+    # FIXME: org-list js didn't work

@@ -40,3 +40,8 @@ class OrgListViewTest(TestCase):
         resp = self.client.get('/orgs/')
         self.assertContains(resp, 'Beijing')
         self.assertNotContains(resp, 'Tibet')
+
+    def test_org_list_page_shows_total_orgs_nums(self):
+        resp = self.client.get('/orgs/')
+        c = '<div class="all">共<span class="key">%d</span>家</div>' % Org.objects.count()
+        self.assertContains(resp, c)

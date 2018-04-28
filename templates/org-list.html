@@ -22,9 +22,9 @@
 					<h2>机构类别</h2>
 					<div class="cont">
                         <a href="?city={{ city_id }}"><span class="{% ifequal category '' %}active2{% endifequal %}">全部</span></a>
-                        <a href="?ct=pxjg&city={{ city_id }}"><span class="{% ifequal category 'pxjg' %}active2{% endifequal %}">培训机构</span></a>
-                        <a href="?ct=gx&city={{ city_id }}"><span class="{% ifequal category 'gx' %}active2{% endifequal %}">高校</span></a>
-                        <a href="?ct=gr&city={{ city_id }}"><span class="{% ifequal category 'gr' %}active2{% endifequal %}">个人</span></a>
+                        <a href="?ct=vocational&city={{ city_id }}"><span class="{% ifequal category 'vocational' %}active2{% endifequal %}">培训机构</span></a>
+                        <a href="?ct=college&city={{ city_id }}"><span class="{% ifequal category 'college' %}active2{% endifequal %}">高校</span></a>
+                        <a href="?ct=personal&city={{ city_id }}"><span class="{% ifequal category 'personal' %}active2{% endifequal %}">个人</span></a>
 					</div>
 				</li>
 
@@ -73,8 +73,8 @@
                             <li class="first"><p class="pic9">课程数：<span>1</span></p><p class="c7">学习人数：<span>{{ course_org.favorite_nums }}</span></p></li>
                             <li class="c8" style="padding-left:18px;">{{ course_org.address }}</li>
                             <li class="pic10" style="padding-left:18px;">经典课程：
-                                   <a href="/diary/19/">c语言基础入门</a>
-                                    <a href="/diary/16/">数据库基础</a>
+                                <a href="/diary/19/">c语言基础入门</a>
+                                <a href="/diary/16/">数据库基础</a>
                             </li>
                         </ul>
                     </dd>

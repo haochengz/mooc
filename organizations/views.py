@@ -17,6 +17,7 @@ class OrgListView(View):
         city_id = request.GET.get('city', '')
         category = request.GET.get('ct', '')
         sort_by = request.GET.get('sort', '')
+
         all_cities = Location.objects.all()
         all_orgs = Org.objects.all()
         top_orgs = all_orgs.order_by("-hits")[:3]

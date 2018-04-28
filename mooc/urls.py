@@ -19,17 +19,16 @@ from django.views.generic import TemplateView
 from django.views.static import serve
 
 import users.views
-import organizations.views
 from mooc.settings import MEDIA_ROOT
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', users.views.index, name='index'),
+    path('orgs/', include('organizations.urls')),
     path('login/', users.views.LoginView.as_view(), name='login'),
     path('reactive/', users.views.ActivateUserView.as_view(), name="resend"),
     path('forget/', users.views.ForgetView.as_view(), name='forget_pwd'),
     path('modify/', users.views.ModifyView.as_view(), name='modify_pwd'),
-    path('orgs/', organizations.views.OrgListView.as_view(), name='org_list'),
     re_path(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
     path('info/', TemplateView.as_view(template_name='index.html'), name='user_info'),
     path('logout/', TemplateView.as_view(template_name='index.html'), name='logout'),
@@ -39,8 +38,7 @@ urlpatterns = [
     path('teachers/', TemplateView.as_view(template_name='index.html'), name='teacher_list'),
     re_path(r'^org/(?P<code>.*)/$', users.views.ActivateUserView.as_view(), name="org_home"),
     path('coursedetail/', TemplateView.as_view(template_name='index.html'), name='course_detail'),
-    path('captcha/', include('captcha.urls')),
     re_path(r'^activate/(?P<code>.*)/$', users.views.ActivateUserView.as_view(), name="active"),
     re_path(r'^retrieve/(?P<code>.*)/$', users.views.RetrievePasswordView.as_view(), name="retrieve"),
-    path('orghome/', TemplateView.as_view(template_name='index.html'), name='add_ask'),
+    path('captcha/', include('captcha.urls')),
 ]

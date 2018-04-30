@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from .models import Course, Chapter, Section, Resource
+from organizations.models import Org, Location
 
 
 class CourseModuleDBConnectionTest(TestCase):
@@ -72,9 +73,12 @@ class CourseModuleDBConnectionTest(TestCase):
         self.assertEqual(data.course, algorithms)
         self.assertEqual(test.course, algorithms)
 
-
     @staticmethod
     def get_courses():
+        org = Org.objects.create(
+            name="Peiking University",
+            located=Location.objects.create(name="Beijing"),
+        )
         python_intro = Course(
             name="Introduction to Python",
             desc="A introduction and tutorial to Python language.",
@@ -85,6 +89,7 @@ class CourseModuleDBConnectionTest(TestCase):
             favorite_nums=8000,
             image="media/courses/2018/04",
             hits=35889,
+            org=org,
             add_time=timezone.now(),
         )
         algorithms = Course(
@@ -97,6 +102,7 @@ class CourseModuleDBConnectionTest(TestCase):
             favorite_nums=9000,
             image="media/courses/2018/04",
             hits=22000,
+            org=org,
             add_time=timezone.now(),
         )
         python_intro.save()

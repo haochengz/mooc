@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+from organizations.models import Org
+
 
 class Course(models.Model):
     name = models.CharField(verbose_name="", max_length=30)
@@ -16,6 +18,7 @@ class Course(models.Model):
     favorite_nums = models.IntegerField(verbose_name="收藏人数", default=0)
     image = models.ImageField(verbose_name="封面图片", upload_to="media/courses/%Y/%m")
     hits = models.IntegerField(verbose_name="点击量", default=0)
+    org = models.ForeignKey(Org, verbose_name="所属机构", on_delete=models.CASCADE, default=None)
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:
@@ -40,7 +43,7 @@ class Chapter(models.Model):
 
 
 class Section(models.Model):
-    chapter = models.ForeignKey(Chapter, verbose_name="所属章节", on_delete=models.CASCADE)
+    chapter = models.ForeignKey(Chapter, verbose_name="所属章节", on_delete=models.CASCADE, default=None)
     name = models.CharField(verbose_name="小节名", max_length=30)
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
@@ -53,7 +56,7 @@ class Section(models.Model):
 
 
 class Resource(models.Model):
-    course = models.ForeignKey(Course, verbose_name="所属课程", on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, verbose_name="所属课程", on_delete=models.CASCADE, default=None)
     name = models.CharField(verbose_name="资源名", max_length=30)
     path = models.FileField(verbose_name="资源链接", upload_to="media/courses/resourses/%Y/%m")
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)

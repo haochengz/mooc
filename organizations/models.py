@@ -40,6 +40,9 @@ class Org(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
 
 class Instructor(models.Model):
     org = models.ForeignKey(Org, verbose_name="所属机构", on_delete=models.CASCADE, default=None)
@@ -57,4 +60,7 @@ class Instructor(models.Model):
         verbose_name_plural = verbose_name
 
     def __unicode__(self):
+        return self.name
+
+    def __str__(self):
         return self.name

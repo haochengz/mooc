@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.urls import resolve
 
-from organizations.views import OrgListView
+from organizations.views import OrgListView, OrgHomeView
 from organizations.models import Org, Location
 
 
@@ -213,3 +213,16 @@ class OrgListViewAndUserConsultViewTest(TestCase):
             course_nums=100,
         )
 
+
+class OrgHomeViewTest(TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_resolve_org_home_correct(self):
+        found = resolve('/orgs/org_home/')
+        self.assertEqual(found.func.view_class, OrgHomeView)
+
+    def test_org_home_uses_org_homepage_template(self):
+        resp = self.client.get('/orgs/org_home/')
+        self.assertTemplateUsed(resp, 'org-detail-homepage.html')

@@ -4,6 +4,7 @@ from django.urls import resolve
 
 from organizations.views import OrgListView, OrgHomeView
 from organizations.models import Org, Location
+from courses.models import Course
 
 
 class OrgListViewAndUserConsultViewTest(TestCase):
@@ -217,7 +218,24 @@ class OrgListViewAndUserConsultViewTest(TestCase):
 class OrgHomeViewTest(TestCase):
 
     def setUp(self):
-        pass
+        beijing = Location.objects.create(
+            name="Beijing",
+        )
+        self.pku = Org.objects.create(
+            name="Peiking University",
+            category="college",
+            located=beijing,
+            hits=1000,
+            enrolled_nums=1000,
+        )
+        self.thu = Org.objects.create(
+            name="Tsinghua University",
+            category="college",
+            located=beijing,
+            hits=900,
+            enrolled_nums=900,
+        )
+        self.create_courses()
 
     def test_resolve_org_home_correct(self):
         found = resolve('/orgs/home/1/')
@@ -226,3 +244,76 @@ class OrgHomeViewTest(TestCase):
     def test_org_home_uses_org_homepage_template(self):
         resp = self.client.get('/orgs/home/1/')
         self.assertTemplateUsed(resp, 'org-detail-homepage.html')
+
+    def test_org_home_page_display_the_course_belong_to_the_orgs(self):
+        resp = self.client.get('/orgs/home/%d/' % self.pku.id)
+        self.assertContains(resp, "Introduction to Python")
+        self.assertNotContains(resp, "Introduction to Compiler")
+
+    def create_courses(self):
+        Course.objects.create(
+            name="Introduction",
+            desc="",
+            degree="junior",
+            detail="",
+            duration_mins=300,
+            enrolled_nums=1000,
+            favorite_nums=1000,
+            hits=10000,
+            org=self.pku,
+        )
+        Course.objects.create(
+            name="Introduction to Python",
+            desc="",
+            degree="junior",
+            detail="",
+            duration_mins=300,
+            enrolled_nums=1000,
+            favorite_nums=1000,
+            hits=10000,
+            org=self.pku,
+        )
+        Course.objects.create(
+            name="Introduction to Operating System",
+            desc="",
+            degree="senior",
+            detail="",
+            duration_mins=300,
+            enrolled_nums=1000,
+            favorite_nums=1000,
+            hits=10000,
+            org=self.pku,
+        )
+        Course.objects.create(
+            name="Introduction to Compiler",
+            desc="",
+            degree="senior",
+            detail="",
+            duration_mins=300,
+            enrolled_nums=1000,
+            favorite_nums=1000,
+            hits=10000,
+            org=self.thu,
+        )
+        Course.objects.create(
+            name="Introduction to Network",
+            desc="",
+            degree="expert",
+            detail="",
+            duration_mins=300,
+            enrolled_nums=1000,
+            favorite_nums=1000,
+            hits=10000,
+            org=self.pku,
+        )
+        Course.objects.create(
+            name="Introduction to Database",
+            desc="",
+            degree="expert",
+            detail="",
+            duration_mins=300,
+            enrolled_nums=1000,
+            favorite_nums=1000,
+            hits=10000,
+            org=self.thu,
+        )

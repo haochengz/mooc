@@ -118,6 +118,35 @@ class OrgListViewTest(TestCase):
         self.assertContains(resp, "Tsinghua University")
         self.assertContains(resp, "Beijing Tranning School")
 
+    def test_sort_orgs_by_course_nums(self):
+        resp = self.client.get('/orgs/')
+        self.assertNotContains(resp, 'Fudan University')
+        self.assertNotContains(resp, 'iMooc.com')
+
+        resp = self.client.get('/orgs/', {'sort': 'courses'})
+        self.assertContains(resp, 'Fudan University')
+        self.assertContains(resp, 'iMooc.com')
+
+    def test_sort_orgs_by_students_nums(self):
+        resp = self.client.get('/orgs/')
+        self.assertNotContains(resp, 'Fudan University')
+        self.assertNotContains(resp, 'iMooc.com')
+
+        resp = self.client.get('/orgs/', {'sort': 'students'})
+        self.assertContains(resp, 'Fudan University')
+        self.assertContains(resp, 'iMooc.com')
+
+    def test_submit_a_consulation_to_db(self):
+        self.client.post('/orgs/consult/', data={
+            "name": "WuHong Wang",
+            "mobile": "13888777666",
+            "course_name": "Introduction to Python",
+        })
+
+        from operations.models import UserConsult
+        consult = UserConsult.objects.get(name='WuHong Wang')
+        self.assertEqual(consult.mobile, '13888777666')
+
     @staticmethod
     def create_orgs():
         beijing = Location.objects.get(name="Beijing")
@@ -135,35 +164,52 @@ class OrgListViewTest(TestCase):
             name="WuHong Wang",
             category="personal",
             located=beijing,
+            hits=700,
+            enrolled_nums=700,
         )
         Org.objects.create(
             name="University of C",
             category="college",
             located=beijing,
+            hits=600,
+            enrolled_nums=600,
         )
         Org.objects.create(
             name="University of D",
             category="college",
             located=beijing,
+            hits=500,
+            enrolled_nums=500,
         )
         Org.objects.create(
             name="University of E",
             category="college",
             located=shanghai,
+            hits=400,
+            enrolled_nums=400,
         )
         Org.objects.create(
             name="J.C. Michael",
             category="personal",
             located=shanghai,
+            hits=300,
+            enrolled_nums=2000,
+            course_nums=300,
         )
         Org.objects.create(
             name="iMooc.com",
             category="vocational",
             located=shanghai,
+            hits=200,
+            enrolled_nums=2100,
+            course_nums=200,
         )
         Org.objects.create(
             name="Fudan University",
             category="college",
             located=shanghai,
+            hits=100,
+            enrolled_nums=2200,
+            course_nums=100,
         )
 

@@ -79,6 +79,33 @@ class OrgListViewTest(TestCase):
         self.assertContains(resp, '下一页')
         self.assertNotContains(resp, '上一页')
 
+    def test_sift_by_city(self):
+        beijing = Location.objects.get(name='Beijing')
+        resp = self.client.get('/orgs/', {'page': 1, 'city': beijing.id})
+
+        self.assertNotContains(resp, 'Fudan University')
+        self.assertNotContains(resp, '上一页')
+        self.assertNotContains(resp, '下一页')
+
+    def test_sift_by_category(self):
+        resp = self.client.get('/orgs/', {'page': 1, 'ct': "college"})
+
+        self.assertContains(resp, 'Fudan University')
+        self.assertNotContains(resp, 'WuHong Wang')
+        self.assertNotContains(resp, '上一页')
+        self.assertNotContains(resp, '下一页')
+
+    def test_sift_by_city_and_category(self):
+        shanghai = Location.objects.get(name='Shanghai')
+        resp = self.client.get('/orgs/', {'page': 1, 'ct': "vocational", 'city': shanghai.id})
+
+        self.assertNotContains(resp, 'WuHong Wang')
+        self.assertNotContains(resp, 'Fudan University')
+        self.assertNotContains(resp, 'J.C. Michael')
+        self.assertContains(resp, 'iMooc.com')
+        self.assertNotContains(resp, '上一页')
+        self.assertNotContains(resp, '下一页')
+
     @staticmethod
     def create_orgs():
         beijing = Location.objects.get(name="Beijing")
@@ -86,13 +113,13 @@ class OrgListViewTest(TestCase):
             name="Shanghai"
         )
         Org.objects.create(
-            name="University of A",
-            category="college",
+            name="Beiking Tranning School",
+            category="vocational",
             located=beijing,
         )
         Org.objects.create(
-            name="University of B",
-            category="college",
+            name="WuHong Wang",
+            category="personal",
             located=beijing,
         )
         Org.objects.create(
@@ -111,17 +138,17 @@ class OrgListViewTest(TestCase):
             located=shanghai,
         )
         Org.objects.create(
-            name="University of F",
-            category="college",
+            name="J.C. Michael",
+            category="personal",
             located=shanghai,
         )
         Org.objects.create(
-            name="University of G",
-            category="college",
+            name="iMooc.com",
+            category="vocational",
             located=shanghai,
         )
         Org.objects.create(
-            name="University of H",
+            name="Fudan University",
             category="college",
             located=shanghai,
         )

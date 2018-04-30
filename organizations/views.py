@@ -58,7 +58,6 @@ class UserConsultView(View):
             return HttpResponse("{'status': 'success'}", content_type='application/json')
         return HttpResponse("{'status': 'failed', 'msg':{0}}".format(consult.errors), content_type='application/json')
 
-    # TODO: test sift organizations
     # TODO: test top 3 orgs shows at right side of the page
     # TODO: test sort by enrolled students number of open course number
     # TODO: test submit consultation

@@ -16,11 +16,15 @@ class OrgListViewTest(TestCase):
             name="Peiking University",
             category="college",
             located=beijing,
+            hits=1000,
+            enrolled_nums=1000,
         )
         Org.objects.create(
             name="Tsinghua University",
             category="college",
             located=beijing,
+            hits=900,
+            enrolled_nums=900,
         )
 
         self.create_orgs()
@@ -106,6 +110,14 @@ class OrgListViewTest(TestCase):
         self.assertNotContains(resp, '上一页')
         self.assertNotContains(resp, '下一页')
 
+    def test_display_a_ranking_board_at_the_right(self):
+        shanghai = Location.objects.get(name='Shanghai')
+        resp = self.client.get('/orgs/', {'page': 1, 'ct': "personal", 'city': shanghai.id})
+
+        self.assertContains(resp, "Peiking University")
+        self.assertContains(resp, "Tsinghua University")
+        self.assertContains(resp, "Beijing Tranning School")
+
     @staticmethod
     def create_orgs():
         beijing = Location.objects.get(name="Beijing")
@@ -113,9 +125,11 @@ class OrgListViewTest(TestCase):
             name="Shanghai"
         )
         Org.objects.create(
-            name="Beiking Tranning School",
+            name="Beijing Tranning School",
             category="vocational",
             located=beijing,
+            hits=800,
+            enrolled_nums=800,
         )
         Org.objects.create(
             name="WuHong Wang",

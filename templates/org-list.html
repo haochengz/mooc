@@ -157,6 +157,8 @@
                 data:$('#jsStayForm').serialize(),
                 async: true,
                 success: function(data) {
+                    console.log(data)
+                    alert(data)
                     if(data.status == 'success'){
                         $('#jsStayForm')[0].reset();
                         alert("提交成功")

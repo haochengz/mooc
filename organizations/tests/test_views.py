@@ -6,7 +6,7 @@ from organizations.views import OrgListView
 from organizations.models import Org, Location
 
 
-class OrgListViewTest(TestCase):
+class OrgListViewAndUserConsultViewTest(TestCase):
 
     def setUp(self):
         beijing = Location.objects.create(

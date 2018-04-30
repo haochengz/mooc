@@ -56,6 +56,6 @@ class UserConsultView(View):
         if consult.is_valid():
             consult.save(commit=True)
             return HttpResponse("{'status': 'success'}", content_type='application/json')
-        return HttpResponse("{'status': 'failed', 'msg':{0}}".format(consult.errors), content_type='application/json')
+        return HttpResponse("{'status': 'failed', 'msg': 'Failed'}", content_type='application/json')
 
     # FIXME: org-list js didn't work

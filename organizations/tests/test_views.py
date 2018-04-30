@@ -23,6 +23,8 @@ class OrgListViewTest(TestCase):
             located=beijing,
         )
 
+        self.create_orgs()
+
     def test_resolve_org_index_url(self):
         found = resolve("/orgs/")
         self.assertEqual(found.func.view_class, OrgListView)
@@ -45,3 +47,82 @@ class OrgListViewTest(TestCase):
         resp = self.client.get('/orgs/')
         c = '<div class="all">共<span class="key">%d</span>家</div>' % Org.objects.count()
         self.assertContains(resp, c)
+
+    def test_pagination_works(self):
+        resp = self.client.get('/orgs/')
+        self.assertTemplateUsed(resp, 'org-list.html')
+        c = '<div class="all">共<span class="key">%d</span>家</div>' % Org.objects.count()
+        self.assertContains(resp, c)
+
+        self.assertContains(resp, '下一页')
+        self.assertNotContains(resp, '上一页')
+
+    def test_pagination_and_follow_to_next_page(self):
+        resp = self.client.get('/orgs/', {'page': 1})
+        self.assertTemplateUsed(resp, 'org-list.html')
+        self.assertContains(resp, '下一页')
+        self.assertNotContains(resp, '上一页')
+
+        resp = self.client.get('/orgs/', {'page': 2})
+        self.assertTemplateUsed(resp, 'org-list.html')
+        self.assertNotContains(resp, '下一页')
+        self.assertContains(resp, '上一页')
+
+    def test_pagination_with_wrong_page_number_always_returns_first_page(self):
+        resp = self.client.get('/orgs/', {'page': 1101})
+        self.assertTemplateUsed(resp, 'org-list.html')
+        self.assertContains(resp, '下一页')
+        self.assertNotContains(resp, '上一页')
+
+        resp = self.client.get('/orgs/')
+        self.assertTemplateUsed(resp, 'org-list.html')
+        self.assertContains(resp, '下一页')
+        self.assertNotContains(resp, '上一页')
+
+    @staticmethod
+    def create_orgs():
+        beijing = Location.objects.get(name="Beijing")
+        shanghai = Location.objects.create(
+            name="Shanghai"
+        )
+        Org.objects.create(
+            name="University of A",
+            category="college",
+            located=beijing,
+        )
+        Org.objects.create(
+            name="University of B",
+            category="college",
+            located=beijing,
+        )
+        Org.objects.create(
+            name="University of C",
+            category="college",
+            located=beijing,
+        )
+        Org.objects.create(
+            name="University of D",
+            category="college",
+            located=beijing,
+        )
+        Org.objects.create(
+            name="University of E",
+            category="college",
+            located=shanghai,
+        )
+        Org.objects.create(
+            name="University of F",
+            category="college",
+            located=shanghai,
+        )
+        Org.objects.create(
+            name="University of G",
+            category="college",
+            located=shanghai,
+        )
+        Org.objects.create(
+            name="University of H",
+            category="college",
+            located=shanghai,
+        )
+

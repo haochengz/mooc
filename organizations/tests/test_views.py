@@ -238,11 +238,11 @@ class OrgHomeViewTest(TestCase):
         self.create_courses()
 
     def test_resolve_org_home_correct(self):
-        found = resolve('/orgs/home/1/')
+        found = resolve('/orgs/home/%d/' % self.pku.id)
         self.assertEqual(found.func.view_class, OrgHomeView)
 
     def test_org_home_uses_org_homepage_template(self):
-        resp = self.client.get('/orgs/home/1/')
+        resp = self.client.get('/orgs/home/%d/' % self.pku.id)
         self.assertTemplateUsed(resp, 'org-detail-homepage.html')
 
     def test_org_home_page_display_the_course_belong_to_the_orgs(self):

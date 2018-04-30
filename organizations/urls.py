@@ -10,10 +10,11 @@ urlpatterns = [
     path('consult/', UserConsultView.as_view(), name='add_ask'),
     path('home/<int:org_id>/', OrgHomeView.as_view(), name='org_home'),
 
-    path('course/<int:org_id>/', OrgHomeView.as_view(), name='org_course'),
-    path('desc/<int:org_id>/', OrgHomeView.as_view(), name='org_desc'),
-    path('teacher/<int:org_id>/', OrgHomeView.as_view(), name='org_teacher'),
-    path('add_fav/', OrgListView.as_view(), name='add_fav'),
+    path('course/<int:org_id>/', OrgHomeView.as_view(), name='org_course'),                 # FIXME:
+    path('desc/<int:org_id>/', OrgHomeView.as_view(), name='org_desc'),                     # FIXME:
+    path('teacher/<int:org_id>/', OrgHomeView.as_view(), name='org_teacher'),               # FIXME:
+    path('add_fav/', OrgListView.as_view(), name='add_fav'),                                # FIXME:
+    path('course_detail/<int:org_id>/', OrgHomeView.as_view(), name='course_detail'),       # FIXME:
 
 
 

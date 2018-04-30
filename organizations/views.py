@@ -65,9 +65,9 @@ class OrgHomeView(View):
 
     @staticmethod
     def get(request, org_id):
+        org = Org.objects.get(id=org_id)
+        top_courses = org.course_set.all()[:3]
         return render(request, "org-detail-homepage.html", {
-            "course_org": Org.objects.create(
-                name="Tsinghua University",
-                located=Location.objects.create(name="Beijing")
-            )
+            "course_org": org,
+            "top_courses": top_courses,
         })

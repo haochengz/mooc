@@ -59,3 +59,15 @@ class UserConsultView(View):
         return HttpResponse("{'status': 'failed', 'msg': 'Failed'}", content_type='application/json')
 
     # FIXME: org-list js didn't work
+
+
+class OrgHomeView(View):
+
+    @staticmethod
+    def get(request, org_id):
+        return render(request, "org-detail-homepage.html", {
+            "course_org": Org.objects.create(
+                name="Tsinghua University",
+                located=Location.objects.create(name="Beijing")
+            )
+        })

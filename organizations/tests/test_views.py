@@ -220,9 +220,9 @@ class OrgHomeViewTest(TestCase):
         pass
 
     def test_resolve_org_home_correct(self):
-        found = resolve('/orgs/org_home/')
+        found = resolve('/orgs/home/1/')
         self.assertEqual(found.func.view_class, OrgHomeView)
 
     def test_org_home_uses_org_homepage_template(self):
-        resp = self.client.get('/orgs/org_home/')
+        resp = self.client.get('/orgs/home/1/')
         self.assertTemplateUsed(resp, 'org-detail-homepage.html')

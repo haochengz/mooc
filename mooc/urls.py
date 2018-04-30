@@ -36,7 +36,7 @@ urlpatterns = [
     path('register/', users.views.RegisterView.as_view(), name='register'),
     path('courses/', TemplateView.as_view(template_name='index.html'), name='course_list'),
     path('teachers/', TemplateView.as_view(template_name='index.html'), name='teacher_list'),
-    re_path(r'^org/(?P<code>.*)/$', users.views.ActivateUserView.as_view(), name="org_home"),
+    # re_path(r'^org/(?P<code>.*)/$', users.views.ActivateUserView.as_view(), name="org_home"),
     path('coursedetail/', TemplateView.as_view(template_name='index.html'), name='course_detail'),
     re_path(r'^activate/(?P<code>.*)/$', users.views.ActivateUserView.as_view(), name="active"),
     re_path(r'^retrieve/(?P<code>.*)/$', users.views.RetrievePasswordView.as_view(), name="retrieve"),

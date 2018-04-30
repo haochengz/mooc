@@ -45,7 +45,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{% url 'users:mymessage' %}">
+                        <a href="{% url 'mymessage' %}">
                             <div class="msg-num"> <span id="MsgNum">{{ request.user.unread_nums }}</span></div>
                         </a>
                     {% else %}
@@ -142,7 +142,7 @@ function add_fav(current_elem, fav_id, fav_type){
     $.ajax({
         cache: false,
         type: "POST",
-        url:"{% url "org:add_fav" %}",
+        url:"{% url "add_fav" %}",
         data:{'fav_id':fav_id, 'fav_type':fav_type},
         async: true,
         beforeSend:function(xhr, settings){

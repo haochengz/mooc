@@ -1,6 +1,7 @@
 
 from django.test import TestCase
 from django.urls import resolve
+from django.test import Client
 
 from organizations.views import (
     OrgListView, OrgHomeView, OrgCourseView, OrgDescView, OrgTeacherView,
@@ -8,6 +9,8 @@ from organizations.views import (
 )
 from organizations.models import Org, Location, Instructor
 from courses.models import Course
+from operations.models import UserFavorite
+from users.models import UserProfile
 
 
 class OrgListViewAndUserConsultViewTest(TestCase):
@@ -375,6 +378,21 @@ class OrgViewTest(TestCase):
 
 class AddFavViewTest(TestCase):
 
+    def setUp(self):
+        self.beijing = Location.objects.create(
+            name="Beijing",
+        )
+        self.pku = Org.objects.create(
+            name="Peiking University",
+            located=self.beijing,
+        )
+        self.user = UserProfile.objects.create(
+            email="user@server.com",
+            username="user@server.com",
+        )
+        self.user.set_password('123456')
+        self.user.save()
+
     def test_resolve_correct_to_add_fav(self):
         found = resolve('/orgs/add_fav/')
         self.assertEqual(found.func.view_class, AddFavView)
@@ -386,6 +404,18 @@ class AddFavViewTest(TestCase):
         })
         self.assertEqual(resp.content.decode(), "{'status': 'failed', 'msg': 'User not login'}")
 
-
-
+    def test_when_already_had_a_same_fav_data_then_unfav_it(self):
+        UserFavorite.objects.create(
+            user=self.user,
+            fav_id=Org.objects.get(name='Peiking University').id,
+            fav_type='org',
+        )
+        c = Client()
+        ok = c.login(username="user@server.com", password="123456")
+        self.assertTrue(ok)
+        resp = c.post('/orgs/add_fav/', data={
+            "fav_id": Org.objects.get(name='Peiking University').id,
+            "fav_type": 'org',
+        })
+        self.assertEqual(resp.content.decode(), "{'status': 'success', 'msg': 'Undo Favorite'}")
 

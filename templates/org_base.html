@@ -149,13 +149,12 @@ function add_fav(current_elem, fav_id, fav_type){
             xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
         },
         success: function(data) {
-            if(data.status == 'fail'){
+            if(data.status == 'failed'){
                 if(data.msg == '用户未登录'){
                     window.location.href="/login/";
                 }else{
                     alert(data.msg)
                 }
-
             }else if(data.status == 'success'){
                 current_elem.text(data.msg)
             }
@@ -164,7 +163,7 @@ function add_fav(current_elem, fav_id, fav_type){
 }
 
 $('.collectionbtn').on('click', function(){
-    add_fav($(this), {{ course_org.id }}, 2);
+    add_fav($(this), {{ course_org.id }}, 'org');
 });
 
 $(function(){

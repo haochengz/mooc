@@ -7,6 +7,7 @@ from pure_pagination import Paginator, PageNotAnInteger
 
 from .models import Org, Location
 from .forms import UserConsultForm
+from operations.models import UserFavorite
 
 
 class OrgListView(View):

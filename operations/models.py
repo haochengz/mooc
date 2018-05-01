@@ -63,7 +63,7 @@ class UserCourse(models.Model):
 class UserFavorite(models.Model):
     user = models.ForeignKey(UserProfile, verbose_name="用户", on_delete=models.CASCADE)
     fav_id = models.IntegerField(verbose_name="收藏数据id", default=0)
-    fav_type = models.IntegerField(verbose_name="收藏类型", default="course", choices=(
+    fav_type = models.CharField(verbose_name="收藏类型", max_length=10, default="course", choices=(
         ("course", "课程"),
         ("org", "机构"),
         ("teacher", "讲师"),

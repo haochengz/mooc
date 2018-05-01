@@ -97,7 +97,7 @@ class OrgTeacherView(View):
     def get(request, org_id):
         org = Org.objects.get(id=org_id)
         all_teachers = org.instructor_set.all()
-        return render(request, "org-detail-course.html", {
+        return render(request, "org-detail-teachers.html", {
             "course_org": org,
             "all_teachers": all_teachers,
             "current_page": "teacher",
@@ -114,3 +114,15 @@ class OrgDescView(View):
             "current_page": "desc",
         })
     # TODO: tests
+
+
+class AddFavView(View):
+
+    @staticmethod
+    def post(request):
+        """
+        取到课程id和收藏类型代码
+        判断用户登陆状态，未登陆则返回失败提示
+        根据课程id，收藏类型代码和登陆用户联合查询用户收藏表格
+        已收藏则取消收藏，反之添加收藏
+        """

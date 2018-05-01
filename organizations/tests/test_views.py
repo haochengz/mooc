@@ -2,7 +2,9 @@
 from django.test import TestCase
 from django.urls import resolve
 
-from organizations.views import OrgListView, OrgHomeView
+from organizations.views import (
+    OrgListView, OrgHomeView, OrgCourseView, OrgDescView, OrgTeacherView,
+)
 from organizations.models import Org, Location, Instructor
 from courses.models import Course
 
@@ -215,7 +217,10 @@ class OrgListViewAndUserConsultViewTest(TestCase):
         )
 
 
-class OrgHomeViewTest(TestCase):
+class OrgViewTest(TestCase):
+    """
+    Test case for OrgHomeView, OrgCourseView, OrgDescView, OrgTeacherView
+    """
 
     def setUp(self):
         beijing = Location.objects.create(
@@ -242,9 +247,33 @@ class OrgHomeViewTest(TestCase):
         found = resolve('/orgs/home/%d/' % self.pku.id)
         self.assertEqual(found.func.view_class, OrgHomeView)
 
+    def test_resolve_org_course_correct(self):
+        found = resolve('/orgs/course/%d/' % self.pku.id)
+        self.assertEqual(found.func.view_class, OrgCourseView)
+
+    def test_resolve_org_desc_correct(self):
+        found = resolve('/orgs/desc/%d/' % self.pku.id)
+        self.assertEqual(found.func.view_class, OrgDescView)
+
+    def test_resolve_org_teacher_correct(self):
+        found = resolve('/orgs/teacher/%d/' % self.pku.id)
+        self.assertEqual(found.func.view_class, OrgTeacherView)
+
     def test_org_home_uses_org_homepage_template(self):
         resp = self.client.get('/orgs/home/%d/' % self.pku.id)
         self.assertTemplateUsed(resp, 'org-detail-homepage.html')
+
+    def test_org_home_uses_org_course_template(self):
+        resp = self.client.get('/orgs/course/%d/' % self.pku.id)
+        self.assertTemplateUsed(resp, 'org-detail-course.html')
+
+    def test_org_home_uses_org_desc_template(self):
+        resp = self.client.get('/orgs/desc/%d/' % self.pku.id)
+        self.assertTemplateUsed(resp, 'org-detail-desc.html')
+
+    def test_org_home_uses_org_teacher_template(self):
+        resp = self.client.get('/orgs/teacher/%d/' % self.pku.id)
+        self.assertTemplateUsed(resp, 'org-detail-teachers.html')
 
     def test_org_home_page_display_the_course_belong_to_the_orgs(self):
         resp = self.client.get('/orgs/home/%d/' % self.pku.id)
@@ -341,3 +370,7 @@ class OrgHomeViewTest(TestCase):
             name="Dr. Zhao",
             org=self.thu
         )
+
+
+
+

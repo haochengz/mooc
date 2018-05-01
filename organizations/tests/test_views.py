@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import resolve
 
 from organizations.views import OrgListView, OrgHomeView
-from organizations.models import Org, Location
+from organizations.models import Org, Location, Instructor
 from courses.models import Course
 
 
@@ -236,6 +236,7 @@ class OrgHomeViewTest(TestCase):
             enrolled_nums=900,
         )
         self.create_courses()
+        self.create_teachers()
 
     def test_resolve_org_home_correct(self):
         found = resolve('/orgs/home/%d/' % self.pku.id)
@@ -249,6 +250,11 @@ class OrgHomeViewTest(TestCase):
         resp = self.client.get('/orgs/home/%d/' % self.pku.id)
         self.assertContains(resp, "Introduction to Python")
         self.assertNotContains(resp, "Introduction to Compiler")
+
+    def test_org_home_page_displays_the_teachers_belong_to_the_orgs(self):
+        resp = self.client.get('/orgs/home/%d/' % self.pku.id)
+        self.assertContains(resp, "Ms. Zhou")
+        self.assertNotContains(resp, "Dr. Zhao")
 
     def create_courses(self):
         Course.objects.create(
@@ -316,4 +322,22 @@ class OrgHomeViewTest(TestCase):
             favorite_nums=1000,
             hits=10000,
             org=self.thu,
+        )
+
+    def create_teachers(self):
+        Instructor.objects.create(
+            name="Ms. Zhou",
+            org=self.pku
+        )
+        Instructor.objects.create(
+            name="Pr. Wang",
+            org=self.pku
+        )
+        Instructor.objects.create(
+            name="Pr. Liu",
+            org=self.thu
+        )
+        Instructor.objects.create(
+            name="Dr. Zhao",
+            org=self.thu
         )

@@ -67,7 +67,9 @@ class OrgHomeView(View):
     def get(request, org_id):
         org = Org.objects.get(id=org_id)
         top_courses = org.course_set.all()[:3]
+        top_teachers = org.instructor_set.all()[:3]
         return render(request, "org-detail-homepage.html", {
             "course_org": org,
             "top_courses": top_courses,
+            "top_teachers": top_teachers,
         })

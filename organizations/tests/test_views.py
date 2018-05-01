@@ -4,6 +4,7 @@ from django.urls import resolve
 
 from organizations.views import (
     OrgListView, OrgHomeView, OrgCourseView, OrgDescView, OrgTeacherView,
+    AddFavView,
 )
 from organizations.models import Org, Location, Instructor
 from courses.models import Course
@@ -370,6 +371,13 @@ class OrgViewTest(TestCase):
             name="Dr. Zhao",
             org=self.thu
         )
+
+
+class AddFavViewTest(TestCase):
+
+    def test_resolve_correct_to_add_fav(self):
+        found = resolve('/orgs/add_fav/')
+        self.assertEqual(found.func.view_class, AddFavView)
 
 
 

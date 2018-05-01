@@ -53,6 +53,7 @@ class Instructor(models.Model):
     position = models.CharField(verbose_name="职位", max_length=50)
     service_len = models.IntegerField(verbose_name="工作年限", default=0)
     characteristics = models.CharField(verbose_name="教学特点", max_length=500)
+    image = models.ImageField(verbose_name="头像", upload_to="media/instructor/%Y/%m", max_length=200, default="")
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:

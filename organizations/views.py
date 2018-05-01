@@ -72,4 +72,22 @@ class OrgHomeView(View):
             "course_org": org,
             "top_courses": top_courses,
             "top_teachers": top_teachers,
+            "current_page": "home",
         })
+
+
+class OrgCourseView(View):
+
+    @staticmethod
+    def get(request, org_id):
+        org = Org.objects.get(id=org_id)
+        all_courses = org.course_set.all()
+        all_teachers = org.instructor_set.all()[:3]
+        return render(request, "org-detail-course.html", {
+            "course_org": org,
+            "all_courses": all_courses,
+            "all_teachers": all_teachers,
+            "current_page": "course",
+        })
+
+    # TODO: tests

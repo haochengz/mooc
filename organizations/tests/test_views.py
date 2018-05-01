@@ -379,6 +379,11 @@ class AddFavViewTest(TestCase):
         found = resolve('/orgs/add_fav/')
         self.assertEqual(found.func.view_class, AddFavView)
 
+    def test_when_user_was_not_login_should_return_failed_json(self):
+        resp = self.client.post('/orgs/add_fav/', data={
+            "": "",
+        })
+
 
 
 

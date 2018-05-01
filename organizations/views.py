@@ -90,4 +90,27 @@ class OrgCourseView(View):
             "current_page": "course",
         })
 
+
+class OrgTeacherView(View):
+
+    @staticmethod
+    def get(request, org_id):
+        org = Org.objects.get(id=org_id)
+        all_teachers = org.instructor_set.all()
+        return render(request, "org-detail-course.html", {
+            "course_org": org,
+            "all_teachers": all_teachers,
+            "current_page": "teacher",
+        })
+
+
+class OrgDescView(View):
+
+    @staticmethod
+    def get(request, org_id):
+        org = Org.objects.get(id=org_id)
+        return render(request, "org-detail-desc.html", {
+            "course_org": org,
+            "current_page": "desc",
+        })
     # TODO: tests

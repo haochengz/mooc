@@ -126,3 +126,9 @@ class AddFavView(View):
         根据课程id，收藏类型代码和登陆用户联合查询用户收藏表格
         已收藏则取消收藏，反之添加收藏
         """
+        fav_id = request.POST.get('fav_id', 0)
+        fav_type = request.POST.get('fav_type', 'org')
+        if request.user.is_authenticated:
+            pass
+        else:
+            return HttpResponse("{'status': 'failed', 'msg': 'User not login'}")

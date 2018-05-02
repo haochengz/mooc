@@ -130,6 +130,16 @@ class AddFavView(View):
         fav_id = request.POST.get('fav_id', 0)
         fav_type = request.POST.get('fav_type', 'org')
         if request.user.is_authenticated:
-            pass
+            fav = UserFavorite.objects.filter(fav_id=fav_id, fav_type=fav_type, user=request.user)
+            if fav:
+                fav.delete()
+                return HttpResponse("{'status': 'success', 'msg': 'Undo Favorite'}")
+            else:
+                UserFavorite.objects.create(
+                    fav_id=fav_id,
+                    fav_type=fav_type,
+                    user=request.user,
+                )
+                return HttpResponse("{'status': 'success', 'msg': 'Add Favorite'}")
         else:
             return HttpResponse("{'status': 'failed', 'msg': 'User not login'}")

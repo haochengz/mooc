@@ -417,5 +417,28 @@ class AddFavViewTest(TestCase):
             "fav_id": Org.objects.get(name='Peiking University').id,
             "fav_type": 'org',
         })
+        unfav = UserFavorite.objects.filter(
+            user=self.user,
+            fav_id=Org.objects.get(name='Peiking University').id,
+            fav_type='org',
+        )
+        self.assertEqual(0, unfav.count())
         self.assertEqual(resp.content.decode(), "{'status': 'success', 'msg': 'Undo Favorite'}")
 
+    def test_add_fav_data(self):
+        c = Client()
+        ok = c.login(username="user@server.com", password="123456")
+        self.assertTrue(ok)
+        resp = c.post('/orgs/add_fav/', data={
+            "fav_id": Org.objects.get(name='Peiking University').id,
+            "fav_type": 'org',
+        })
+        fav = UserFavorite.objects.filter(
+            user=self.user,
+            fav_id=Org.objects.get(name='Peiking University').id,
+            fav_type='org',
+        )
+        self.assertEqual(1, fav.count())
+        self.assertEqual(self.user, fav[0].user)
+        self.assertEqual(Org.objects.get(name='Peiking University').id, fav[0].fav_id)
+        self.assertEqual(resp.content.decode(), "{'status': 'success', 'msg': 'Add Favorite'}")

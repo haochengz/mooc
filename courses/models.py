@@ -29,8 +29,14 @@ class Course(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
     def get_chapter_nums(self):
         return self.chapter_set.all().count()
+
+    def get_learn_users(self):
+        return self.usercourse_set.all()[:5]
 
 
 class Chapter(models.Model):

@@ -30,6 +30,12 @@ class CourseListViewTest(TestCase):
             org=stanford,
         )
         Course.objects.create(
+            name="Python",
+            duration_mins=300,
+            hits=1000,
+            org=stanford,
+        )
+        Course.objects.create(
             name="Database",
             duration_mins=300,
             hits=1000,
@@ -43,12 +49,6 @@ class CourseListViewTest(TestCase):
         )
         Course.objects.create(
             name="Deep learning",
-            duration_mins=300,
-            hits=1000,
-            org=stanford,
-        )
-        Course.objects.create(
-            name="Python",
             duration_mins=300,
             hits=1000,
             org=stanford,
@@ -88,7 +88,7 @@ class CourseListViewTest(TestCase):
 
     def test_pagination_of_course_list_page_by_8_courses_each_page(self):
         resp = self.client.get("/course/list/")
-        self.assertContains(resp, "Database")
+        self.assertContains(resp, "Python")
         self.assertNotContains(resp, "Introduction to Database")
         self.assertContains(resp, "下一页")
         self.assertNotContains(resp, "上一页")
@@ -104,3 +104,12 @@ class CourseListViewTest(TestCase):
         resp = self.client.get("/course/list/")
         self.assertContains(resp, "Network")
         self.assertNotContains(resp, "Compiler")
+
+    def test_requests_second_page(self):
+        resp = self.client.get("/course/list/", {
+            "page": 2
+        })
+        self.assertContains(resp, "上一页")
+        self.assertNotContains(resp, "下一页")
+        self.assertContains(resp, "Introduction to Database")
+        self.assertNotContains(resp, "Python")

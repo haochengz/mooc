@@ -2,11 +2,14 @@
 from django.views.generic import View
 from django.shortcuts import render
 
-# Create your views here.
+from .models import Course
 
 
 class CourseListView(View):
 
     @staticmethod
     def get(request):
-        return render(request, "course-list.html", {})
+        all_courses = Course.objects.all()
+        return render(request, "course-list.html", {
+            "all_courses": all_courses,
+        })

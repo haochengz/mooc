@@ -5,10 +5,10 @@ from organizations.models import Org
 
 
 class Course(models.Model):
-    name = models.CharField(verbose_name="", max_length=30)
-    desc = models.CharField(verbose_name="", max_length=500)
-    detail = models.TextField(verbose_name="")
-    degree = models.CharField(verbose_name="", choices=(
+    name = models.CharField(verbose_name="课程名", max_length=30)
+    desc = models.CharField(verbose_name="简介", max_length=500)
+    detail = models.TextField(verbose_name="详情")
+    degree = models.CharField(verbose_name="难度", choices=(
         ("junior", "初级"),
         ("senior", "中级"),
         ("expert", "高级"),

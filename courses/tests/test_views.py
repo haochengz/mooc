@@ -255,3 +255,11 @@ class CourseDetailViewTest(TestCase):
 
         teacher_num_str = "<span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  %d</span>" % 1
         self.assertContains(resp, teacher_num_str)
+
+    def test_every_get_request_to_the_course_detail_page_mean_one_hit_from_user(self):
+        compiler = Course.objects.get(id=1)
+        self.assertEqual(compiler.hits, 10000)
+        self.client.get("/course/detail/1/")
+        compiler = Course.objects.get(id=1)
+        self.assertEqual(compiler.hits, 10001)
+

@@ -37,6 +37,8 @@ class CourseDetailView(View):
     @staticmethod
     def get(request, course_id):
         course = Course.objects.get(id=course_id)
+        course.hits += 1
+        course.save()
 
         return render(request, "course-detail.html", {
             "course": course,

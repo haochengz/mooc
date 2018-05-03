@@ -43,3 +43,6 @@ class CourseDetailView(View):
         return render(request, "course-detail.html", {
             "course": course,
         })
+
+    # TODO: Categorize by tag
+    # TODO: Fav the course and org at the course detail page

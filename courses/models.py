@@ -17,6 +17,7 @@ class Course(models.Model):
     enrolled_nums = models.IntegerField(verbose_name="注册人数", default=0)
     favorite_nums = models.IntegerField(verbose_name="收藏人数", default=0)
     image = models.ImageField(verbose_name="封面图片", upload_to="media/courses/%Y/%m")
+    category = models.CharField(verbose_name="课程类别", max_length=20, default="")
     hits = models.IntegerField(verbose_name="点击量", default=0)
     org = models.ForeignKey(Org, verbose_name="所属机构", on_delete=models.CASCADE, default=None)
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
@@ -27,6 +28,9 @@ class Course(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_chapter_nums(self):
+        return self.chapter_set.all().count()
 
 
 class Chapter(models.Model):

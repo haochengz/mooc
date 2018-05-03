@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 
-from .models import Course, Chapter, Section, Resource
+from courses.models import Course, Chapter, Section, Resource
 from organizations.models import Org, Location
 
 

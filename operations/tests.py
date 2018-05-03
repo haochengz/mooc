@@ -2,8 +2,8 @@ from django.test import TestCase
 
 from .models import UserConsult, UserFavorite, UserMessage, UserCourse, CourseComment
 from users.tests.test_models import UserModuleModelsDBConnectionTest as UMT
-from courses.tests import CourseModuleDBConnectionTest as CMT
-from organizations.tests.tests_modules import OrganizationsModuleDBConnectionTest as OMT
+from courses.tests.test_models import CourseModuleDBConnectionTest as CMT
+from organizations.tests.test_models import OrganizationsModuleDBConnectionTest as OMT
 
 
 class OperationsModuleDBConnectionTest(TestCase):

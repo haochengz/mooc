@@ -30,3 +30,14 @@ class CourseListView(View):
             "hot_courses": hot_courses,
             "sort": sort,
         })
+
+
+class CourseDetailView(View):
+
+    @staticmethod
+    def get(request, course_id):
+        course = Course.objects.get(id=course_id)
+
+        return render(request, "course-detail.html", {
+            "course": course,
+        })

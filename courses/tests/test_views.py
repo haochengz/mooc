@@ -6,7 +6,7 @@ from courses.views import CourseListView, CourseDetailView
 from courses.models import Course, Chapter
 from users.models import UserProfile
 from operations.models import UserCourse
-from organizations.models import Org, Location
+from organizations.models import Org, Location, Instructor
 
 
 class CourseListViewTest(TestCase):
@@ -219,6 +219,10 @@ class CourseDetailViewTest(TestCase):
             user=user,
             course=compiler,
         )
+        Instructor.objects.create(
+            name="Pr. Zhang",
+            org=stanford,
+        )
 
     def test_resolve_correct(self):
         found = resolve("/course/detail/1/")
@@ -239,3 +243,15 @@ class CourseDetailViewTest(TestCase):
     def test_shows_how_many_chapters_of_this_course(self):
         resp = self.client.get("/course/detail/1/")
         self.assertContains(resp, "章&nbsp;节&nbsp;数：</span><span>2")
+
+    def test_shows_the_orgs_on_the_right_side_of_the_page(self):
+        resp = self.client.get("/course/detail/1/")
+        self.assertContains(resp, "Stanford University")
+
+    def test_shows_some_detail_of_the_org(self):
+        resp = self.client.get("/course/detail/1/")
+        course_num_str = "<span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   %d</span>" % 0
+        self.assertContains(resp, course_num_str)
+
+        teacher_num_str = "<span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  %d</span>" % 1
+        self.assertContains(resp, teacher_num_str)

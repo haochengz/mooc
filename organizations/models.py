@@ -43,6 +43,9 @@ class Org(models.Model):
     def __str__(self):
         return self.name
 
+    def get_teacher_nums(self):
+        return self.instructor_set.all().count()
+
 
 class Instructor(models.Model):
     org = models.ForeignKey(Org, verbose_name="所属机构", on_delete=models.CASCADE, default=None)

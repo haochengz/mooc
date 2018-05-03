@@ -3,7 +3,9 @@ from django.urls import resolve
 from django.test import TestCase
 
 from courses.views import CourseListView, CourseDetailView
-from courses.models import Course
+from courses.models import Course, Chapter
+from users.models import UserProfile
+from operations.models import UserCourse
 from organizations.models import Org, Location
 
 
@@ -138,10 +140,12 @@ class CourseDetailViewTest(TestCase):
             name="Stanford University",
             located=mountain_view,
         )
-        Course.objects.create(
+        compiler = Course.objects.create(
             name="Compiler",
             duration_mins=300,
             hits=10000,
+            enrolled_nums=300,
+            category="CS",
             org=stanford,
         )
         Course.objects.create(
@@ -199,6 +203,22 @@ class CourseDetailViewTest(TestCase):
             hits=1000,
             org=stanford,
         )
+        Chapter.objects.create(
+            name="Introduction",
+            course=compiler,
+        )
+        Chapter.objects.create(
+            name="tokenize",
+            course=compiler,
+        )
+        user = UserProfile.objects.create(
+            username="user",
+            email="user@server.com",
+        )
+        UserCourse.objects.create(
+            user=user,
+            course=compiler,
+        )
 
     def test_resolve_correct(self):
         found = resolve("/course/detail/1/")
@@ -207,3 +227,15 @@ class CourseDetailViewTest(TestCase):
     def test_template_render_correct(self):
         resp = self.client.get("/course/detail/1/")
         self.assertTemplateUsed(resp, "course-detail.html")
+
+    def test_shows_the_detail_of_the_course(self):
+        resp = self.client.get("/course/detail/1/")
+        self.assertContains(resp, "Compiler")
+
+    def test_shows_how_many_students_were_leaning_this_course(self):
+        resp = self.client.get("/course/detail/1/")
+        self.assertContains(resp, "学习人数：1")
+
+    def test_shows_how_many_chapters_of_this_course(self):
+        resp = self.client.get("/course/detail/1/")
+        self.assertContains(resp, "章&nbsp;节&nbsp;数：</span><span>2")

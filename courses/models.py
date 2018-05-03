@@ -38,6 +38,9 @@ class Course(models.Model):
     def get_learn_users(self):
         return self.usercourse_set.all()[:5]
 
+    def get_students_nums(self):
+        return self.usercourse_set.all().count()
+
 
 class Chapter(models.Model):
     course = models.ForeignKey(Course, verbose_name="所属课程", on_delete=models.CASCADE, default=None)

@@ -20,7 +20,7 @@ class CourseListViewTest(TestCase):
         Course.objects.create(
             name="Compiler",
             duration_mins=300,
-            hits=1000,
+            hits=10000,
             org=stanford,
         )
         Course.objects.create(
@@ -69,6 +69,7 @@ class CourseListViewTest(TestCase):
             name="Operating System",
             duration_mins=300,
             hits=1000,
+            enrolled_nums=10000,
             org=stanford,
         )
         Course.objects.create(
@@ -113,3 +114,15 @@ class CourseListViewTest(TestCase):
         self.assertNotContains(resp, "下一页")
         self.assertContains(resp, "Introduction to Database")
         self.assertNotContains(resp, "Python")
+
+    def test_sort_by_enrolled_nums(self):
+        resp = self.client.get("/course/list/", data={
+            "sort": "students",
+        })
+        self.assertContains(resp, "Operating System")
+
+    def test_sort_by_hits(self):
+        resp = self.client.get("/course/list/", data={
+            "sort": "hot",
+        })
+        self.assertContains(resp, "Compiler")

@@ -14,10 +14,20 @@ class CourseListView(View):
             page = request.GET.get('page', 1)
         except PageNotAnInteger:
             page = 1
-        all_courses = Course.objects.all().order_by("-add_time")
+        sort = request.GET.get("sort", "")
+        if sort:
+            if sort == "hot":
+                all_courses = Course.objects.all().order_by("-hits")
+            elif sort == "students":
+                all_courses = Course.objects.all().order_by("-enrolled_nums")
+            else:
+                all_courses = Course.objects.all().order_by("-add_time")
+        else:
+            all_courses = Course.objects.all().order_by("-add_time")
 
         paginator = Paginator(all_courses, 8, request=request)
         courses = paginator.page(page)
         return render(request, "course-list.html", {
             "courses": courses,
+            "sort": sort,
         })

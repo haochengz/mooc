@@ -20,6 +20,7 @@ class Course(models.Model):
     category = models.CharField(verbose_name="课程类别", max_length=20, default="")
     hits = models.IntegerField(verbose_name="点击量", default=0)
     org = models.ForeignKey(Org, verbose_name="所属机构", on_delete=models.CASCADE, default=None)
+    tag = models.CharField(verbose_name="标签", max_length=20, default="")
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:

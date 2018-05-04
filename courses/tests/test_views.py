@@ -2,7 +2,7 @@
 from django.urls import resolve
 from django.test import TestCase
 
-from courses.views import CourseListView, CourseDetailView
+from courses.views import CourseListView, CourseDetailView, CourseInfoView
 from courses.models import Course, Chapter
 from users.models import UserProfile
 from operations.models import UserCourse
@@ -272,3 +272,25 @@ class CourseDetailViewTest(TestCase):
         )
         resp = self.client.get("/course/detail/1/")
         self.assertContains(resp, "Algorithms")
+
+
+class CourseInfoViewTest(TestCase):
+
+    def setUp(self):
+        Course.objects.create(
+            name="Compiler",
+            org=Org.objects.create(
+                name="Stanford University",
+                located=Location.objects.create(
+                    name="San Francisco",
+                )
+            )
+        )
+
+    def test_resolve_correct(self):
+        found = resolve("/course/info/1/")
+        self.assertEqual(found.func.view_class, CourseInfoView)
+
+    def test_render_correct_template(self):
+        resp = self.client.get("/course/info/1/")
+        self.assertTemplateUsed(resp, "course-video.html")

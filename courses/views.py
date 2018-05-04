@@ -4,7 +4,6 @@ from django.shortcuts import render
 from pure_pagination import Paginator, PageNotAnInteger
 
 from .models import Course
-from apps.utils.tools import add_favorite
 
 
 class CourseListView(View):
@@ -54,3 +53,13 @@ class CourseDetailView(View):
 
     # TODO: Categorize by tag
     # TODO: Fav the course and org at the course detail page
+
+
+class CourseInfoView(View):
+
+    @staticmethod
+    def get(request, course_id):
+        course = Course.objects.get(id=course_id)
+        return render(request, "course-video.html", {
+            "course": course,
+        })

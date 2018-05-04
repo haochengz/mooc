@@ -42,6 +42,9 @@ class Course(models.Model):
     def get_students_nums(self):
         return self.usercourse_set.all().count()
 
+    def get_course_lesson(self):
+        return self.chapter_set.all()
+
 
 class Chapter(models.Model):
     course = models.ForeignKey(Course, verbose_name="所属课程", on_delete=models.CASCADE, default=None)
@@ -55,11 +58,18 @@ class Chapter(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
+    def get_lesson_video(self):
+        return self.section_set.all()
+
 
 class Section(models.Model):
     chapter = models.ForeignKey(Chapter, verbose_name="所属章节", on_delete=models.CASCADE, default=None)
     name = models.CharField(verbose_name="小节名", max_length=30, default="")
     url = models.CharField(verbose_name="视频地址", max_length=300, default="")
+    duration_mins = models.IntegerField(verbose_name="时长", default=0)
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:
@@ -67,6 +77,9 @@ class Section(models.Model):
         verbose_name_plural = verbose_name
 
     def __unicode__(self):
+        return self.name
+
+    def __str__(self):
         return self.name
 
 
@@ -81,4 +94,7 @@ class Resource(models.Model):
         verbose_name_plural = verbose_name
 
     def __unicode__(self):
+        return self.name
+
+    def __str__(self):
         return self.name

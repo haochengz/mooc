@@ -45,6 +45,14 @@ class Course(models.Model):
     def get_course_lesson(self):
         return self.chapter_set.all()
 
+    def get_degree(self):
+        if self.degree == "junior":
+            return "初级"
+        elif self.degree == "senior":
+            return "中级"
+        elif self.degree == "expert":
+            return "高级"
+
 
 class Chapter(models.Model):
     course = models.ForeignKey(Course, verbose_name="所属课程", on_delete=models.CASCADE, default=None)

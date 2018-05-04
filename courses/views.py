@@ -40,8 +40,15 @@ class CourseDetailView(View):
         course.hits += 1
         course.save()
 
+        tag = course.tag
+        if tag:
+            related_courses = Course.objects.filter(tag=tag).exclude(id=course_id)[:1]
+        else:
+            related_courses = []
+
         return render(request, "course-detail.html", {
             "course": course,
+            "related_courses": related_courses,
         })
 
     # TODO: Categorize by tag

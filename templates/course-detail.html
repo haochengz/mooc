@@ -130,7 +130,7 @@
 			<div class="right layout">
 				<div class="head">相关课程推荐</div>
                 <div class="group_recommend">
-                    {% for relate_course in relate_courses %}
+                    {% for relate_course in related_courses %}
                         <dl>
                             <dt>
                                 <a target="_blank" href="">
@@ -166,14 +166,14 @@ function add_fav(current_elem, fav_id, fav_type){
             xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
         },
         success: function(data) {
-            if(data.status == 'fail'){
-                if(data.msg == '用户未登录'){
+            if(data.status === 'fail'){
+                if(data.msg === '用户未登录'){
                     window.location.href="/login/";
                 }else{
                     alert(data.msg)
                 }
 
-            }else if(data.status == 'success'){
+            }else if(data.status === 'success'){
                 current_elem.text(data.msg)
             }
         },

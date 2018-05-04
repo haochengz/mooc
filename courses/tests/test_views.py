@@ -146,6 +146,7 @@ class CourseDetailViewTest(TestCase):
             hits=10000,
             enrolled_nums=300,
             category="CS",
+            tag="CS",
             org=stanford,
         )
         Course.objects.create(
@@ -263,3 +264,11 @@ class CourseDetailViewTest(TestCase):
         compiler = Course.objects.get(id=1)
         self.assertEqual(compiler.hits, 10001)
 
+    def test_shows_related_courses_on_course_detail_page(self):
+        Course.objects.create(
+            name="Algorithms",
+            tag="CS",
+            org=Org.objects.get(name="Stanford University"),
+        )
+        resp = self.client.get("/course/detail/1/")
+        self.assertContains(resp, "Algorithms")

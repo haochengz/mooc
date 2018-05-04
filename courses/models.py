@@ -58,7 +58,8 @@ class Chapter(models.Model):
 
 class Section(models.Model):
     chapter = models.ForeignKey(Chapter, verbose_name="所属章节", on_delete=models.CASCADE, default=None)
-    name = models.CharField(verbose_name="小节名", max_length=30)
+    name = models.CharField(verbose_name="小节名", max_length=30, default="")
+    url = models.CharField(verbose_name="视频地址", max_length=300, default="")
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:

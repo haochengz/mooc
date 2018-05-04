@@ -4,6 +4,7 @@ from django.shortcuts import render
 from pure_pagination import Paginator, PageNotAnInteger
 
 from .models import Course
+from apps.utils.tools import add_favorite
 
 
 class CourseListView(View):

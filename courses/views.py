@@ -3,7 +3,7 @@ from django.views.generic import View
 from django.shortcuts import render
 from pure_pagination import Paginator, PageNotAnInteger
 
-from .models import Course
+from .models import Course, Resource
 
 
 class CourseListView(View):
@@ -60,6 +60,8 @@ class CourseInfoView(View):
     @staticmethod
     def get(request, course_id):
         course = Course.objects.get(id=course_id)
+        resources = Resource.objects.filter(course=course)
         return render(request, "course-video.html", {
             "course": course,
+            "course_resources": resources,
         })

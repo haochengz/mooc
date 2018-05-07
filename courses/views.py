@@ -6,6 +6,7 @@ from django.http import HttpResponse
 
 from .models import Course, Resource
 from operations.models import CourseComment, UserCourse
+from apps.utils.tools import LoginRequiredMixin
 
 
 class CourseListView(View):
@@ -57,7 +58,7 @@ class CourseDetailView(View):
     # TODO: Fav the course and org at the course detail page
 
 
-class CourseInfoView(View):
+class CourseInfoView(LoginRequiredMixin, View):
 
     @staticmethod
     def get(request, course_id):
@@ -79,7 +80,7 @@ class CourseInfoView(View):
     # TODO: tests of render and displays
 
 
-class CommentView(View):
+class CommentView(LoginRequiredMixin, View):
 
     @staticmethod
     def get(request, course_id):

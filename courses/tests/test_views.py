@@ -2,10 +2,10 @@
 from django.urls import resolve
 from django.test import TestCase
 
-from courses.views import CourseListView, CourseDetailView, CourseInfoView
+from courses.views import CourseListView, CourseDetailView, CourseInfoView, CommentView
 from courses.models import Course, Chapter
 from users.models import UserProfile
-from operations.models import UserCourse
+from operations.models import UserCourse, CourseComment
 from organizations.models import Org, Location, Instructor
 
 
@@ -294,3 +294,38 @@ class CourseInfoViewTest(TestCase):
     def test_render_correct_template(self):
         resp = self.client.get("/course/info/1/")
         self.assertTemplateUsed(resp, "course-video.html")
+
+
+class CommentViewTest(TestCase):
+
+    def setUp(self):
+        Course.objects.create(
+            name="Compiler",
+            org=Org.objects.create(
+                name="Stanford University",
+                located=Location.objects.create(
+                    name="San Francisco",
+                )
+            )
+        )
+
+    def test_resolve_correct(self):
+        found = resolve("/course/comment/1/")
+        self.assertEqual(found.func.view_class, CommentView)
+
+    def test_render_correct_template(self):
+        resp = self.client.get("/course/comment/1/")
+        self.assertTemplateUsed(resp, "course-comment.html")
+
+    def test_comnents_displayed(self):
+        CourseComment.objects.create(
+            user=UserProfile.objects.create(
+                username="WAHWAH",
+                nick_name="HOHOHO",
+            ),
+            course=Course.objects.get(id=1),
+            comment="Very Good course of all time."
+        )
+        resp = self.client.get("/course/comment/1/")
+        self.assertContains(resp, "Good course")
+

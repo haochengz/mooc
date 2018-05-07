@@ -2,8 +2,10 @@
 from django.views.generic import View
 from django.shortcuts import render
 from pure_pagination import Paginator, PageNotAnInteger
+from django.http import HttpResponse
 
 from .models import Course, Resource
+from operations.models import CourseComment
 
 
 class CourseListView(View):
@@ -73,4 +75,31 @@ class CommentView(View):
 
     @staticmethod
     def get(request, course_id):
-        pass
+        course = Course.objects.get(id=course_id)
+        resources = Resource.objects.filter(course=course)
+        comments = CourseComment.objects.filter(course=course)
+        return render(request, "course-comment.html", {
+            "course": course,
+            "course_resources": resources,
+            "comments": comments,
+        })
+
+
+class AddCommentView(View):
+
+    @staticmethod
+    def post(request):
+        user = request.user
+        if user.is_authenticated:
+            course_id = request.POST.get("course_id", 0)
+            comment = request.POST.get("comments", "")
+            if course_id == 0 or comment == "":
+                return HttpResponse("{'status': 'fail', 'message': 'Failed'}")
+            CourseComment.objects.create(
+                user=user,
+                course=Course.objects.get(id=course_id),
+                comment=comment,
+            )
+            return HttpResponse("{'status': 'success', 'message': 'Success'}")
+        return HttpResponse("{'status': 'fail', 'message': 'Failed'}")
+

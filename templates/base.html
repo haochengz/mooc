@@ -23,7 +23,7 @@
 				<div class="wp">
 					<div class="fl"><p>服务电话：<b>010-85443975</b></p></div>
 
-                        {% if request.user.is_authenticated %}
+                     {% if request.user.is_authenticated %}
                         <div class="personal">
                             <dl class="user fr">
                                 <dd>{{ user.username }}<img class="down fr" src="{% static "images/top_down.png" %}"/></dd>

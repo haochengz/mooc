@@ -67,3 +67,10 @@ class CourseInfoView(View):
         })
 
     # TODO: tests of render and displays
+
+
+class CommentView(View):
+
+    @staticmethod
+    def get(request, course_id):
+        pass

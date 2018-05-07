@@ -1,11 +1,13 @@
 from django.db import models
 from django.utils import timezone
 
-from organizations.models import Org
+from organizations.models import Org, Instructor
 
 
 class Course(models.Model):
     name = models.CharField(verbose_name="课程名", max_length=30)
+    teacher = models.ForeignKey(Instructor, verbose_name="讲师", default=None,
+                                on_delete=models.CASCADE, null=True, blank=True)
     desc = models.CharField(verbose_name="简介", max_length=500)
     detail = models.TextField(verbose_name="详情")
     degree = models.CharField(verbose_name="难度", choices=(

@@ -65,3 +65,5 @@ class CourseInfoView(View):
             "course": course,
             "course_resources": resources,
         })
+
+    # TODO: tests of render and displays

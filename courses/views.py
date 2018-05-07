@@ -4,7 +4,7 @@ from django.shortcuts import render
 from pure_pagination import Paginator, PageNotAnInteger
 from django.http import HttpResponse
 
-from .models import Course, Resource
+from .models import Course, Resource, Section
 from operations.models import CourseComment, UserCourse
 from apps.utils.tools import LoginRequiredMixin
 
@@ -65,6 +65,8 @@ class CourseInfoView(LoginRequiredMixin, View):
         course = Course.objects.get(id=course_id)
         resources = Resource.objects.filter(course=course)
 
+        # TODO: 查询是否已经关联该课程, 未关联则建立连接且学习人数递增
+
         user_courses = UserCourse.objects.filter(course=course)
         user_ids = [uc.user.id for uc in user_courses]
         all_uc = UserCourse.objects.filter(user_id__in=user_ids)
@@ -111,4 +113,30 @@ class AddCommentView(View):
             )
             return HttpResponse("{'status': 'success', 'message': 'Success'}")
         return HttpResponse("{'status': 'fail', 'message': 'Failed'}")
+
+
+class VideoPlayView(View):
+
+    @staticmethod
+    def get(request, video_id):
+        video = Section.objects.get(id=video_id)
+        course = video.chapter.course
+        resources = Resource.objects.filter(course=course)
+
+        # TODO: 查询是否已经关联该课程, 未关联则建立连接
+
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [uc.user.id for uc in user_courses]
+        all_uc = UserCourse.objects.filter(user_id__in=user_ids)
+        courses_id = [uc.course.id for uc in user_courses]
+        relate_courses = Course.objects.filter(id__in=courses_id).order_by("-hits")[:3]
+        # TODO: need refactor here
+        return render(request, "course-play.html", {
+            "course": course,
+            "course_resources": resources,
+            "relate_courses": relate_courses,
+            "video": video,
+        })
+
+    # TODO: very similar to the Course Info View
 

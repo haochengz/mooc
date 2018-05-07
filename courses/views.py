@@ -5,7 +5,7 @@ from pure_pagination import Paginator, PageNotAnInteger
 from django.http import HttpResponse
 
 from .models import Course, Resource
-from operations.models import CourseComment
+from operations.models import CourseComment, UserCourse
 
 
 class CourseListView(View):
@@ -63,9 +63,17 @@ class CourseInfoView(View):
     def get(request, course_id):
         course = Course.objects.get(id=course_id)
         resources = Resource.objects.filter(course=course)
+
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [uc.user.id for uc in user_courses]
+        all_uc = UserCourse.objects.filter(user_id__in=user_ids)
+        courses_id = [uc.course.id for uc in user_courses]
+        relate_courses = Course.objects.filter(id__in=courses_id).order_by("-hits")[:3]
+        # TODO: need refactor here
         return render(request, "course-video.html", {
             "course": course,
             "course_resources": resources,
+            "relate_courses": relate_courses,
         })
 
     # TODO: tests of render and displays

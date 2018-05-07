@@ -23,6 +23,8 @@ class Course(models.Model):
     hits = models.IntegerField(verbose_name="点击量", default=0)
     org = models.ForeignKey(Org, verbose_name="所属机构", on_delete=models.CASCADE, default=None)
     tag = models.CharField(verbose_name="标签", max_length=20, default="")
+    tips = models.CharField(verbose_name="讲师提示", max_length=200, default="")
+    notice = models.CharField(verbose_name="学前须知", max_length=200, default="")
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:

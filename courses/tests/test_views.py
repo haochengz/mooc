@@ -2,7 +2,9 @@
 from django.urls import resolve
 from django.test import TestCase, Client
 
-from courses.views import CourseListView, CourseDetailView, CourseInfoView, CommentView
+from courses.views import (
+    CourseListView, CourseDetailView, CourseInfoView, CommentView, AddCommentView,
+)
 from courses.models import Course, Chapter
 from users.models import UserProfile
 from operations.models import UserCourse, CourseComment
@@ -456,6 +458,90 @@ class CommentViewTest(TestCase):
         self.assertNotContains(resp, "Good course")
         self.assertNotContains(resp, "Amazing")
         self.assertContains(resp, "Just so so")
+
+    def get_logged_in_client(self, user, passwd="123456"):
+        c = Client()
+        ok = c.login(username=user.email, password=passwd)
+        self.assertTrue(ok)
+
+        return c
+
+
+class AddCommentViewTest(TestCase):
+
+    def setUp(self):
+        org = Org.objects.create(
+            name="Stanford University",
+            located=Location.objects.create(
+                name="San Francisco",
+            )
+        )
+        Course.objects.create(
+            name="Compiler",
+            org=org,
+            tag="cs"
+        )
+        Course.objects.create(
+            name="Operating System",
+            org=org,
+            tag="engineer"
+        )
+        Course.objects.create(
+            name="Network",
+            org=org,
+            tag="cs"
+        )
+        self.user = UserProfile(
+            username="joseph",
+            email="user@server.com",
+        )
+        self.user.set_password("123456")
+        self.user.save()
+
+    def test_resolve_correct(self):
+        found = resolve("/course/add/")
+        self.assertEqual(found.func.view_class, AddCommentView)
+
+    def test_cannot_submit_any_comments_without_login(self):
+        resp = self.client.post("/course/add/", follow=True, data={
+            "course_id": 1,
+            "comments": "amazing"
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(str(resp.content, encoding="utf-8"), "{'status': 'fail', 'message': 'Failed'}")
+
+    def test_add_comments_to_db(self):
+        self.assertEqual(CourseComment.objects.all().count(), 0)
+        c = self.get_logged_in_client(self.user)
+        resp = c.post("/course/add/", follow=True, data={
+            "course_id": 1,
+            "comments": "amazing"
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(str(resp.content, encoding="utf-8"), "{'status': 'success', 'message': 'Success'}")
+        self.assertEqual(CourseComment.objects.all().count(), 1)
+
+    def test_failed_if_submit_to_an_un_exists_course_of_empty_comment(self):
+        self.assertEqual(CourseComment.objects.all().count(), 0)
+        c = self.get_logged_in_client(self.user)
+        resp = c.post("/course/add/", follow=True, data={
+            "course_id": 11,
+            "comments": "amazing"
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(str(resp.content, encoding="utf-8"), "{'status': 'fail', 'message': 'Failed'}")
+        resp = c.post("/course/add/", follow=True, data={
+            "course_id": 1,
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(str(resp.content, encoding="utf-8"), "{'status': 'fail', 'message': 'Failed'}")
+        resp = c.post("/course/add/", follow=True, data={
+            "course_id": 3,
+            "comments": ""
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(str(resp.content, encoding="utf-8"), "{'status': 'fail', 'message': 'Failed'}")
+        self.assertEqual(CourseComment.objects.all().count(), 0)
 
     def get_logged_in_client(self, user, passwd="123456"):
         c = Client()

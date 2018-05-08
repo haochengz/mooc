@@ -96,7 +96,7 @@ class AddCommentView(View):
         if user.is_authenticated:
             course_id = request.POST.get("course_id", 0)
             comment = request.POST.get("comments", "")
-            if course_id == 0 or comment == "":
+            if course_id == 0 or comment == "" or Course.objects.filter(id=course_id).count() == 0:
                 return HttpResponse("{'status': 'fail', 'message': 'Failed'}")
             CourseComment.objects.create(
                 user=user,
@@ -105,10 +105,9 @@ class AddCommentView(View):
             )
             return HttpResponse("{'status': 'success', 'message': 'Success'}")
         return HttpResponse("{'status': 'fail', 'message': 'Failed'}")
-    # TODO(haochengz@outlook.com): test render, resolve, add comments to db, maybe failed, need login
 
 
-class VideoPlayView(View):
+class VideoPlayView(LoginRequiredMixin, View):
 
     @staticmethod
     def get(request, video_id):

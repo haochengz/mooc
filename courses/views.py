@@ -83,7 +83,7 @@ class CourseInfoView(LoginRequiredMixin, View):
             "relate_courses": relate_courses,
         })
 
-    # TODO(haochengz@outlook.com): test render, resolve, related_courses
+    # TODO(haochengz@outlook.com): test render, resolve, related_courses, course.enrolled_nums modifiers in db
 
 
 class CommentView(LoginRequiredMixin, View):

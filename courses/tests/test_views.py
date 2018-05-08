@@ -1,6 +1,6 @@
 
 from django.urls import resolve
-from django.test import TestCase
+from django.test import TestCase, Client
 
 from courses.views import CourseListView, CourseDetailView, CourseInfoView, CommentView
 from courses.models import Course, Chapter
@@ -286,13 +286,29 @@ class CourseInfoViewTest(TestCase):
                 )
             )
         )
+        self.user = UserProfile(
+            username="joseph",
+            email="user@server.com",
+        )
+        self.user.set_password("123456")
+        self.user.save()
 
     def test_resolve_correct(self):
         found = resolve("/course/info/1/")
         self.assertEqual(found.func.view_class, CourseInfoView)
 
-    def test_render_correct_template(self):
+    def test_redirect_to_login_page_if_no_user_logged_in(self):
         resp = self.client.get("/course/info/1/")
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, expected_url="/login/?next=/course/info/1/", status_code=302, target_status_code=200)
+        # FIXME(haochengz@outlook.com): fix login view forward the login process to original page after login
+
+    def test_render_the_correct_templage_after_logged_in(self):
+        c = Client()
+        ok = c.login(username="user@server.com", password="123456")
+        self.assertTrue(ok)
+
+        resp = c.get("/course/info/1/")
         self.assertTemplateUsed(resp, "course-video.html")
 
 
@@ -308,6 +324,12 @@ class CommentViewTest(TestCase):
                 )
             )
         )
+        self.user = UserProfile(
+            username="joseph",
+            email="user@server.com",
+        )
+        self.user.set_password("123456")
+        self.user.save()
 
     def test_resolve_correct(self):
         found = resolve("/course/comment/1/")
@@ -315,7 +337,9 @@ class CommentViewTest(TestCase):
 
     def test_render_correct_template(self):
         resp = self.client.get("/course/comment/1/")
-        self.assertTemplateUsed(resp, "course-comment.html")
+        self.assertEqual(resp.status_code, 302)
+        resp = self.client.get("/course/comment/1/", follow=True)
+        self.assertTemplateUsed(resp, "login.html")
 
     def test_comnents_displayed(self):
         CourseComment.objects.create(
@@ -326,6 +350,8 @@ class CommentViewTest(TestCase):
             course=Course.objects.get(id=1),
             comment="Very Good course of all time."
         )
-        resp = self.client.get("/course/comment/1/")
+        c = Client()
+        ok = c.login(username="user@server.com", password="123456")
+        self.assertTrue(ok)
+        resp = c.get("/course/comment/1/")
         self.assertContains(resp, "Good course")
-

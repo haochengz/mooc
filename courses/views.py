@@ -45,7 +45,7 @@ class CourseDetailView(View):
 
         tag = course.tag
         if tag:
-            related_courses = Course.objects.filter(tag=tag).exclude(id=course_id)[:1]
+            related_courses = Course.objects.filter(tag=tag).exclude(id=course_id)[:3]
         else:
             related_courses = []
 
@@ -53,9 +53,7 @@ class CourseDetailView(View):
             "course": course,
             "related_courses": related_courses,
         })
-
-    # TODO: Categorize by tag
-    # TODO: Fav the course and org at the course detail page
+    # TODO(haochengz@outlook.com): test render, resolve, related_courses
 
 
 class CourseInfoView(LoginRequiredMixin, View):
@@ -64,12 +62,18 @@ class CourseInfoView(LoginRequiredMixin, View):
     def get(request, course_id):
         course = Course.objects.get(id=course_id)
         resources = Resource.objects.filter(course=course)
+        user = request.user
 
-        # TODO: 查询是否已经关联该课程, 未关联则建立连接且学习人数递增
+        already_enrolled = UserCourse.objects.filter(course=course, user=user)
+        if not len(already_enrolled):
+            UserCourse.objects.create(
+                course=course,
+                user=user,
+            )
+            course.enrolled_nums += 1
+            course.save()
 
         user_courses = UserCourse.objects.filter(course=course)
-        user_ids = [uc.user.id for uc in user_courses]
-        all_uc = UserCourse.objects.filter(user_id__in=user_ids)
         courses_id = [uc.course.id for uc in user_courses]
         relate_courses = Course.objects.filter(id__in=courses_id).order_by("-hits")[:3]
         # TODO: need refactor here
@@ -79,7 +83,7 @@ class CourseInfoView(LoginRequiredMixin, View):
             "relate_courses": relate_courses,
         })
 
-    # TODO: tests of render and displays
+    # TODO(haochengz@outlook.com): test render, resolve, related_courses
 
 
 class CommentView(LoginRequiredMixin, View):
@@ -94,6 +98,7 @@ class CommentView(LoginRequiredMixin, View):
             "course_resources": resources,
             "comments": comments,
         })
+    # TODO(haochengz@outlook.com): test render, resolve, comments from db, need login
 
 
 class AddCommentView(View):
@@ -113,6 +118,7 @@ class AddCommentView(View):
             )
             return HttpResponse("{'status': 'success', 'message': 'Success'}")
         return HttpResponse("{'status': 'fail', 'message': 'Failed'}")
+    # TODO(haochengz@outlook.com): test render, resolve, add comments to db, maybe failed, need login
 
 
 class VideoPlayView(View):
@@ -138,5 +144,5 @@ class VideoPlayView(View):
             "video": video,
         })
 
-    # TODO: very similar to the Course Info View
+    # TODO(haochengz@outlook.com): test render, resolve, need login
 

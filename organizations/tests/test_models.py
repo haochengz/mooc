@@ -30,11 +30,9 @@ class OrganizationsModuleDBConnectionTest(TestCase):
         self.assertEqual(cities[1].name, sh.name)
 
     def test_org_foreigkey_correct(self):
-        # TODO: Test the foreinkey
         pass
 
     def test_instructor_foreigkey_correct(self):
-        # TODO: Test the foreinkey
         pass
 
     @staticmethod

@@ -53,7 +53,6 @@ class CourseDetailView(View):
             "course": course,
             "related_courses": related_courses,
         })
-    # TODO(haochengz@outlook.com): test render, resolve, related_courses
 
 
 class CourseInfoView(LoginRequiredMixin, View):

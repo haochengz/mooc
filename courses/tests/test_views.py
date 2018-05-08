@@ -375,14 +375,26 @@ class CourseInfoViewTest(TestCase):
 class CommentViewTest(TestCase):
 
     def setUp(self):
+        org = Org.objects.create(
+            name="Stanford University",
+            located=Location.objects.create(
+                name="San Francisco",
+            )
+        )
         Course.objects.create(
             name="Compiler",
-            org=Org.objects.create(
-                name="Stanford University",
-                located=Location.objects.create(
-                    name="San Francisco",
-                )
-            )
+            org=org,
+            tag="cs"
+        )
+        Course.objects.create(
+            name="Operating System",
+            org=org,
+            tag="engineer"
+        )
+        Course.objects.create(
+            name="Network",
+            org=org,
+            tag="cs"
         )
         self.user = UserProfile(
             username="joseph",
@@ -390,28 +402,64 @@ class CommentViewTest(TestCase):
         )
         self.user.set_password("123456")
         self.user.save()
+        UserCourse.objects.create(
+            user=self.user,
+            course=Course.objects.get(name="Compiler"),
+        )
+        UserCourse.objects.create(
+            user=self.user,
+            course=Course.objects.get(name="Network"),
+        )
 
     def test_resolve_correct(self):
         found = resolve("/course/comment/1/")
         self.assertEqual(found.func.view_class, CommentView)
 
-    def test_render_correct_template(self):
+    def test_forward_to_login_page_if_un_logged_in(self):
         resp = self.client.get("/course/comment/1/")
         self.assertEqual(resp.status_code, 302)
         resp = self.client.get("/course/comment/1/", follow=True)
         self.assertTemplateUsed(resp, "login.html")
 
-    def test_comnents_displayed(self):
+    def test_render_correct_template(self):
+        c = self.get_logged_in_client(self.user)
+        resp = c.get("/course/comment/1/")
+        self.assertTemplateUsed(resp, "course-comment.html")
+
+    def test_comments_displayed(self):
         CourseComment.objects.create(
-            user=UserProfile.objects.create(
-                username="WAHWAH",
-                nick_name="HOHOHO",
-            ),
+            user=self.user,
             course=Course.objects.get(id=1),
             comment="Very Good course of all time."
         )
-        c = Client()
-        ok = c.login(username="user@server.com", password="123456")
-        self.assertTrue(ok)
+        CourseComment.objects.create(
+            user=self.user,
+            course=Course.objects.get(id=2),
+            comment="Just so so"
+        )
+        another_user = UserProfile.objects.create(
+            username="another_dude",
+            email="hawk@eagle.org",
+        )
+        CourseComment.objects.create(
+            user=another_user,
+            course=Course.objects.get(id=1),
+            comment="Amazing"
+        )
+        c = self.get_logged_in_client(self.user)
         resp = c.get("/course/comment/1/")
         self.assertContains(resp, "Good course")
+        self.assertContains(resp, "Amazing")
+        self.assertNotContains(resp, "Just so so")
+
+        resp = c.get("/course/comment/2/")
+        self.assertNotContains(resp, "Good course")
+        self.assertNotContains(resp, "Amazing")
+        self.assertContains(resp, "Just so so")
+
+    def get_logged_in_client(self, user, passwd="123456"):
+        c = Client()
+        ok = c.login(username=user.email, password=passwd)
+        self.assertTrue(ok)
+
+        return c

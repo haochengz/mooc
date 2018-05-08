@@ -86,7 +86,6 @@ class CommentView(LoginRequiredMixin, View):
             "course_resources": resources,
             "comments": comments,
         })
-    # TODO(haochengz@outlook.com): test render, resolve, comments from db, need login
 
 
 class AddCommentView(View):

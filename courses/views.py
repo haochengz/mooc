@@ -5,7 +5,7 @@ from pure_pagination import Paginator, PageNotAnInteger
 from django.http import HttpResponse
 
 from .models import Course, Resource, Section
-from operations.models import CourseComment, UserCourse
+from operations.models import CourseComment
 from apps.utils.tools import LoginRequiredMixin, others_choice_of_course, increasing_enrolled_nums
 
 
@@ -114,21 +114,14 @@ class VideoPlayView(LoginRequiredMixin, View):
         video = Section.objects.get(id=video_id)
         course = video.chapter.course
         resources = Resource.objects.filter(course=course)
+        user = request.user
 
-        # TODO: 查询是否已经关联该课程, 未关联则建立连接
+        increasing_enrolled_nums(course, user)
+        relate_courses = others_choice_of_course(course)
 
-        user_courses = UserCourse.objects.filter(course=course)
-        user_ids = [uc.user.id for uc in user_courses]
-        all_uc = UserCourse.objects.filter(user_id__in=user_ids)
-        courses_id = [uc.course.id for uc in user_courses]
-        relate_courses = Course.objects.filter(id__in=courses_id).order_by("-hits")[:3]
-        # TODO: need refactor here
         return render(request, "course-play.html", {
             "course": course,
             "course_resources": resources,
             "relate_courses": relate_courses,
             "video": video,
         })
-
-    # TODO(haochengz@outlook.com): test render, resolve, need login
-

@@ -3,9 +3,9 @@ from django.urls import resolve
 from django.test import TestCase, Client
 
 from courses.views import (
-    CourseListView, CourseDetailView, CourseInfoView, CommentView, AddCommentView,
+    CourseListView, CourseDetailView, CourseInfoView, CommentView, AddCommentView, VideoPlayView,
 )
-from courses.models import Course, Chapter
+from courses.models import Course, Chapter, Section
 from users.models import UserProfile
 from operations.models import UserCourse, CourseComment
 from organizations.models import Org, Location, Instructor
@@ -542,6 +542,77 @@ class AddCommentViewTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(str(resp.content, encoding="utf-8"), "{'status': 'fail', 'message': 'Failed'}")
         self.assertEqual(CourseComment.objects.all().count(), 0)
+
+    def get_logged_in_client(self, user, passwd="123456"):
+        c = Client()
+        ok = c.login(username=user.email, password=passwd)
+        self.assertTrue(ok)
+
+        return c
+
+
+class VideoPlayViewTest(TestCase):
+
+    def setUp(self):
+        org = Org.objects.create(
+            name="Stanford University",
+            located=Location.objects.create(
+                name="San Francisco",
+            )
+        )
+        Course.objects.create(
+            name="Compiler",
+            org=org,
+            tag="cs"
+        )
+        Course.objects.create(
+            name="Operating System",
+            org=org,
+            tag="engineer"
+        )
+        Course.objects.create(
+            name="Network",
+            org=org,
+            tag="cs"
+        )
+        self.user = UserProfile(
+            username="joseph",
+            email="user@server.com",
+        )
+        self.user.set_password("123456")
+        self.user.save()
+        UserCourse.objects.create(
+            user=self.user,
+            course=Course.objects.get(name="Compiler"),
+        )
+        UserCourse.objects.create(
+            user=self.user,
+            course=Course.objects.get(name="Network"),
+        )
+        Chapter.objects.create(
+            name="Tokenizer",
+            course=Course.objects.get(name="Compiler")
+        )
+        Section.objects.create(
+            name="What's token",
+            chapter=Chapter.objects.get(name="Tokenizer"),
+            url="http://www.google.com/",
+        )
+
+    def test_resolve_correct(self):
+        found = resolve("/course/video/1/")
+        self.assertEqual(found.func.view_class, VideoPlayView)
+
+    def test_forward_to_login_page_if_un_logged_in(self):
+        resp = self.client.get("/course/video/1/")
+        self.assertEqual(resp.status_code, 302)
+        resp = self.client.get("/course/video/1/", follow=True)
+        self.assertTemplateUsed(resp, "login.html")
+
+    def test_render_correct_template(self):
+        c = self.get_logged_in_client(self.user)
+        resp = c.get("/course/video/1/")
+        self.assertTemplateUsed(resp, "course-play.html")
 
     def get_logged_in_client(self, user, passwd="123456"):
         c = Client()

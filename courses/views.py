@@ -6,8 +6,7 @@ from django.http import HttpResponse
 
 from .models import Course, Resource, Section
 from operations.models import CourseComment, UserCourse
-from apps.utils.tools import LoginRequiredMixin
-from users.models import UserProfile
+from apps.utils.tools import LoginRequiredMixin, others_choice_of_course, increasing_enrolled_nums
 
 
 class CourseListView(View):
@@ -65,20 +64,9 @@ class CourseInfoView(LoginRequiredMixin, View):
         resources = Resource.objects.filter(course=course)
         user = request.user
 
-        already_enrolled = UserCourse.objects.filter(course=course, user=user)
-        if not len(already_enrolled):
-            UserCourse.objects.create(
-                course=course,
-                user=user,
-            )
-            course.enrolled_nums += 1
-            course.save()
+        increasing_enrolled_nums(course, user)
+        relate_courses = others_choice_of_course(course)
 
-        user_courses = UserCourse.objects.filter(course=course)
-        user_ids = [uc.user.id for uc in user_courses]
-        courses = UserCourse.objects.filter(user_id__in=user_ids)
-        relate_courses = [c.course for c in courses]
-        # TODO: need refactor here
         return render(request, "course-video.html", {
             "course": course,
             "course_resources": resources,

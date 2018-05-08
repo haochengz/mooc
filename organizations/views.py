@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from pure_pagination import Paginator, PageNotAnInteger
 
-from .models import Org, Location
+from .models import Org, Location, Instructor
 from .forms import UserConsultForm
 from apps.utils.tools import add_favorite
 
@@ -126,3 +126,20 @@ class AddFavView(View):
             return add_favorite(fav_type, fav_id, request.user)
         else:
             return HttpResponse("{'status': 'failed', 'msg': 'User not login'}")
+
+
+class TeacherListView(View):
+
+    @staticmethod
+    def get(request):
+        return render(request, "teachers-list.html", {})
+
+
+class TeacherDetailView(View):
+
+    @staticmethod
+    def get(request, teacher_id):
+        teacher = Instructor.objects.get(id=teacher_id)
+        return render(request, "teacher-detail.html", {
+            "teacher": teacher,
+        })

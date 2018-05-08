@@ -5,7 +5,7 @@ from django.test import Client
 
 from organizations.views import (
     OrgListView, OrgHomeView, OrgCourseView, OrgDescView, OrgTeacherView,
-    AddFavView,
+    AddFavView, TeacherListView, TeacherDetailView,
 )
 from organizations.models import Org, Location, Instructor
 from courses.models import Course
@@ -442,3 +442,41 @@ class AddFavViewTest(TestCase):
         self.assertEqual(self.user, fav[0].user)
         self.assertEqual(Org.objects.get(name='Peiking University').id, fav[0].fav_id)
         self.assertEqual(resp.content.decode(), "{'status': 'success', 'msg': 'Add Favorite'}")
+
+
+class TeacherListViewTest(TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_resolve_correct(self):
+        found = resolve("/orgs/teacher/list/")
+        self.assertEqual(found.func.view_class, TeacherListView)
+
+    def test_render_correct(self):
+        resp = self.client.get("/orgs/teacher/list/")
+        self.assertTemplateUsed(resp, "teachers-list.html")
+
+
+class TeacherDetailViewTest(TestCase):
+
+    def setUp(self):
+        self.sf = Location.objects.create(
+            name="San Francisco",
+        )
+        self.stanford = Org.objects.create(
+            name="Stanford",
+            located=self.sf,
+        )
+        Instructor.objects.create(
+            name="Mr. Zhou",
+            org=self.stanford,
+        )
+
+    def test_resolve_correct(self):
+        found = resolve("/orgs/teacher/detail/1/")
+        self.assertEqual(found.func.view_class, TeacherDetailView)
+
+    def test_render_correct(self):
+        resp = self.client.get("/orgs/teacher/detail/1/")
+        self.assertTemplateUsed(resp, "teacher-detail.html")

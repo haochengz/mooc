@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from .models import Course, Resource, Section
 from operations.models import CourseComment, UserCourse
 from apps.utils.tools import LoginRequiredMixin
+from users.models import UserProfile
 
 
 class CourseListView(View):
@@ -74,8 +75,9 @@ class CourseInfoView(LoginRequiredMixin, View):
             course.save()
 
         user_courses = UserCourse.objects.filter(course=course)
-        courses_id = [uc.course.id for uc in user_courses]
-        relate_courses = Course.objects.filter(id__in=courses_id).order_by("-hits")[:3]
+        user_ids = [uc.user.id for uc in user_courses]
+        courses = UserCourse.objects.filter(user_id__in=user_ids)
+        relate_courses = [c.course for c in courses]
         # TODO: need refactor here
         return render(request, "course-video.html", {
             "course": course,

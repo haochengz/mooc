@@ -270,21 +270,39 @@ class CourseDetailViewTest(TestCase):
             tag="CS",
             org=Org.objects.get(name="Stanford University"),
         )
+        Course.objects.create(
+            name="Deep Learning",
+            tag="ai",
+            org=Org.objects.get(name="Stanford University"),
+        )
         resp = self.client.get("/course/detail/1/")
         self.assertContains(resp, "Algorithms")
+        self.assertNotContains(resp, "Deep Learning")
 
 
 class CourseInfoViewTest(TestCase):
 
     def setUp(self):
+        org = Org.objects.create(
+            name="Stanford University",
+            located=Location.objects.create(
+                name="San Francisco",
+            )
+        )
         Course.objects.create(
             name="Compiler",
-            org=Org.objects.create(
-                name="Stanford University",
-                located=Location.objects.create(
-                    name="San Francisco",
-                )
-            )
+            org=org,
+            tag="cs"
+        )
+        Course.objects.create(
+            name="Operating System",
+            org=org,
+            tag="engineer"
+        )
+        Course.objects.create(
+            name="Network",
+            org=org,
+            tag="cs"
         )
         self.user = UserProfile(
             username="joseph",
@@ -292,6 +310,14 @@ class CourseInfoViewTest(TestCase):
         )
         self.user.set_password("123456")
         self.user.save()
+        UserCourse.objects.create(
+            user=self.user,
+            course=Course.objects.get(name="Compiler"),
+        )
+        UserCourse.objects.create(
+            user=self.user,
+            course=Course.objects.get(name="Network"),
+        )
 
     def test_resolve_correct(self):
         found = resolve("/course/info/1/")
@@ -304,12 +330,23 @@ class CourseInfoViewTest(TestCase):
         # FIXME(haochengz@outlook.com): fix login view forward the login process to original page after login
 
     def test_render_the_correct_templage_after_logged_in(self):
-        c = Client()
-        ok = c.login(username="user@server.com", password="123456")
-        self.assertTrue(ok)
-
+        c = self.get_logged_in_client(self.user)
         resp = c.get("/course/info/1/")
         self.assertTemplateUsed(resp, "course-video.html")
+
+    def test_showing_the_relate_courses(self):
+        c = self.get_logged_in_client(self.user)
+        resp = c.get("/course/info/1/")
+
+        self.assertContains(resp, "Network")
+        self.assertNotContains(resp, "Operating System")
+
+    def get_logged_in_client(self, user, passwd="123456"):
+        c = Client()
+        ok = c.login(username=user.email, password=passwd)
+        self.assertTrue(ok)
+
+        return c
 
 
 class CommentViewTest(TestCase):

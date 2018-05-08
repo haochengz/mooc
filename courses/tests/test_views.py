@@ -341,6 +341,29 @@ class CourseInfoViewTest(TestCase):
         self.assertContains(resp, "Network")
         self.assertNotContains(resp, "Operating System")
 
+    def test_enrolled_nums_increasing_by_visit(self):
+        user_a = UserProfile.objects.create(
+            username="UserA",
+            email="user_a@server.com",
+        )
+        user_a.set_password("123456")
+        user_b = UserProfile.objects.create(
+            username="UserB",
+            email="user_b@server.com",
+        )
+        user_b.set_password("123456")
+        user_a.save()
+        user_b.save()
+        c = self.get_logged_in_client(user_a)
+        self.assertEqual(Course.objects.get(id=1).enrolled_nums, 0)
+        c.get("/course/info/1/")
+        self.assertEqual(Course.objects.get(id=1).enrolled_nums, 1)
+        c.get("/course/info/1/")
+        self.assertEqual(Course.objects.get(id=1).enrolled_nums, 1)
+        c = self.get_logged_in_client(user_b)
+        c.get("/course/info/1/")
+        self.assertEqual(Course.objects.get(id=1).enrolled_nums, 2)
+
     def get_logged_in_client(self, user, passwd="123456"):
         c = Client()
         ok = c.login(username=user.email, password=passwd)

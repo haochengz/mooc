@@ -9,7 +9,7 @@ from organizations.views import (
 
 
 urlpatterns = [
-    path('', OrgListView.as_view(), name='org_list'),
+    path('list/', OrgListView.as_view(), name='org_list'),
     path('consult/', UserConsultView.as_view(), name='add_ask'),
     path('home/<int:org_id>/', OrgHomeView.as_view(), name='org_home'),
     path('course/<int:org_id>/', OrgCourseView.as_view(), name='org_course'),

@@ -155,6 +155,10 @@ class TeacherDetailView(View):
     @staticmethod
     def get(request, teacher_id):
         teacher = Instructor.objects.get(id=teacher_id)
+        courses = teacher.course_set.all()
+        hot_teachers = Instructor.objects.all().order_by("-hits")
         return render(request, "teacher-detail.html", {
             "teacher": teacher,
+            "all_courses": courses,
+            "sorted_teachers": hot_teachers,
         })

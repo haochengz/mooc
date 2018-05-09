@@ -132,7 +132,15 @@ class TeacherListView(View):
 
     @staticmethod
     def get(request):
-        return render(request, "teachers-list.html", {})
+        all_teachers = Instructor.objects.all()
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_teachers, 8, request=request)
+        teachers = p.page(page)
+        return render(request, "teachers-list.html", {"all_teachers": teachers})
 
 
 class TeacherDetailView(View):

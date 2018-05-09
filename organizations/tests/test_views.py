@@ -37,30 +37,30 @@ class OrgListViewAndUserConsultViewTest(TestCase):
         self.create_orgs()
 
     def test_resolve_org_index_url(self):
-        found = resolve("/orgs/")
+        found = resolve("/orgs/list/")
         self.assertEqual(found.func.view_class, OrgListView)
 
     def test_template_used_correct_at_org_list_url(self):
-        resp = self.client.get("/orgs/")
+        resp = self.client.get("/orgs/list/")
         self.assertTemplateUsed(resp, "org-list.html")
 
     def test_org_list_page_shows_organizations_from_db(self):
-        resp = self.client.get('/orgs/')
+        resp = self.client.get('/orgs/list/')
         self.assertContains(resp, "Peiking University")
         self.assertContains(resp, "Tsinghua University")
 
     def test_org_list_page_shows_cities_from_db(self):
-        resp = self.client.get('/orgs/')
+        resp = self.client.get('/orgs/list/')
         self.assertContains(resp, 'Beijing')
         self.assertNotContains(resp, 'Tibet')
 
     def test_org_list_page_shows_total_orgs_nums(self):
-        resp = self.client.get('/orgs/')
+        resp = self.client.get('/orgs/list/')
         c = '<div class="all">共<span class="key">%d</span>家</div>' % Org.objects.count()
         self.assertContains(resp, c)
 
     def test_pagination_works(self):
-        resp = self.client.get('/orgs/')
+        resp = self.client.get('/orgs/list/')
         self.assertTemplateUsed(resp, 'org-list.html')
         c = '<div class="all">共<span class="key">%d</span>家</div>' % Org.objects.count()
         self.assertContains(resp, c)
@@ -69,37 +69,37 @@ class OrgListViewAndUserConsultViewTest(TestCase):
         self.assertNotContains(resp, '上一页')
 
     def test_pagination_and_follow_to_next_page(self):
-        resp = self.client.get('/orgs/', {'page': 1})
+        resp = self.client.get('/orgs/list/', {'page': 1})
         self.assertTemplateUsed(resp, 'org-list.html')
         self.assertContains(resp, '下一页')
         self.assertNotContains(resp, '上一页')
 
-        resp = self.client.get('/orgs/', {'page': 2})
+        resp = self.client.get('/orgs/list/', {'page': 2})
         self.assertTemplateUsed(resp, 'org-list.html')
         self.assertNotContains(resp, '下一页')
         self.assertContains(resp, '上一页')
 
     def test_pagination_with_wrong_page_number_always_returns_first_page(self):
-        resp = self.client.get('/orgs/', {'page': 1101})
+        resp = self.client.get('/orgs/list/', {'page': 1101})
         self.assertTemplateUsed(resp, 'org-list.html')
         self.assertContains(resp, '下一页')
         self.assertNotContains(resp, '上一页')
 
-        resp = self.client.get('/orgs/')
+        resp = self.client.get('/orgs/list/')
         self.assertTemplateUsed(resp, 'org-list.html')
         self.assertContains(resp, '下一页')
         self.assertNotContains(resp, '上一页')
 
     def test_sift_by_city(self):
         beijing = Location.objects.get(name='Beijing')
-        resp = self.client.get('/orgs/', {'page': 1, 'city': beijing.id})
+        resp = self.client.get('/orgs/list/', {'page': 1, 'city': beijing.id})
 
         self.assertNotContains(resp, 'Fudan University')
         self.assertNotContains(resp, '上一页')
         self.assertNotContains(resp, '下一页')
 
     def test_sift_by_category(self):
-        resp = self.client.get('/orgs/', {'page': 1, 'ct': "college"})
+        resp = self.client.get('/orgs/list/', {'page': 1, 'ct': "college"})
 
         self.assertContains(resp, 'Fudan University')
         self.assertNotContains(resp, 'WuHong Wang')
@@ -108,7 +108,7 @@ class OrgListViewAndUserConsultViewTest(TestCase):
 
     def test_sift_by_city_and_category(self):
         shanghai = Location.objects.get(name='Shanghai')
-        resp = self.client.get('/orgs/', {'page': 1, 'ct': "vocational", 'city': shanghai.id})
+        resp = self.client.get('/orgs/list/', {'page': 1, 'ct': "vocational", 'city': shanghai.id})
 
         self.assertNotContains(resp, 'WuHong Wang')
         self.assertNotContains(resp, 'Fudan University')
@@ -119,27 +119,27 @@ class OrgListViewAndUserConsultViewTest(TestCase):
 
     def test_display_a_ranking_board_at_the_right(self):
         shanghai = Location.objects.get(name='Shanghai')
-        resp = self.client.get('/orgs/', {'page': 1, 'ct': "personal", 'city': shanghai.id})
+        resp = self.client.get('/orgs/list/', {'page': 1, 'ct': "personal", 'city': shanghai.id})
 
         self.assertContains(resp, "Peiking University")
         self.assertContains(resp, "Tsinghua University")
         self.assertContains(resp, "Beijing Tranning School")
 
     def test_sort_orgs_by_course_nums(self):
-        resp = self.client.get('/orgs/')
+        resp = self.client.get('/orgs/list/')
         self.assertNotContains(resp, 'Fudan University')
         self.assertNotContains(resp, 'iMooc.com')
 
-        resp = self.client.get('/orgs/', {'sort': 'courses'})
+        resp = self.client.get('/orgs/list/', {'sort': 'courses'})
         self.assertContains(resp, 'Fudan University')
         self.assertContains(resp, 'iMooc.com')
 
     def test_sort_orgs_by_students_nums(self):
-        resp = self.client.get('/orgs/')
+        resp = self.client.get('/orgs/list/')
         self.assertNotContains(resp, 'Fudan University')
         self.assertNotContains(resp, 'iMooc.com')
 
-        resp = self.client.get('/orgs/', {'sort': 'students'})
+        resp = self.client.get('/orgs/list/', {'sort': 'students'})
         self.assertContains(resp, 'Fudan University')
         self.assertContains(resp, 'iMooc.com')
 
@@ -457,6 +457,21 @@ class TeacherListViewTest(TestCase):
         resp = self.client.get("/orgs/teacher/list/")
         self.assertTemplateUsed(resp, "teachers-list.html")
 
+    def test_displays_the_instructors_on_teacher_list_page(self):
+        pass
+
+    def test_the_sum_of_the_teachers_displays_correctly(self):
+        pass
+
+    def test_the_paginator_function_works_correct(self):
+        pass
+
+    def test_the_teacher_board_section(self):
+        pass
+
+    def test_to_sort_the_teacher_by_hits_function(self):
+        pass
+
 
 class TeacherDetailViewTest(TestCase):
 
@@ -480,3 +495,12 @@ class TeacherDetailViewTest(TestCase):
     def test_render_correct(self):
         resp = self.client.get("/orgs/teacher/detail/1/")
         self.assertTemplateUsed(resp, "teacher-detail.html")
+
+    def test_the_teacher_profile_correctly(self):
+        pass
+
+    def test_the_moocs_correctly(self):
+        pass
+
+    def test_add_to_favorite_function_works_correctly(self):
+        pass

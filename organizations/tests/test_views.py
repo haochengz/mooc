@@ -447,7 +447,50 @@ class AddFavViewTest(TestCase):
 class TeacherListViewTest(TestCase):
 
     def setUp(self):
-        pass
+        self.sf = Location.objects.create(
+            name="San Francisco",
+        )
+        self.stanford = Org.objects.create(
+            name="Stanford",
+            located=self.sf,
+        )
+        Instructor.objects.create(
+            name="Mr. Zhou",
+            org=self.stanford,
+        )
+        Instructor.objects.create(
+            name="Mr. Huang",
+            org=self.stanford,
+        )
+        Instructor.objects.create(
+            name="Mr. Wang",
+            org=self.stanford,
+        )
+        Instructor.objects.create(
+            name="Mr. Liu",
+            org=self.stanford,
+        )
+        Instructor.objects.create(
+            name="Mr. Zhao",
+            org=self.stanford,
+        )
+        Instructor.objects.create(
+            name="Mr. He",
+            org=self.stanford,
+        )
+        Instructor.objects.create(
+            name="Mr. Chen",
+            org=self.stanford,
+        )
+        Instructor.objects.create(
+            name="Mr. Qian",
+            org=self.stanford,
+        )
+        Instructor.objects.create(
+            name="Mr. Zhu",
+            org=self.stanford,
+            hits=100
+        )
 
     def test_resolve_correct(self):
         found = resolve("/orgs/teacher/list/")
@@ -458,19 +501,30 @@ class TeacherListViewTest(TestCase):
         self.assertTemplateUsed(resp, "teachers-list.html")
 
     def test_displays_the_instructors_on_teacher_list_page(self):
-        pass
+        resp = self.client.get("/orgs/teacher/list/")
+        self.assertContains(resp, "Mr. Zhou")
 
     def test_the_sum_of_the_teachers_displays_correctly(self):
-        pass
+        resp = self.client.get("/orgs/teacher/list/")
+        num = Instructor.objects.all().count()
+        self.assertContains(resp, '共<span class="key">%d</span>人' % num)
 
     def test_the_paginator_function_works_correct(self):
-        pass
+        resp = self.client.get("/orgs/teacher/list/")
+        self.assertContains(resp, '下一页')
+        self.assertNotContains(resp, '上一页')
+
+        resp = self.client.get("/orgs/teacher/list/?page=2")
+        self.assertNotContains(resp, '下一页')
+        self.assertContains(resp, '上一页')
 
     def test_the_teacher_board_section(self):
-        pass
+        resp = self.client.get("/orgs/teacher/list/")
+        self.assertContains(resp, "Mr. Zhu")
 
     def test_to_sort_the_teacher_by_hits_function(self):
-        pass
+        resp = self.client.get("/orgs/teacher/list/?sort=hot")
+        self.assertContains(resp, "Mr. Zhu")
 
 
 class TeacherDetailViewTest(TestCase):
@@ -487,6 +541,17 @@ class TeacherDetailViewTest(TestCase):
             name="Mr. Zhou",
             org=self.stanford,
         )
+        Course.objects.create(
+            name="Compiler",
+            org=self.stanford,
+            teacher=Instructor.objects.get(name="Mr. Zhou"),
+        )
+        self.user = UserProfile.objects.create(
+            email="user@server.com",
+            username="user@server.com",
+        )
+        self.user.set_password('123456')
+        self.user.save()
 
     def test_resolve_correct(self):
         found = resolve("/orgs/teacher/detail/1/")
@@ -497,10 +562,48 @@ class TeacherDetailViewTest(TestCase):
         self.assertTemplateUsed(resp, "teacher-detail.html")
 
     def test_the_teacher_profile_correctly(self):
-        pass
+        resp = self.client.get("/orgs/teacher/detail/1/")
+        self.assertContains(resp, "Mr. Zhou")
 
     def test_the_moocs_correctly(self):
-        pass
+        resp = self.client.get("/orgs/teacher/detail/1/")
+        self.assertContains(resp, "Compiler")
 
     def test_add_to_favorite_function_works_correctly(self):
-        pass
+        c = Client()
+        ok = c.login(username="user@server.com", password="123456")
+        self.assertTrue(ok)
+        resp = c.post('/orgs/add_fav/', data={
+            "fav_id": Instructor.objects.get(name='Mr. Zhou').id,
+            "fav_type": 'teacher',
+        })
+        fav = UserFavorite.objects.filter(
+            user=self.user,
+            fav_id=Instructor.objects.get(name='Mr. Zhou').id,
+            fav_type='teacher',
+        )
+        self.assertEqual(1, fav.count())
+        self.assertEqual(self.user, fav[0].user)
+        self.assertEqual(Instructor.objects.get(name='Mr. Zhou').id, fav[0].fav_id)
+        self.assertEqual(resp.content.decode(), "{'status': 'success', 'msg': 'Add Favorite'}")
+
+    def test_when_already_had_a_same_fav_data_then_unfav_it(self):
+        UserFavorite.objects.create(
+            user=self.user,
+            fav_id=Instructor.objects.get(name='Mr. Zhou').id,
+            fav_type='teacher',
+        )
+        c = Client()
+        ok = c.login(username="user@server.com", password="123456")
+        self.assertTrue(ok)
+        resp = c.post('/orgs/add_fav/', data={
+            "fav_id": Instructor.objects.get(name='Mr. Zhou').id,
+            "fav_type": 'teacher',
+        })
+        unfav = UserFavorite.objects.filter(
+            user=self.user,
+            fav_id=Instructor.objects.get(name='Mr. Zhou').id,
+            fav_type='teacher',
+        )
+        self.assertEqual(0, unfav.count())
+        self.assertEqual(resp.content.decode(), "{'status': 'success', 'msg': 'Undo Favorite'}")

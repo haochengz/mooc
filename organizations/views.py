@@ -134,7 +134,7 @@ class TeacherListView(View):
     @staticmethod
     def get(request):
         hot_teachers = Instructor.objects.all().order_by("-hits")
-        if request.GET.get("hot", "") == "hot":
+        if request.GET.get("sort", "") == "hot":
             all_teachers = hot_teachers
         else:
             all_teachers = Instructor.objects.all()
@@ -144,10 +144,12 @@ class TeacherListView(View):
             page = 1
 
         p = Paginator(all_teachers, 8, request=request)
+        teachers_num = all_teachers.count()
         teachers = p.page(page)
         return render(request, "teachers-list.html", {
             "all_teachers": teachers,
             "sorted_teachers": hot_teachers[:3],
+            "teachers_num": teachers_num,
         })
 
 

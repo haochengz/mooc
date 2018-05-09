@@ -241,7 +241,7 @@ class CourseDetailViewTest(TestCase):
 
     def test_shows_how_many_students_were_leaning_this_course(self):
         resp = self.client.get("/course/detail/1/")
-        self.assertContains(resp, "学习人数：1")
+        self.assertContains(resp, "学习人数：300")
 
     def test_shows_how_many_chapters_of_this_course(self):
         resp = self.client.get("/course/detail/1/")

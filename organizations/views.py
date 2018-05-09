@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from pure_pagination import Paginator, PageNotAnInteger
 
 from .models import Org, Location, Instructor
+from operations.models import UserFavorite
 from .forms import UserConsultForm
 from apps.utils.tools import add_favorite
 
@@ -157,8 +158,20 @@ class TeacherDetailView(View):
         teacher = Instructor.objects.get(id=teacher_id)
         courses = teacher.course_set.all()
         hot_teachers = Instructor.objects.all().order_by("-hits")
+        fav_teacher = False
+        fav_org = False
+        if request.user.is_authenticated and UserFavorite.objects.filter(
+                user=request.user, fav_id=teacher.id, fav_type="teacher"):
+            fav_teacher = True
+        if request.user.is_authenticated and UserFavorite.objects.filter(
+                user=request.user, fav_id=teacher.org.id, fav_type="org"):
+            fav_org = True
         return render(request, "teacher-detail.html", {
             "teacher": teacher,
             "all_courses": courses,
             "sorted_teachers": hot_teachers,
+            "has_fav_teacher": fav_teacher,
+            "has_fav_org": fav_org,
         })
+
+    # TODO: favorite bug fix

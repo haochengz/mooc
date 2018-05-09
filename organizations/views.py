@@ -132,7 +132,11 @@ class TeacherListView(View):
 
     @staticmethod
     def get(request):
-        all_teachers = Instructor.objects.all()
+        hot_teachers = Instructor.objects.all().order_by("-hits")
+        if request.GET.get("hot", "") == "hot":
+            all_teachers = hot_teachers
+        else:
+            all_teachers = Instructor.objects.all()
         try:
             page = request.GET.get('page', 1)
         except PageNotAnInteger:
@@ -140,7 +144,10 @@ class TeacherListView(View):
 
         p = Paginator(all_teachers, 8, request=request)
         teachers = p.page(page)
-        return render(request, "teachers-list.html", {"all_teachers": teachers})
+        return render(request, "teachers-list.html", {
+            "all_teachers": teachers,
+            "sorted_teachers": hot_teachers[:3],
+        })
 
 
 class TeacherDetailView(View):

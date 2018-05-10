@@ -174,8 +174,6 @@ class ImgUploadView(LoginRequiredMixin, View):
 
     @staticmethod
     def post(request):
-        image_form = ImgUploadForm(request.POST, request.FILES)
+        image_form = ImgUploadForm(request.POST, request.FILES, instance=request.user)
         if image_form.is_valid():
-            image = image_form.cleaned_data['image']
-            request.user.image = image
             request.user.save()

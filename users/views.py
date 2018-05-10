@@ -9,6 +9,7 @@ from django.utils import timezone
 from users.forms import LoginForm, RegisterEmailForm, ForgetForm, PasswordResetForm
 from users.models import UserProfile, EmailVerify
 from apps.utils.email import send_register_verify_mail, send_retrieve_password_mail
+from apps.utils.tools import LoginRequiredMixin
 
 
 def index(request):
@@ -159,3 +160,11 @@ class ModifyView(View):
             return render(request, "login.html", {"msg": "reset success, please login."})
         else:
             return render(request, "password_reset.html", {"email": email, "reset_form": form})
+
+
+class UserInfoView(LoginRequiredMixin, View):
+
+    @staticmethod
+    def get(request):
+        return render(request, "usercenter-info.html", {
+        })

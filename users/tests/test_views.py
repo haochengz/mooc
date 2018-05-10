@@ -5,8 +5,12 @@ from django.test import TestCase
 from django.urls import resolve
 from captcha.models import CaptchaStore
 from django.contrib.auth import authenticate
+from django.test import Client
 
-from users.views import index, LoginView, RegisterView, ActivateUserView, ForgetView, RetrievePasswordView, ModifyView
+from users.views import (
+    index, LoginView, RegisterView, ActivateUserView, ForgetView, RetrievePasswordView,
+    ModifyView, UserInfoView,
+)
 from users.models import UserProfile, EmailVerify
 from apps.utils.email import generate_verify_url, generate_retrieve_url
 from apps.utils.tools import minutes_ago
@@ -562,3 +566,33 @@ class ModifyViewTest(TestCase):
 
         self.assertTemplateUsed(resp, "password_reset.html")
         self.assertFalse(authenticate(username="user@testserver.com", password="987654321"))
+
+
+class UserInfoViewTest(TestCase):
+
+    def setUp(self):
+        self.user = UserProfile.objects.create(
+            username="user1",
+            email="user@server.com",
+        )
+        self.user.set_password("123456")
+        self.user.save()
+
+    def test_url_resolve(self):
+        found = resolve("/user/info/")
+        self.assertEqual(found.func.view_class, UserInfoView)
+
+    def test_view_class_working_correctly(self):
+        c = self.logged_in_with(self.user)
+        resp = c.get("/user/info/")
+
+        self.assertTemplateUsed(resp, "usercenter-info.html")
+
+    # TODO: test no-login, information displays
+
+    def logged_in_with(self, user, passwd="123456"):
+        c = Client()
+        ok = c.login(username=user.username, password=passwd)
+        self.assertTrue(ok)
+
+        return c

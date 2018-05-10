@@ -177,3 +177,6 @@ class TeacherDetailView(View):
         })
 
     # TODO: favorite bug fix
+
+
+# TODO: add the searching function for instructors, organizations and courses

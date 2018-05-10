@@ -26,6 +26,7 @@ urlpatterns = [
     path('', users.views.index, name='index'),
     path('orgs/', include('organizations.urls')),
     path('course/', include('courses.urls')),
+    path('user/', include('users.urls')),
     path('login/', users.views.LoginView.as_view(), name='login'),
     path('reactive/', users.views.ActivateUserView.as_view(), name="resend"),
     path('forget/', users.views.ForgetView.as_view(), name='forget_pwd'),

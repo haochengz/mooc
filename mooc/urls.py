@@ -32,7 +32,6 @@ urlpatterns = [
     path('forget/', users.views.ForgetView.as_view(), name='forget_pwd'),
     path('modify/', users.views.ModifyView.as_view(), name='modify_pwd'),
     re_path(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
-    path('info/', TemplateView.as_view(template_name='index.html'), name='user_info'),
     path('logout/', TemplateView.as_view(template_name='index.html'), name='logout'),
     path('message/', TemplateView.as_view(template_name='index.html'), name='mymessage'),
     path('register/', users.views.RegisterView.as_view(), name='register'),

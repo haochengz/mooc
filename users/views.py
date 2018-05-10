@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import make_password
 from django.db.models import Q
 from django.utils import timezone
 
-from users.forms import LoginForm, RegisterEmailForm, ForgetForm, PasswordResetForm
+from users.forms import LoginForm, RegisterEmailForm, ForgetForm, PasswordResetForm, ImgUploadForm
 from users.models import UserProfile, EmailVerify
 from apps.utils.email import send_register_verify_mail, send_retrieve_password_mail
 from apps.utils.tools import LoginRequiredMixin
@@ -168,3 +168,14 @@ class UserInfoView(LoginRequiredMixin, View):
     def get(request):
         return render(request, "usercenter-info.html", {
         })
+
+
+class ImgUploadView(LoginRequiredMixin, View):
+
+    @staticmethod
+    def post(request):
+        image_form = ImgUploadForm(request.POST, request.FILES)
+        if image_form.is_valid():
+            image = image_form.cleaned_data['image']
+            request.user.image = image
+            request.user.save()

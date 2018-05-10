@@ -1,4 +1,6 @@
 
+import json
+
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.views.generic.base import View
@@ -7,7 +9,9 @@ from django.db.models import Q
 from django.utils import timezone
 from django.http import HttpResponse
 
-from users.forms import LoginForm, RegisterEmailForm, ForgetForm, PasswordResetForm, ImgUploadForm
+from users.forms import (
+    LoginForm, RegisterEmailForm, ForgetForm, PasswordResetForm, ImgUploadForm, UserCenterPwResetForm,
+)
 from users.models import UserProfile, EmailVerify
 from apps.utils.email import send_register_verify_mail, send_retrieve_password_mail
 from apps.utils.tools import LoginRequiredMixin
@@ -181,3 +185,22 @@ class ImgUploadView(LoginRequiredMixin, View):
             return HttpResponse("{'status': 'success'}", content_type="application/json")
         else:
             return HttpResponse("{'status': 'fail'}", content_type="application/json")
+
+
+class PwdModifyView(LoginRequiredMixin, View):
+
+    @staticmethod
+    def post(request):
+        pwd_reset_form = UserCenterPwResetForm(request.POST)
+        if pwd_reset_form.is_valid():
+            pwd1 = request.POST['password1']
+            pwd2 = request.POST['password2']
+            if pwd1 != pwd2:
+                return HttpResponse("{'status': 'fail', 'msg': 'Wrong input'", content_type="application/json")
+            user = request.user
+            user.password = make_password(pwd2)
+            user.save()
+            return HttpResponse("{'status': 'success', 'msg': 'success, please re-login'",
+                                content_type="application/json")
+        else:
+            return HttpResponse(json.dumps(pwd_reset_form.errors), content_type="application/json")

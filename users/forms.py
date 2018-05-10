@@ -26,6 +26,11 @@ class PasswordResetForm(forms.Form):
     pwd2 = forms.CharField(required=True, max_length=16, min_length=8)
 
 
+class UserCenterPwResetForm(forms.Form):
+    password1 = forms.CharField(required=True, max_length=16, min_length=8)
+    password2 = forms.CharField(required=True, max_length=16, min_length=8)
+
+
 class ImgUploadForm(forms.ModelForm):
 
     class Meta:

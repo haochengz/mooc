@@ -589,6 +589,7 @@ class UserInfoViewTest(TestCase):
         self.assertTemplateUsed(resp, "usercenter-info.html")
 
     # TODO: test no-login, information displays
+    # TODO: index page led to a wrong user info page
 
     def logged_in_with(self, user, passwd="123456"):
         c = Client()

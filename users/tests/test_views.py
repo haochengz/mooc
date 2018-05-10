@@ -1,5 +1,6 @@
 
 from datetime import datetime
+import json
 
 from django.test import TestCase
 from django.urls import resolve
@@ -9,7 +10,7 @@ from django.test import Client
 
 from users.views import (
     index, LoginView, RegisterView, ActivateUserView, ForgetView, RetrievePasswordView,
-    ModifyView, UserInfoView,
+    ModifyView, UserInfoView, PwdModifyView,
 )
 from users.models import UserProfile, EmailVerify
 from apps.utils.email import generate_verify_url, generate_retrieve_url
@@ -588,8 +589,97 @@ class UserInfoViewTest(TestCase):
 
         self.assertTemplateUsed(resp, "usercenter-info.html")
 
-    # TODO: test no-login, information displays
-    # TODO: index page led to a wrong user info page
+    def test_redirect_to_login_page_if_no_user_logged_in(self):
+        resp = self.client.get("/user/info/", follow=True)
+        self.assertTemplateUsed(resp, "login.html")
+
+    def test_displays_details_of_the_user(self):
+        c = self.logged_in_with(self.user)
+        resp = c.get("/user/info/")
+        self.assertContains(resp, "user1")
+        self.assertContains(resp, "user@server.com")
+
+    def logged_in_with(self, user, passwd="123456"):
+        c = Client()
+        ok = c.login(username=user.username, password=passwd)
+        self.assertTrue(ok)
+
+        return c
+
+
+class ImgUploadViewTest(TestCase):
+    pass
+
+
+class PwdModifyViewTest(TestCase):
+
+    def setUp(self):
+        self.user = UserProfile.objects.create(
+            username="user1",
+            email="user@server.com",
+        )
+        self.user.set_password("123456")
+        self.user.save()
+
+    def test_url_resolve(self):
+        found = resolve("/user/update/pwd/")
+        self.assertEqual(found.func.view_class, PwdModifyView)
+
+    def test_redirect_to_login_page_if_no_user_logged_in(self):
+        resp = self.client.post("/user/info/", follow=True)
+        self.assertTemplateUsed(resp, "login.html")
+
+
+class ImgUploadViewTest(TestCase):
+    pass
+
+
+class PwdModifyViewTest(TestCase):
+
+    def setUp(self):
+        self.user = UserProfile.objects.create(
+            username="user1",
+            email="user@server.com",
+        )
+        self.user.set_password("123456")
+        self.user.save()
+
+    def test_url_resolve(self):
+        found = resolve("/user/update/pwd/")
+        self.assertEqual(found.func.view_class, PwdModifyView)
+
+    def test_redirect_to_login_page_if_no_user_logged_in(self):
+        resp = self.client.post("/user/update/pwd/", follow=True)
+        self.assertTemplateUsed(resp, "login.html")
+
+    def test_errors_returns_when_form_validation_fails(self):
+        c = self.logged_in_with(self.user)
+        resp = c.post("/user/update/pwd/", {
+            "password1": "12",
+            "password2": "34",
+        })
+        json_response = json.loads(resp.content)
+        self.assertEqual(json_response, {
+            "password1": ["确保该变量至少包含 8 字符(目前字符数 2)。"],
+            "password2": ["确保该变量至少包含 8 字符(目前字符数 2)。"],
+        })
+
+    def test_two_password_should_be_the_identical(self):
+        c = self.logged_in_with(self.user)
+        resp = c.post("/user/update/pwd/", {
+            "password1": "abc123def456",
+            "password2": "abc456def123",
+        })
+        self.assertEqual(resp.content.decode(), "{'status': 'fail', 'msg': 'Wrong input'}")
+
+    def test_correctly_modify_the_password(self):
+        c = self.logged_in_with(self.user)
+        c.post("/user/update/pwd/", {
+            "password1": "abc123def456",
+            "password2": "abc123def456",
+        })
+        ok = c.login(username="user1", password="abc123def456")
+        self.assertTrue(ok)
 
     def logged_in_with(self, user, passwd="123456"):
         c = Client()

@@ -5,6 +5,7 @@ from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from django.db.models import Q
 from django.utils import timezone
+from django.http import HttpResponse
 
 from users.forms import LoginForm, RegisterEmailForm, ForgetForm, PasswordResetForm, ImgUploadForm
 from users.models import UserProfile, EmailVerify
@@ -177,3 +178,6 @@ class ImgUploadView(LoginRequiredMixin, View):
         image_form = ImgUploadForm(request.POST, request.FILES, instance=request.user)
         if image_form.is_valid():
             request.user.save()
+            return HttpResponse("{'status': 'success'}", content_type="application/json")
+        else:
+            return HttpResponse("{'status': 'fail'}", content_type="application/json")

@@ -14,7 +14,8 @@ from users.forms import (
     UserInfoForm,
 )
 from users.models import UserProfile, EmailVerify
-from operations.models import UserCourse
+from organizations.models import Org
+from operations.models import UserCourse, UserFavorite
 from apps.utils.email import send_register_verify_mail, send_retrieve_password_mail
 from apps.utils.tools import LoginRequiredMixin
 
@@ -226,4 +227,15 @@ class MyCoursesView(LoginRequiredMixin, View):
         user_courses = UserCourse.objects.filter(user=request.user)
         return render(request, "usercenter-mycourse.html", {
             "user_courses": user_courses,
+        })
+
+
+class MyFavOrgView(LoginRequiredMixin, View):
+
+    @staticmethod
+    def get(request):
+        fav_orgs = UserFavorite.objects.filter(user=request.user, fav_type="org")
+        orgs = [Org.objects.get(id=org.fav_id) for org in fav_orgs]
+        return render(request, "usercenter-fav-org.html", {
+            "org_list": orgs,
         })

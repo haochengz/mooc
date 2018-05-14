@@ -25,6 +25,7 @@ class Course(models.Model):
     tag = models.CharField(verbose_name="标签", max_length=20, default="")
     tips = models.CharField(verbose_name="讲师提示", max_length=200, default="")
     notice = models.CharField(verbose_name="学前须知", max_length=200, default="")
+    is_ad = models.BooleanField(verbose_name="是否是广告客户", default=False)
     add_time = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:

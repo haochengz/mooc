@@ -27,6 +27,7 @@ class IndexView(View):
     @staticmethod
     def get(request):
         banners = Banner.objects.all().order_by("index")
+        courses = Course.objects.all().order_by("-hits")
         return render(request, "index.html", {
             "banners": banners
         })

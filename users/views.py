@@ -14,7 +14,7 @@ from users.forms import (
     LoginForm, RegisterEmailForm, ForgetForm, PasswordResetForm, ImgUploadForm, UserCenterPwResetForm,
     UserInfoForm,
 )
-from users.models import UserProfile, EmailVerify
+from users.models import UserProfile, EmailVerify, Banner
 from organizations.models import Org, Instructor
 from courses.models import Course
 from operations.models import UserCourse, UserFavorite, UserMessage
@@ -22,8 +22,14 @@ from apps.utils.email import send_register_verify_mail, send_retrieve_password_m
 from apps.utils.tools import LoginRequiredMixin
 
 
-def index(request):
-    return render(request, "index.html", {})
+class IndexView(View):
+
+    @staticmethod
+    def get(request):
+        banners = Banner.objects.all().order_by("index")
+        return render(request, "index.html", {
+            "banners": banners
+        })
 
 
 class LoginView(View):

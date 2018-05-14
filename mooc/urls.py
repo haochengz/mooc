@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path, re_path, include
 from django.contrib import admin
-from django.views.generic import TemplateView
+# from django.views.generic import TemplateView
 from django.views.static import serve
 
 import users.views
@@ -23,7 +23,7 @@ from mooc.settings import MEDIA_ROOT
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', users.views.index, name='index'),
+    path('', users.views.IndexView.as_view(), name='index'),
     path('orgs/', include('organizations.urls')),
     path('course/', include('courses.urls')),
     path('user/', include('users.urls')),

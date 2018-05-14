@@ -3,7 +3,7 @@ from django.urls import path
 
 from .views import (
     UserInfoView, ImgUploadView, PwdModifyView, MyCoursesView, MyFavOrgView, MyFavCourseView,
-    MyFavTeacherView,
+    MyFavTeacherView, MyMessageView,
 )
 
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
     path('myfav/course/', MyFavCourseView.as_view(), name="myfav_course"),
     path('img/upload/', ImgUploadView.as_view(), name="image_upload"),
     path('update/pwd/', PwdModifyView.as_view(), name="update_pwd"),
+    path('message/', MyMessageView.as_view(), name="mymessage"),
 ]

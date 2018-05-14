@@ -262,3 +262,10 @@ class MyFavCourseView(LoginRequiredMixin, View):
         return render(request, "usercenter-fav-course.html", {
             "course_list": courses,
         })
+
+
+class MyMessageView(LoginRequiredMixin, View):
+
+    @staticmethod
+    def get(request):
+        return render(request, "usercenter-message.html", {})

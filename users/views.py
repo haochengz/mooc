@@ -27,7 +27,7 @@ class IndexView(View):
     @staticmethod
     def get(request):
         banners = Banner.objects.all().order_by("index")
-        courses = Course.objects.filter(is_ad=False).order_by("-hits")[:3]
+        courses = Course.objects.filter(is_ad=False).order_by("-hits")[:6]
         advertise = Course.objects.filter(is_ad=True)
         courses_orgs = Org.objects.all().order_by("hits")[:15]
         return render(request, "index.html", {
@@ -53,7 +53,8 @@ class LoginView(View):
             user = authenticate(username=username, password=password)
             if user and user.is_active:
                 login(request=request, user=user)
-                return render(request, "index.html", {})
+                from django.urls import reverse
+                return HttpResponseRedirect(reverse("index"))
             elif not user:
                 return render(request, "login.html", {"msg": "invalid username or password"})
             else:

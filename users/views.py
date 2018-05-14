@@ -2,12 +2,12 @@
 import json
 
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from django.db.models import Q
 from django.utils import timezone
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from pure_pagination import Paginator, PageNotAnInteger
 
 from users.forms import (
@@ -279,3 +279,12 @@ class MyMessageView(LoginRequiredMixin, View):
         return render(request, "usercenter-message.html", {
             "messages": messages,
         })
+
+
+class LogoutView(LoginRequiredMixin, View):
+
+    @staticmethod
+    def get(request):
+        logout(request)
+        from django.urls import reverse
+        return HttpResponseRedirect(reverse("index"))

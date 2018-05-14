@@ -37,4 +37,9 @@ urlpatterns = [
     re_path(r'^activate/(?P<code>.*)/$', users.views.ActivateUserView.as_view(), name="active"),
     re_path(r'^retrieve/(?P<code>.*)/$', users.views.RetrievePasswordView.as_view(), name="retrieve"),
     path('captcha/', include('captcha.urls')),
+    path('exception/404/', users.views.test_404_render, name="404"),
+    path('exception/500/', users.views.test_500_render, name="500"),
 ]
+
+handler404 = 'users.views.page_not_found'
+handler500 = ''

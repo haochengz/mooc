@@ -301,3 +301,31 @@ class LogoutView(LoginRequiredMixin, View):
         logout(request)
         from django.urls import reverse
         return HttpResponseRedirect(reverse("index"))
+
+
+def page_not_found(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response("404.html", {})
+    response.status_code = 404
+    return response
+
+
+def server_internal_error(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response("500.html", {})
+    response.status_code = 500
+    return response
+
+
+def test_404_render(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response("404.html", {})
+    response.status_code = 404
+    return response
+
+
+def test_500_render(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response("500.html", {})
+    response.status_code = 500
+    return response

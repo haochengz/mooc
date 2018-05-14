@@ -8,6 +8,7 @@ from django.contrib.auth.hashers import make_password
 from django.db.models import Q
 from django.utils import timezone
 from django.http import HttpResponse
+from pure_pagination import Paginator, PageNotAnInteger
 
 from users.forms import (
     LoginForm, RegisterEmailForm, ForgetForm, PasswordResetForm, ImgUploadForm, UserCenterPwResetForm,
@@ -16,7 +17,7 @@ from users.forms import (
 from users.models import UserProfile, EmailVerify
 from organizations.models import Org, Instructor
 from courses.models import Course
-from operations.models import UserCourse, UserFavorite
+from operations.models import UserCourse, UserFavorite, UserMessage
 from apps.utils.email import send_register_verify_mail, send_retrieve_password_mail
 from apps.utils.tools import LoginRequiredMixin
 
@@ -268,4 +269,13 @@ class MyMessageView(LoginRequiredMixin, View):
 
     @staticmethod
     def get(request):
-        return render(request, "usercenter-message.html", {})
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+        user_messages = UserMessage.objects.filter(user=request.user).order_by("-add_time")
+        paginator = Paginator(user_messages, 8, request=request)
+        messages = paginator.page(page)
+        return render(request, "usercenter-message.html", {
+            "messages": messages,
+        })

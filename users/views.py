@@ -14,7 +14,8 @@ from users.forms import (
     UserInfoForm,
 )
 from users.models import UserProfile, EmailVerify
-from organizations.models import Org
+from organizations.models import Org, Instructor
+from courses.models import Course
 from operations.models import UserCourse, UserFavorite
 from apps.utils.email import send_register_verify_mail, send_retrieve_password_mail
 from apps.utils.tools import LoginRequiredMixin
@@ -238,4 +239,26 @@ class MyFavOrgView(LoginRequiredMixin, View):
         orgs = [Org.objects.get(id=org.fav_id) for org in fav_orgs]
         return render(request, "usercenter-fav-org.html", {
             "org_list": orgs,
+        })
+
+
+class MyFavTeacherView(LoginRequiredMixin, View):
+
+    @staticmethod
+    def get(request):
+        fav_teachers = UserFavorite.objects.filter(user=request.user, fav_type="teacher")
+        teachers = [Instructor.objects.get(id=teacher.fav_id) for teacher in fav_teachers]
+        return render(request, "usercenter-fav-teacher.html", {
+            "teacher_list": teachers,
+        })
+
+
+class MyFavCourseView(LoginRequiredMixin, View):
+
+    @staticmethod
+    def get(request):
+        fav_courses = UserFavorite.objects.filter(user=request.user, fav_type="course")
+        courses = [Course.objects.get(id=course.fav_id) for course in fav_courses]
+        return render(request, "usercenter-fav-course.html", {
+            "course_list": courses,
         })

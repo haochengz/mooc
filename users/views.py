@@ -27,9 +27,14 @@ class IndexView(View):
     @staticmethod
     def get(request):
         banners = Banner.objects.all().order_by("index")
-        courses = Course.objects.all().order_by("-hits")
+        courses = Course.objects.filter(is_ad=False).order_by("-hits")[:3]
+        advertise = Course.objects.filter(is_ad=True)
+        courses_orgs = Org.objects.all().order_by("hits")[:15]
         return render(request, "index.html", {
-            "banners": banners
+            "banners": banners,
+            "courses": courses,
+            "banner_courses": advertise,
+            "course_orgs": courses_orgs,
         })
 
 

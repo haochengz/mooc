@@ -146,6 +146,8 @@ class RetrievePasswordView(View):
         records[0].delete()
         return render(request, "password_reset.html", {"email": email, "reset_form": form})
 
+# TODO: Modify email address View and function un-implement
+
 
 class ModifyView(View):
 
@@ -214,3 +216,10 @@ class PwdModifyView(LoginRequiredMixin, View):
                                 content_type="application/json")
         else:
             return HttpResponse(json.dumps(pwd_reset_form.errors), content_type="application/json")
+
+
+class MyCoursesView(LoginRequiredMixin, View):
+
+    @staticmethod
+    def get(request):
+        return render(request, "usercenter-mycourse.html", {})

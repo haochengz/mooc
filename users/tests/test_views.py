@@ -626,29 +626,6 @@ class PwdModifyViewTest(TestCase):
         self.assertEqual(found.func.view_class, PwdModifyView)
 
     def test_redirect_to_login_page_if_no_user_logged_in(self):
-        resp = self.client.post("/user/info/", follow=True)
-        self.assertTemplateUsed(resp, "login.html")
-
-
-class ImgUploadViewTest(TestCase):
-    pass
-
-
-class PwdModifyViewTest(TestCase):
-
-    def setUp(self):
-        self.user = UserProfile.objects.create(
-            username="user1",
-            email="user@server.com",
-        )
-        self.user.set_password("123456")
-        self.user.save()
-
-    def test_url_resolve(self):
-        found = resolve("/user/update/pwd/")
-        self.assertEqual(found.func.view_class, PwdModifyView)
-
-    def test_redirect_to_login_page_if_no_user_logged_in(self):
         resp = self.client.post("/user/update/pwd/", follow=True)
         self.assertTemplateUsed(resp, "login.html")
 

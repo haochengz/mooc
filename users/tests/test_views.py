@@ -593,7 +593,7 @@ class UserInfoViewTest(TestCase):
         resp = self.client.get("/user/info/", follow=True)
         self.assertTemplateUsed(resp, "login.html")
 
-    def test_displays_details_of_the_user(self):
+    def test_get_displays_details_of_the_user(self):
         c = self.logged_in_with(self.user)
         resp = c.get("/user/info/")
         self.assertContains(resp, "user1")
@@ -605,6 +605,10 @@ class UserInfoViewTest(TestCase):
         self.assertTrue(ok)
 
         return c
+
+    def test_post_data_to_view(self):
+        pass
+        # TODO: tests
 
 
 class ImgUploadViewTest(TestCase):

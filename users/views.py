@@ -11,6 +11,7 @@ from django.http import HttpResponse
 
 from users.forms import (
     LoginForm, RegisterEmailForm, ForgetForm, PasswordResetForm, ImgUploadForm, UserCenterPwResetForm,
+    UserInfoForm,
 )
 from users.models import UserProfile, EmailVerify
 from apps.utils.email import send_register_verify_mail, send_retrieve_password_mail
@@ -173,6 +174,15 @@ class UserInfoView(LoginRequiredMixin, View):
     def get(request):
         return render(request, "usercenter-info.html", {
         })
+
+    @staticmethod
+    def post(request):
+        user_info_form = UserInfoForm(request.POST, instance=request.user)
+        if user_info_form.is_valid():
+            user_info_form.save()
+            return HttpResponse("{'status': 'success'}", content_type="application/json")
+        else:
+            return HttpResponse(json.dumps(user_info_form.errors), content_type="application/json")
 
 
 class ImgUploadView(LoginRequiredMixin, View):

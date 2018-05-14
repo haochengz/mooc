@@ -14,6 +14,7 @@ from users.forms import (
     UserInfoForm,
 )
 from users.models import UserProfile, EmailVerify
+from operations.models import UserCourse
 from apps.utils.email import send_register_verify_mail, send_retrieve_password_mail
 from apps.utils.tools import LoginRequiredMixin
 
@@ -222,4 +223,7 @@ class MyCoursesView(LoginRequiredMixin, View):
 
     @staticmethod
     def get(request):
-        return render(request, "usercenter-mycourse.html", {})
+        user_courses = UserCourse.objects.filter(user=request.user)
+        return render(request, "usercenter-mycourse.html", {
+            "user_courses": user_courses,
+        })

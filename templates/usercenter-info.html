@@ -14,6 +14,7 @@
 {% endblock %}
 
 {% block right_content %}
+    {% load l10n %}
     <div class="right">
 		<div class="personal_des ">
 			<div class="head" style="border:1px solid #eaeaea;">
@@ -45,7 +46,7 @@
                             <i class="error-tips"></i>
                         </li>
 						<li>生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日：
-                           <input type="text" id="birth_day" name="birday" value="{{ request.user.birthday }}" readonly="readonly"/>
+                           <input type="text" id="birth_day" name="birthday" value="{% localize on %}{{ request.user.birthday }}{% endlocalize %}" readonly="readonly"/>
                             <i class="error-tips"></i>
 						</li>
 						<li>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：

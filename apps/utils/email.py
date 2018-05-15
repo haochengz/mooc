@@ -83,11 +83,11 @@ def generate_retrieve_mail(code):
 
 
 def generate_verify_url(code):
-    return server_url + "activate/" + code + "/"
+    return server_url + "user/activate/" + code + "/"
 
 
 def generate_retrieve_url(code):
-    return server_url + "retrieve/" + code + "/"
+    return server_url + "user/retrieve/" + code + "/"
 
 
 def _send_the_mail(email_addr, subject, text):

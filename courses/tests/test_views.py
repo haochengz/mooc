@@ -328,7 +328,7 @@ class CourseInfoViewTest(TestCase):
     def test_redirect_to_login_page_if_no_user_logged_in(self):
         resp = self.client.get("/course/info/1/")
         self.assertEqual(resp.status_code, 302)
-        self.assertRedirects(resp, expected_url="/login/?next=/course/info/1/", status_code=302, target_status_code=200)
+        self.assertRedirects(resp, expected_url="/user/login/?next=/course/info/1/", status_code=302, target_status_code=200)
         # FIXME(haochengz@outlook.com): fix login view forward the login process to original page after login
 
     def test_render_the_correct_templage_after_logged_in(self):

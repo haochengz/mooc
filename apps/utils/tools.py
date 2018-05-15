@@ -29,7 +29,7 @@ def add_favorite(fav_type, fav_id, user):
 
 class LoginRequiredMixin:
 
-    @method_decorator(login_required(login_url="/login/"))
+    @method_decorator(login_required(login_url="/user/login/"))
     def dispatch(self, request, *args, **kwargs):
         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 

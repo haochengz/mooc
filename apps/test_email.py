@@ -61,13 +61,13 @@ class EmailVerifyTest(TestCase):
         code = generate_random_code()
         url = generate_verify_url(code)
         self.assertIn(code, url)
-        self.assertEqual(url, server_url + "activate/" + code + '/')
+        self.assertEqual(url, server_url + "user/activate/" + code + '/')
 
     def test_generate_retrieve_mail(self):
         code = generate_random_code()
         url = generate_retrieve_url(code)
         self.assertIn(code, url)
-        self.assertEqual(url, server_url + "retrieve/" + code + '/')
+        self.assertEqual(url, server_url + "user/retrieve/" + code + '/')
 
     def test_no_repetitive_code_in_db(self):
         send_register_verify_mail(user=self.user)

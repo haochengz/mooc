@@ -74,16 +74,15 @@ class RegisterView(View):
         reg_form = RegisterEmailForm(request.POST)
         repeat = UserProfile.objects.filter(Q(username=request.POST['email']) | Q(email=request.POST['email']))
         if reg_form.is_valid() and len(repeat) == 0:
-            UserProfile.objects.create(
+            unactive_user = UserProfile.objects.create(
                 username=request.POST['email'],
                 email=request.POST['email'],
                 password=make_password(request.POST['password']),
                 is_active=False,
                 is_staff=False,
             )
-            unactive_user = UserProfile.objects.get(username=request.POST['email'])
             send_register_verify_mail(unactive_user)
-            return render(request, "login.html", {})
+            return render(request, "login.html", {"msg": "Check your email to activate"})
         elif len(repeat) > 0:
             return render(request, "register.html", {"register_form": reg_form, "msg": "email already exists"})
         return render(request, "register.html", {"register_form": reg_form})

@@ -29,6 +29,7 @@ class IndexViewTest(TestCase):
 
 
 class LoginViewTest(TestCase):
+    # TODO: if a requests comes with a forward parameter, Should forward to that address after logged in
 
     def setUp(self):
         self.user = UserProfile(username="test", email="test@tests.com")
@@ -71,6 +72,15 @@ class LoginViewTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, "login.html")
         self.assertFalse(resp.wsgi_request.user.is_authenticated)
+
+    def test_user_avaiable_then_redirect_to_index(self):
+        resp = self.client.post('/user/login/', data={
+            "username": "test",
+            "password": "123456abc",
+        })
+
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.url, "/")
 
     def test_only_activated_user_login(self):
         user = UserProfile(username="unactivated", email="unactivated@tests.com", is_active=False)
@@ -184,6 +194,7 @@ class RegisterViewTest(TestCase):
         user = UserProfile.objects.get(email="testuser@user.com")
         self.assertTemplateUsed(resp, "login.html")
         self.assertIsNotNone(user)
+        self.assertContains(resp, "Check your email to activate")
 
     def test_POST_a_user_register_request_to_view_which_user_is_not_active(self):
         captcha = self.captcha_through()
@@ -207,7 +218,7 @@ class RegisterViewTest(TestCase):
         verify_code = EmailVerify.objects.get(email="testuser@user.com")
         self.assertIsNotNone(verify_code)
 
-    def test_POST_register_an_exists_email_should_reture_to_register_page(self):
+    def test_POST_register_an_exists_email_should_return_to_register_page(self):
         UserProfile.objects.create(
             username="testuser@user.com",
             email="testuser@user.com",
